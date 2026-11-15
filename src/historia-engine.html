@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Historia Franka</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&family=Caveat:wght@600;700&display=swap">
+<style>
+/* Layout: zeszyt w kratkę z granatowym paskiem; jedna kolumna kartek z zadaniami, czerwony długopis do ocen */
+:root{
+  --paper:#F8F5EC; --grid:#E8E2D0; --card:#FFFFFF; --fg:#1F2433; --muted:#5B6275; --line:#D6D0BD;
+  --ink:#1F5AA6; --ink-soft:#E3EDF9; --on-ink:#FFFFFF;
+  --red:#C3352B; --red-soft:#FBE6E3; --green:#1D7A4C; --green-soft:#DFF2E6; --amber:#A86C12; --amber-soft:#FBEFD6;
+  --hl:#FFE47D; --shadow:rgba(31,90,166,.14);
+  --bar:#1B3F73; --bar-fg:#D6E4F7; --bar-line:rgba(255,255,255,.3); --bar-on:#FFD65A; --bar-on-fg:#1F2433;
+  --display:'Baloo 2','Trebuchet MS',system-ui,sans-serif;
+  --body:'Nunito','Segoe UI',system-ui,sans-serif;
+  --hand:'Caveat','Comic Sans MS',cursive;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#11151F; --grid:#1A2030; --card:#171D2B; --fg:#E6EBF5; --muted:#9AA5BD; --line:#2B3550;
+  --ink:#8DB8F2; --ink-soft:#1E2C47; --on-ink:#0E1420;
+  --red:#FF8B80; --red-soft:#3A1F22; --green:#6CD29A; --green-soft:#16321F; --amber:#F0BC5A; --amber-soft:#382B15;
+  --hl:#5E5014; --shadow:rgba(0,0,0,.45); --bar:#162B50; --bar-fg:#C6D8F2; --bar-line:rgba(255,255,255,.2); --bar-on:#F2C14E; --bar-on-fg:#11151F; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --paper:#11151F; --grid:#1A2030; --card:#171D2B; --fg:#E6EBF5; --muted:#9AA5BD; --line:#2B3550;
+  --ink:#8DB8F2; --ink-soft:#1E2C47; --on-ink:#0E1420;
+  --red:#FF8B80; --red-soft:#3A1F22; --green:#6CD29A; --green-soft:#16321F; --amber:#F0BC5A; --amber-soft:#382B15;
+  --hl:#5E5014; --shadow:rgba(0,0,0,.45); --bar:#162B50; --bar-fg:#C6D8F2; --bar-line:rgba(255,255,255,.2); --bar-on:#F2C14E; --bar-on-fg:#11151F; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{margin:0;background-color:var(--paper);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:22px 22px;min-height:100vh}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bar)}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+button:disabled{cursor:default}
+:focus-visible{outline:3px solid var(--ink);outline-offset:2px;border-radius:6px}
+
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bar);box-shadow:0 2px 10px var(--shadow)}
+.top-in{max-width:780px;margin:0 auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.brand{font-family:var(--display);font-weight:800;font-size:1.2rem;color:#FFFFFF;line-height:1;display:flex;align-items:baseline;gap:6px;margin-right:auto}
+.brand small{font-family:var(--body);font-weight:700;font-size:.72rem;color:var(--bar-fg);letter-spacing:.06em;text-transform:uppercase}
+.nav{display:grid;grid-template-columns:repeat(4,auto);gap:8px}
+.nav button{border:2px solid var(--bar-line);background:transparent;padding:9px 18px;border-radius:12px;font-family:var(--display);font-weight:700;font-size:1.08rem;line-height:1.2;color:var(--bar-fg)}
+.nav button:hover{border-color:var(--bar-fg);color:#FFFFFF}
+.nav button.on{background:var(--bar-on);border-color:var(--bar-on);color:var(--bar-on-fg);box-shadow:0 3px 0 rgba(0,0,0,.25)}
+.nav button:focus-visible{outline-color:var(--bar-on)}
+@media (max-width:620px){.nav{width:100%;grid-template-columns:repeat(4,1fr);gap:6px}.nav button{padding:11px 2px;font-size:1rem}}
+
+main{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:22px;
+  padding-block:24px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+h1{font-size:clamp(1.8rem,5vw,2.4rem);font-weight:800}
+h2{font-size:1.3rem;font-weight:700}
+p{margin:0}
+.lead{color:var(--muted);max-width:60ch}
+.eyebrow{font-size:.74rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.hl{background:linear-gradient(transparent 55%,var(--hl) 55%);padding:0 2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+.stack{display:flex;flex-direction:column;gap:14px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+.primary,.ghost,.soft{border-radius:10px;padding:10px 18px;font-weight:800;border:2px solid var(--ink)}
+.primary{background:var(--ink);color:var(--on-ink)}
+.primary:hover{filter:brightness(1.08)}
+.ghost{background:transparent;color:var(--ink)}
+.ghost:hover{background:var(--ink-soft)}
+.soft{border-color:var(--line);background:var(--card);color:var(--fg);padding:6px 12px;font-size:.9rem}
+.soft:hover{border-color:var(--ink);color:var(--ink)}
+.danger{border-color:var(--red);background:var(--red);color:var(--on-ink)}
+
+/* zadanie */
+.task{border:2px solid var(--ink);border-radius:18px;padding:clamp(18px,4vw,32px);box-shadow:0 6px 22px var(--shadow)}
+.task-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;margin-bottom:12px}
+.tn{font-family:var(--display);font-weight:800;font-size:1.4rem}
+.pts{color:var(--muted);font-variant-numeric:tabular-nums}
+.pts .got{font-family:var(--hand);font-size:1.5rem;color:var(--red);line-height:1}
+.tag{margin-left:auto;font-size:.85rem;font-weight:700;color:var(--ink);background:var(--ink-soft);padding:4px 12px;border-radius:999px}
+.q-text{font-size:clamp(1.12rem,3.4vw,1.32rem);line-height:1.5;max-width:62ch;font-weight:600}
+.q-text b{color:var(--ink)}
+.opts{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+.opt{display:grid;grid-template-columns:2.2em 1fr;gap:12px;align-items:center;text-align:left;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:10px 14px;font-size:1.06rem;font-weight:600}
+.opt:not(:disabled):hover{border-color:var(--ink)}
+.opt .lt{width:2em;height:2em;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-weight:800;background:var(--ink-soft);color:var(--ink)}
+.opt.sel{border-color:var(--ink);background:var(--ink-soft)}
+.opt.sel .lt{background:var(--ink);color:var(--on-ink)}
+.opt.right{border-color:var(--green);background:var(--green-soft)}
+.opt.right .lt{background:var(--green);color:var(--on-ink)}
+.opt.wrong{border-color:var(--red);background:var(--red-soft)}
+.opt.wrong .lt{background:var(--red);color:var(--on-ink)}
+.opt:disabled{color:var(--fg)}
+.sorts{display:flex;flex-direction:column;gap:8px;margin-top:18px}
+.srow{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.srow.ok{border-color:var(--green);background:var(--green-soft)}
+.srow.bad{border-color:var(--red);background:var(--red-soft)}
+.si{flex:1 1 180px;min-width:0;font-weight:700;font-size:1.05rem}
+.cats{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:2px solid var(--line);background:var(--card);border-radius:999px;padding:5px 12px;font-weight:700;font-size:.92rem;color:var(--fg)}
+.chip:not(:disabled):hover{border-color:var(--ink)}
+.chip.on{border-color:var(--ink);background:var(--ink);color:var(--on-ink)}
+.chip.right{border-color:var(--green);background:var(--green);color:var(--on-ink)}
+.chip.wrong{border-color:var(--red);background:var(--red);color:var(--on-ink);text-decoration:line-through}
+.seq{list-style:none;margin:18px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.slot{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;padding:8px 12px;border:2px dashed var(--line);border-radius:12px;min-height:52px}
+.slot.full{border-style:solid;border-color:var(--ink);background:var(--ink-soft)}
+.slot.ok{border-color:var(--green);background:var(--green-soft)}
+.slot.bad{border-color:var(--red);background:var(--red-soft)}
+.num{font-family:var(--display);font-weight:800;font-size:1.3rem;color:var(--ink);width:1.4em}
+.ph{color:var(--muted);font-size:.92rem}
+.fix{flex-basis:100%;font-size:.9rem;color:var(--red);font-weight:700;padding-left:2em}
+.step{border:2px solid var(--ink);background:var(--card);color:var(--fg);border-radius:10px;padding:7px 12px;font-weight:700;text-align:left}
+.slot .step{background:transparent;border-color:transparent;padding:4px 2px}
+.pool{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
+.pool .step:hover{background:var(--ink-soft)}
+.nrow{cursor:text}
+.num-in{width:7.5em;border:2px solid var(--line);border-radius:8px;padding:6px 10px;background:var(--card);font-weight:800;font-size:1.1rem;font-variant-numeric:tabular-nums}
+.num-in:focus{border-color:var(--ink);outline:none}
+.num-in:disabled{background:transparent;color:var(--fg);opacity:1}
+.unit{color:var(--muted);font-weight:700}
+.nrow .fix{padding-left:0}
+.tree{margin-top:14px;display:flex;flex-direction:column;gap:6px;padding:12px;border:1px dashed var(--line);border-radius:12px;background:var(--ink-soft)}
+.tr{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;justify-content:center}
+.tl{flex-basis:100%;text-align:center;font-size:.72rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.tb{background:var(--card);border:2px solid var(--ink);border-radius:8px;padding:3px 10px;font-weight:700;font-size:.95rem}
+.tdesc{font-size:.92rem;font-weight:600;color:var(--fg);margin-top:4px}
+.acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px;align-items:center}
+.acts .sp{margin-left:auto}
+.acts .primary,.acts .ghost{font-size:1.1rem;padding:12px 24px}
+.hint{margin-top:14px;padding:12px 16px;border-radius:10px;background:var(--amber-soft);color:var(--fg);border:1px dashed var(--amber);font-size:1.02rem}
+.hint b{color:var(--amber)}
+.warn{color:var(--red);font-weight:700;font-size:.92rem}
+.fb{margin-top:16px;padding:16px 18px;border-radius:12px;display:flex;flex-direction:column;gap:6px}
+.fb.ok{background:var(--green-soft)} .fb.bad{background:var(--red-soft)} .fb.part{background:var(--amber-soft)}
+.fb-v{font-family:var(--hand);font-size:2rem;line-height:1}
+.fb.ok .fb-v{color:var(--green)} .fb.bad .fb-v{color:var(--red)} .fb.part .fb-v{color:var(--amber)}
+.expl{max-width:62ch;font-size:1.03rem}
+.lvmsg{font-weight:800;color:var(--ink)}
+
+/* przebieg */
+.run-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.run-top .t{font-weight:800}
+.run-top .cnt{margin-left:auto;font-variant-numeric:tabular-nums;font-weight:800;color:var(--muted)}
+.bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ink);border-radius:99px;transition:width .3s}
+.timer{font-variant-numeric:tabular-nums;font-weight:800;color:var(--ink);background:var(--ink-soft);padding:2px 10px;border-radius:8px}
+.timer.low{color:var(--red);background:var(--red-soft)}
+.dots{display:flex;flex-wrap:wrap;gap:6px}
+.dots button{width:34px;height:34px;border-radius:50%;border:2px solid var(--line);background:var(--card);font-weight:800;font-size:.85rem;font-variant-numeric:tabular-nums}
+.dots button.filled{border-color:var(--ink);color:var(--ink)}
+.dots button.cur{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+.confirm{border:2px solid var(--red);background:var(--red-soft);border-radius:12px;padding:12px 14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.confirm p{flex:1 1 240px;font-weight:700}
+.sheet-h{display:flex;flex-wrap:wrap;gap:4px 16px;align-items:baseline;border-bottom:2px solid var(--fg);padding-bottom:6px}
+.sheet-h b{font-family:var(--display);font-size:1.05rem}
+.sheet-h span{color:var(--muted);font-size:.9rem}
+
+/* start */
+.hello{display:flex;flex-direction:column;gap:6px}
+.modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.mode{text-align:left;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:4px}
+.mode:hover{border-color:var(--ink)}
+.mode b{font-family:var(--display);font-size:1.25rem;line-height:1.2;color:var(--ink)}
+.mode small{color:var(--muted);font-size:.9rem}
+.mode .ex{font-size:.82rem;font-weight:700;color:var(--fg);margin-top:4px}
+.chap{display:flex;flex-direction:column;gap:8px}
+.chap h3{font-size:1rem;color:var(--muted);font-family:var(--body);font-weight:800;letter-spacing:.04em}
+.tmap{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px}
+.tchip{text-align:left;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;grid-template-columns:1fr auto;gap:4px 8px;align-items:center}
+.tchip:hover{border-color:var(--ink)}
+.tchip .nm{font-weight:700;font-size:.95rem;min-width:0}
+.mini{grid-column:1/-1;height:6px;border-radius:99px;background:var(--line);overflow:hidden}
+.mini i{display:block;height:100%}
+.st{font-size:.72rem;font-weight:800;padding:1px 8px;border-radius:99px;white-space:nowrap}
+.st.new{background:var(--line);color:var(--muted)}
+.st.low{background:var(--red-soft);color:var(--red)}
+.st.mid{background:var(--amber-soft);color:var(--amber)}
+.st.top{background:var(--green-soft);color:var(--green)}
+.c-low{background:var(--red)} .c-mid{background:var(--amber)} .c-top{background:var(--green)}
+.dim{opacity:.55;filter:grayscale(1);transition:opacity .2s,filter .2s}
+.dim:hover,.dim:focus-within{opacity:1;filter:none}
+
+/* ustawienia */
+.tchips{display:flex;flex-wrap:wrap;gap:8px}
+.tc{border:2px solid var(--line);background:var(--card);border-radius:999px;padding:5px 12px;font-weight:700;font-size:.9rem}
+.tc.on{border-color:var(--ink);background:var(--ink-soft);color:var(--ink)}
+.seg{display:inline-flex;border:2px solid var(--ink);border-radius:10px;overflow:hidden;flex-wrap:wrap}
+.seg button{border:0;background:transparent;padding:7px 14px;font-weight:800;color:var(--ink)}
+.seg button.on{background:var(--ink);color:var(--on-ink)}
+.lbl{font-weight:800;font-size:.95rem}
+.note{font-size:.88rem;color:var(--muted)}
+.switch{display:flex;gap:10px;align-items:center;font-weight:700}
+.switch input{width:20px;height:20px;accent-color:var(--ink)}
+
+/* wynik */
+.res-top{display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+.stamp{width:124px;height:124px;border:3px solid var(--red);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--red);font-family:var(--hand);transform:rotate(-8deg);flex:none}
+.stamp b{font-size:4.2rem;line-height:.8;font-weight:700}
+.stamp span{font-size:1.3rem;line-height:1}
+.big{font-family:var(--display);font-weight:800;font-size:2.6rem;line-height:1;font-variant-numeric:tabular-nums}
+.big small{font-size:1.1rem;color:var(--muted);font-weight:700}
+.scale{font-size:.82rem;color:var(--muted)}
+.rlist{display:flex;flex-direction:column;gap:6px}
+.ritem{border:1px solid var(--line);border-radius:10px;background:var(--card)}
+.ritem summary{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:9px 12px;cursor:pointer;list-style:none}
+.ritem summary::-webkit-details-marker{display:none}
+.ritem .mark{font-family:var(--hand);font-size:1.5rem;line-height:1;width:1.2em;text-align:center}
+.ritem .mark.y{color:var(--green)} .ritem .mark.n{color:var(--red)} .ritem .mark.p{color:var(--amber)}
+.ritem .rp{font-variant-numeric:tabular-nums;font-weight:800;color:var(--muted)}
+.ritem .rb{padding:10px 14px 14px;display:flex;flex-direction:column;gap:6px;border-top:1px dashed var(--line)}
+.ritem .rb .q-text{font-size:1.05rem}
+.ritem .rb .opt{font-size:.95rem;padding:7px 10px}
+
+/* postępy */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.tile b{display:block;font-family:var(--display);font-size:1.9rem;line-height:1.1;font-variant-numeric:tabular-nums}
+.tile span{font-size:.82rem;color:var(--muted);font-weight:700}
+.ttable{display:flex;flex-direction:column}
+.trow{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(70px,1fr) 3.2em auto auto;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)}
+.trow:last-child{border-bottom:0}
+.trow .nm{font-weight:700;font-size:.95rem}
+.trow .pc{font-variant-numeric:tabular-nums;font-weight:800;text-align:right}
+.lvdots{display:flex;gap:3px}
+.lvdots i{width:8px;height:8px;border-radius:50%;background:var(--line)}
+.lvdots i.on{background:var(--ink)}
+@media (max-width:520px){ .trow{grid-template-columns:minmax(0,1fr) auto auto;} .trow .mini{grid-column:1/-1;order:5} .trow .lvdots{display:none} }
+.chart svg{width:100%;height:auto;display:block}
+.chart .gl{stroke:var(--line);stroke-width:1}
+.chart .gt{fill:var(--muted);font:600 11px var(--body)}
+.chart .bt{fill:var(--ink)} .chart .bx{fill:var(--red)}
+.chart .vl{fill:var(--fg);font:800 11px var(--body);text-anchor:middle}
+.chart .gr{fill:var(--red);font:700 17px var(--hand);text-anchor:middle}
+.legend{display:flex;gap:16px;font-size:.82rem;color:var(--muted);font-weight:700;flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.hist{display:flex;flex-direction:column}
+.hrow{display:grid;grid-template-columns:7.5em 1fr auto auto;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:.92rem;align-items:center}
+.hrow:last-child{border-bottom:0}
+.hrow .d{color:var(--muted);font-variant-numeric:tabular-nums}
+.hrow .s{font-variant-numeric:tabular-nums;font-weight:800}
+.hrow .g{font-family:var(--hand);color:var(--red);font-size:1.4rem;line-height:1;min-width:1.4em;text-align:center}
+.name-in{border:2px solid var(--line);border-radius:8px;padding:6px 10px;background:var(--card);width:12em;max-width:100%}
+a.primary,a.ghost{display:inline-block;text-decoration:none}
+.sum-box{width:100%;min-height:180px;font:13px/1.45 ui-monospace,Menlo,Consolas,monospace;border:2px solid var(--line);border-radius:8px;padding:10px;background:var(--card);color:var(--fg);resize:vertical}
+.okmsg{color:var(--green);font-weight:800}
+.mail{font-weight:800;user-select:all}
+.empty{padding:18px;text-align:center;color:var(--muted);border:2px dashed var(--line);border-radius:12px}
+@media (prefers-reduced-motion: reduce){ *{transition:none!important;animation:none!important} }
+</style>
+</head>
+<body>
+<header class="top"><div class="top-in">
+  <div class="brand">Historia <small>kl. 4 · rozdz. I</small></div>
+  <nav class="nav" aria-label="Widoki">
+    <button data-go="home">Start</button>
+    <button data-go="train">Trening</button>
+    <button data-go="test">Sprawdzian</button>
+    <button data-go="progress">Postępy</button>
+  </nav>
+</div></header>
+<main id="main"></main>
+
+<script>
+/* ---------- pomocnicze ---------- */
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const P=a=>a[Math.floor(Math.random()*a.length)];
+const plural=(n,a,b,c)=>{if(n===1)return a;const u=n%10,t=n%100;return(u>=2&&u<=4&&(t<12||t>14))?b:c};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const pickN=(a,n)=>shuffle(a).slice(0,n);
+const ymd=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const today=()=>ymd(new Date());
+const LV={1:'łatwy',2:'średni',3:'trudny'};
+const CUR=new Date().getFullYear();
+
+/* liczby rzymskie i wieki */
+const toRoman=n=>{const m=[[1000,'M'],[900,'CM'],[500,'D'],[400,'CD'],[100,'C'],[90,'XC'],[50,'L'],[40,'XL'],[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']];let s='';for(const[v,r]of m)while(n>=v){s+=r;n-=v}return s};
+const fromRoman=s=>{const v={I:1,V:5,X:10,L:50,C:100,D:500,M:1000};let n=0;for(let i=0;i<s.length;i++){const a=v[s[i]],b=v[s[i+1]];if(!a)return NaN;n+=b>a?-a:a}return toRoman(n)===s?n:NaN};
+const cent=y=>Math.ceil(y/100);
+const rk=(y,bc,ne)=>`${y} roku${bc?' p.n.e.':ne?' n.e.':''}`;
+const near=(ok,extra=[])=>{const c=[...new Set([ok+1,ok-1,ok+10,ok-10,ok+2,ok-2,ok+5,...extra].filter(x=>x>0&&x!==ok))];return pickN(c,3).map(String)};
+const rnear=n=>{const ok=toRoman(n);const c=[...new Set([n+1,n-1,n+2,n-2,n+10,n-10,n+5,n-5].filter(x=>x>0).map(toRoman).filter(x=>x!==ok))];return pickN(c,3)};
+const wnear=(c,bc)=>{const ok=toRoman(c)+(bc?' p.n.e.':'');const cs=[...new Set([c+1,c-1,c+2,c-2].filter(x=>x>0))];return pickN(cs,3).map(x=>toRoman(x)+(bc?' p.n.e.':''))};
+
+const TOPICS=[
+ {id:'hist',ch:1,name:'Co to jest historia',hint:'Historia to przeszłość, opowieść o niej i nauka o przeszłości. Historycy badają ludzi, którzy żyli naprawdę, i wydarzenia, do których naprawdę doszło, a najważniejsza jest dla nich prawda. W baśniach bohaterowie i zdarzenia są wymyślone, w legendach prawda miesza się z nieprawdą. Historia pomaga zrozumieć świat i przewidywać skutki działań.'},
+ {id:'zrodla',ch:1,name:'Rodzaje źródeł historycznych',hint:'Źródłem jest każdy ślad działalności człowieka. Materialne pisane: książki, kroniki, dokumenty, listy, gazety, mapy. Materialne niepisane: budowle, obrazy, rzeźby, odzież, zdjęcia, przedmioty. Niematerialne: tradycja, obyczaje, przekazy ustne. Archeolodzy szukają materialnych śladów na wykopaliskach.'},
+ {id:'wiary',ch:1,name:'Wiarygodność źródeł i praca historyka',hint:'Wiarygodność źródła to na ile zawarte w nim informacje są pewne. Historyk ustala, kto, kiedy i w jakim celu je stworzył, porównuje je z innymi źródłami i ustaleniami archeologów. Fakt można sprawdzić, a opinia to czyjś pogląd.'},
+ {id:'przyczyny',ch:1,name:'Przyczyny i skutki',hint:'Przyczyny: dlaczego do czegoś doszło. Skutki: co z tego wynikło. Związki przyczynowo-skutkowe to zależności między wydarzeniami, w których jedno prowadziło do drugiego (np. wynalezienie druku przez Gutenberga).'},
+ {id:'rodzina',ch:2,name:'Jak poznać historię rodziny',hint:'Źródła wiedzy o rodzinie: opowieści krewnych i pamiątki rodzinne (zdjęcia, dokumenty, listy, przedmioty codziennego użytku). Krewni mają wspólnego przodka.'},
+ {id:'drzewo',ch:2,name:'Drzewo genealogiczne',hint:'Najstarsi przodkowie są na dole (pień), najmłodsi na górze. Obrączki łączą małżonków. Genealogia bada historię rodziny.'},
+ {id:'tradycje',ch:2,name:'Tradycje rodzinne',hint:'Tradycja to zwyczaje, wspólny zawód, zamiłowania, przepisy. Wzmacnia więzi i pozwala utrzymać bliski kontakt.'},
+ {id:'chrono',ch:3,name:'Chronologia i oś czasu',hint:'Chronologia to nauka o mierzeniu czasu. Porządek chronologiczny: od najdawniejszego do najnowszego. Na osi czasu najstarsze po lewej, najnowsze po prawej.'},
+ {id:'jedn',ch:3,name:'Jednostki czasu',hint:'Rok = 365 lub 366 dni, wiek (stulecie) = 100 lat, tysiąclecie = 1000 lat = 10 wieków.'},
+ {id:'ery',ch:3,name:'Ery i prehistoria',hint:'Nasza era (n.e.) liczy się od narodzin Jezusa z Nazaretu, wcześniejsze czasy to p.n.e. Nie było roku zerowego. Historia zaczyna się od wynalezienia pisma, wcześniej była prehistoria.'},
+ {id:'epoki',ch:3,name:'Epoki historyczne',hint:'Starożytność (ok. 3400 p.n.e. – 476), średniowiecze (476 – 1492), nowożytność (1492 – 1918), współczesność (od 1918).'},
+ {id:'rzym',ch:3,name:'Liczby rzymskie',hint:'I = 1, V = 5, X = 10, L = 50, C = 100, D = 500, M = 1000. Mniejsza cyfra przed większą się odejmuje (IV = 4, IX = 9, XL = 40).'},
+ {id:'oblicz',ch:4,name:'Obliczanie upływu lat',hint:'Ta sama era n.e.: późniejsza − wcześniejsza. P.n.e.: wcześniejsza (większa) − późniejsza (mniejsza). Różne ery: dodaj obie daty i odejmij 1.'},
+ {id:'wiek',ch:4,name:'Który to wiek',hint:'Odrzuć dwie ostatnie cyfry i dodaj 1 (1410 → 14 + 1 → XV wiek). Jeśli rok kończy się dwoma zerami, nie dodajesz 1 (1400 → XIV wiek). Dotyczy też p.n.e.'},
+ {id:'zegary',ch:5,name:'Jak dawniej mierzono czas',hint:'Słońce i cień (zegar słoneczny), klepsydra z piaskiem, zegary mechaniczne ze średniowiecza (ciężarki, koła zębate, dzwony), zegarki kieszonkowe, na rękę, cyfrowe.'},
+ {id:'kal',ch:5,name:'Kalendarz',hint:'Księżycowy (ok. 29 dni, 12 miesięcy) → egipski (365 dni) → juliański (Juliusz Cezar, 29 lutego co 4 lata) → gregoriański (Grzegorz XIII, 1582, pominięto 10 dni).'}
+];
+const T=Object.fromEntries(TOPICS.map(t=>[t.id,t]));
+const CHAPTERS={1:'Lekcje 1–2: Historia, źródła, przyczyny i skutki',2:'Lekcja 3: Historia mojej rodziny',3:'Lekcja 4: Czas w historii',4:'Lekcja 5: Obliczanie czasu w historii',5:'Tajemnice sprzed wieków'};
+
+/* ---------- typy zadań ---------- */
+function D(l,fn){return{l,f:()=>{const o=fn();const opts=shuffle([o.ok,...o.bad]);return{type:'one',html:o.q,opts,fields:[{ans:opts.indexOf(o.ok)}],expl:o.expl,hint:o.hint,key:o.q}}}}
+const O=(l,q,ok,bad,expl,hint)=>D(l,()=>({q,ok,bad,expl,hint}));
+function SQ(l,q,cats,pool,n,expl,hint){return{l,f:()=>{
+  let ch=[];cats.forEach((c,ci)=>{const g=pool.filter(p=>p[1]===ci);if(g.length&&ch.length<n)ch.push(P(g))});
+  ch=ch.concat(pickN(pool.filter(p=>!ch.includes(p)),n-ch.length));ch=shuffle(ch);
+  const ex=typeof expl==='function'?expl(ch,cats):expl;
+  return{type:'sort',html:q,cats,fields:ch.map(p=>({item:p[0],ans:p[1]})),expl:ex,hint,key:q+ch.map(p=>p[0]).join('|')}}}}
+function Ord(l,q,steps,expl,hint){return{l,f:()=>{let s;do{s=shuffle(steps.map((_,i)=>i))}while(s.every((v,i)=>v===i));
+  return{type:'order',html:q,steps,shuf:s,fields:steps.map((_,k)=>({ans:k})),expl,hint,key:q+Math.random()}}}}
+const SQd=(l,q,cats,poolFn,n,expl,hint)=>({l,f:()=>SQ(l,q,cats,poolFn(),n,expl,hint).f()});
+const OrdD=(l,q,genFn)=>({l,f:()=>{const g=genFn();return Ord(l,q,g.steps,g.expl,g.hint).f()}});
+const NM=(l,fn)=>({l,f:()=>{const o=fn();return{type:'num',html:o.q,fields:o.fields,expl:o.expl,hint:o.hint,key:o.q}}});
+const F=(label,ans,kind,more)=>Object.assign({label,ans,kind:kind||'n'},more||{});
+const listExpl=(ch,cats)=>ch.map(p=>`${p[0]} – ${cats[p[1]]}`).join('; ')+'.';
+
+/* sprawdzanie odpowiedzi liczbowych: n = liczba, w = wiek (rzymski lub arabski), r = liczba rzymska */
+function chk(fd,raw){
+  let s=String(raw==null?'':raw).trim().toUpperCase().replace(/\s+/g,' ');
+  s=s.replace(/\b(WIEK|LAT|LATA|DNI|DZIEŃ|KM|WIEKÓW|WIEKI|P\.N\.E\.|N\.E\.)\b/g,'').replace(/\./g,'').replace(/\s+/g,' ').trim();
+  if(fd.kind==='r')return s.replace(/\s/g,'')===fd.ans;
+  if(fd.kind==='w'){if(/^\d+$/.test(s))return+s===fd.ans;return fromRoman(s.replace(/\s/g,''))===fd.ans}
+  return /^\d+$/.test(s)&&+s===fd.ans;
+}
+
+/* ---------- drzewo genealogiczne ---------- */
+const treeHTML=(rows,desc)=>`<div class="tree">${rows.map((r,i)=>`<div class="tr">${i===0?'<span class="tl">góra – najmłodsi</span>':''}${i===rows.length-1?'<span class="tl">dół – najstarsi</span>':''}${r.map(b=>`<span class="tb">${b}</span>`).join('')}</div>`).join('')}<p class="tdesc">${desc}</p></div>`;
+const FEM=['Anna','Joanna','Kasia','Teresa','Helena','Zofia','Maria','Ewa','Halina','Irena','Jadwiga','Ola','Danuta','Krystyna'];
+const MAS=['Tomasz','Piotr','Stefan','Zbigniew','Jan','Kuba','Marek','Adam','Henryk','Paweł','Ryszard','Andrzej','Józef','Leon'];
+function fam(){const f=pickN(FEM,5),m=pickN(MAS,5);return{sis:f[0],mama:f[1],bab:f[2],sb:f[3],pb:f[4],bro:m[0],tata:m[1],stryj:m[2],dz:m[3],pd:m[4]}}
+const famHTML=p=>treeHTML([[p.sis,'Ja',p.bro],[`${p.mama} 💍 ${p.tata}`,p.stryj],[p.sb,`${p.bab} 💍 ${p.dz}`],[`${p.pb} 💍 ${p.pd}`]],
+  `💍 = małżeństwo. ${p.pb} i ${p.pd} mają córki: ${p.sb} i ${p.bab}. ${p.bab} i ${p.dz} mają synów: ${p.tata} i ${p.stryj}. ${p.tata} i ${p.mama} mają dzieci: ${p.sis}, Ja i ${p.bro}.`);
+const ROLES_JA=['siostra','brat','mama','tata','stryj (brat taty)','babcia','dziadek','siostra babci','prababcia','pradziadek'];
+const ROLES_TATA=['mama','tata','brat','ciocia (siostra mamy)','babcia','dziadek','żona','syn'];
+function famRole(l){return D(l,()=>{const p=fam();
+  if(l===3){const c=[['bab','mama'],['dz','tata'],['stryj','brat'],['sb','ciocia (siostra mamy)'],['pb','babcia'],['pd','dziadek']],x=P(c);
+    return{q:famHTML(p)+`<br>Kim jest <b>${p[x[0]]}</b> dla osoby o imieniu <b>${p.tata}</b>?`,ok:x[1],bad:pickN(ROLES_TATA.filter(r=>r!==x[1]),3),expl:`${p[x[0]]} to ${x[1]} dla osoby ${p.tata}. ${p.tata} jest synem ${p.bab} i ${p.dz}, więc jego rodzicami są oni, a siostra jego mamy to ciocia.`}}
+  const pool=l===1?[['sis','siostra'],['bro','brat'],['mama','mama'],['tata','tata'],['bab','babcia'],['dz','dziadek']]:[['stryj','stryj (brat taty)'],['pb','prababcia'],['pd','pradziadek'],['sb','siostra babci'],['bab','babcia'],['dz','dziadek']];
+  const x=P(pool);return{q:famHTML(p)+`<br>Kim jest <b>${p[x[0]]}</b> dla osoby „Ja”?`,ok:x[1],bad:pickN(ROLES_JA.filter(r=>r!==x[1]),3),expl:`${p[x[0]]} to ${x[1]} osoby „Ja”. Czytaj drzewo od dołu: starsze pokolenia mają dzieci poziom wyżej.`}})}
+
+/* ---------- dane z podręcznika ---------- */
+const POSTACIE=[['Maria Skłodowska-Curie',0],['Mikołaj Kopernik',0],['Kazimierz Wielki',0],['Juliusz Cezar',0],['Krzysztof Kolumb',0],['Kleopatra VII',0],['Bolesław Chrobry',0],['Halina Konopacka',0],['Czerwony Kapturek',1],['Syrenka Warszawska',1],['Smok Wawelski',1]];
+const SRC=[['książka',0],['dokument',0],['gazeta',0],['paszport dziadka',0],['średniowieczna kronika',0],['list sprzed wielu lat',0],['ruiny zamku',1],['starożytny miecz',1],['budowla',1],['dzieło sztuki',1],['dawny przedmiot codziennego użytku',1],['taniec ludowy',2],['tradycja rodzinna',2],['obyczaj',2],['opowieść przekazywana ustnie',2],['mapa',0],['zbiór praw',0],['napis na pomniku',0],['pamiętnik',0],['obraz',1],['rzeźba',1],['biżuteria',1],['zdjęcie',1],['film',1],['pieśń',2],['zwyczaje wigilijne',2]];
+const SRCN=['materialne pisane','materialne niepisane','niematerialne'];
+const TRAD=['wspólne obchody świąt','wykonywanie w rodzinie tego samego zawodu','zamiłowanie do muzyki lub sportu','przepis na ulubione ciasto przekazywany przez dziesięciolecia','coroczne wspólne wyjazdy'];
+const NOTRAD=['jednorazowa wycieczka klasowa','przypadkowa rozmowa z nieznajomym','zakupy w sklepie','nowy film w kinie'];
+const EV=[
+ {t:'wynalezienie pisma (ok. 3400 r. p.n.e.)',v:-3400},{t:'śmierć Juliusza Cezara (44 r. p.n.e.)',v:-44},
+ {t:'pierwsze igrzyska w Koloseum (80 r. n.e.)',v:80},{t:'upadek Rzymu (476 r.)',v:476},
+ {t:'wynalezienie druku przez Gutenberga (połowa XV w.)',v:1450},{t:'zdobycie Konstantynopola przez Turków (1453 r.)',v:1453},
+ {t:'odkrycie Ameryki przez Kolumba (1492 r.)',v:1492},{t:'Kopernik ogłasza, że Ziemia kręci się wokół Słońca (1543 r.)',v:1543},
+ {t:'koniec I wojny światowej (1918 r.)',v:1918}];
+const EPO=['starożytność','średniowiecze','nowożytność','współczesność'];
+const EPDESC=[['czasy pierwszych państw',0],['czasy piramid i faraonów',0],['czasy potęgi Cesarstwa Rzymskiego',0],['czasy zamków i katedr',1],['czasy początków państwa polskiego',1],['czasy narodzin uniwersytetów',1],['czasy wielkich odkryć geograficznych',2],['czasy rozwoju nauki',2],['czasy maszyny parowej, fabryk i kolei',2],['czasy rozwoju komunikacji i technologii',3],['czasy podboju kosmosu',3],['czasy komputerów i internetu',3]];
+const epokaOf=(y,bc)=>bc||y<476?0:y<1492?1:y<1918?2:3;
+const PAIRS=[['ok. 3400 roku p.n.e.','wynalezienie pisma'],['476 roku','upadek Rzymu'],['1492 roku','odkrycie Ameryki'],['1918 roku','koniec I wojny światowej']];
+const WHO=['Pewien król','Pewien wódz','Pewien filozof','Pewien cesarz','Pewien poeta'];
+
+const B={
+hist:[
+ O(1,'Które trzy znaczenia ma słowo „historia”?','przeszłość, opowieść i nauka o przeszłości',['przeszłość, przyszłość i teraźniejszość','książka, film i gra','wydarzenie, data i miejsce'],'Historia to przeszłość, opowieść o niej, a także nauka o przeszłości.'),
+ O(1,'Czym zajmują się historycy?','badają losy ludzi, którzy żyli naprawdę, i opisują wydarzenia, do których naprawdę doszło',['wymyślają legendy i bajki o dawnych czasach','badają tylko rośliny i zwierzęta','przepowiadają przyszłość'],'Historycy badają postacie historyczne, opisują prawdziwe wydarzenia i czerpią wiedzę ze źródeł historycznych.'),
+ O(1,'Skąd historycy czerpią wiedzę o przeszłości?','ze źródeł historycznych',['z własnych wymysłów','z prognoz pogody','z kolorowych ilustracji w bajkach'],'Źródła historyczne to np. książki, dokumenty, budowle, przedmioty i opowieści.'),
+ SQ(1,'Postać historyczna czy postać z legendy lub bajki?',['postać historyczna','postać z legendy lub bajki'],POSTACIE,4,listExpl),
+ SQ(2,'Postać historyczna czy postać z legendy lub bajki?',['postać historyczna','postać z legendy lub bajki'],POSTACIE,6,listExpl),
+ O(2,'Dlaczego Syrenka Warszawska nie jest postacią historyczną?','Bo nie żyła naprawdę, to bohaterka legendy',['Bo żyła zbyt dawno','Bo nie miała imienia','Bo jest tylko pomnikiem, a pomniki nie są źródłem'],'Postacie historyczne to ludzie, którzy naprawdę żyli, jak Maria Skłodowska-Curie i Mikołaj Kopernik.'),
+ SQ(2,'Które znaczenie słowa „historia” ma to zdanie?',['przeszłość','opowieść','nauka o przeszłości'],[['Wszystko, co wydarzyło się dawno temu.',0],['Czasy, w których żyli nasi przodkowie.',0],['Babcia opowiada historię ze swojego dzieciństwa.',1],['Dziadek snuje historię o dawnym domu.',1],['Naukowcy badają dzieje ludzi i wydarzeń.',2],['To przedmiot szkolny i dziedzina badań.',2]],4,'Przeszłość to to, co minęło. Opowieść to relacja o tym. Nauka o przeszłości to zajęcie historyków.'),
+ O(3,'Co odróżnia postać historyczną od bohatera legendy?','Postać historyczna żyła naprawdę, a wiedzę o niej czerpiemy ze źródeł',['Postać historyczna zawsze była królem','Bohaterowie legend mają zawsze prawdziwe imiona','Nie ma między nimi różnicy'],'Historycy opisują tylko to, co wydarzyło się naprawdę.'),
+ O(3,'Historyk chce opisać wydarzenie sprzed wieków. Co jest mu potrzebne, by wiedzieć, że naprawdę się wydarzyło?','źródła historyczne',['tylko własna wyobraźnia','tylko ilustracja z bajki','nic, wystarczy je wymyślić'],'Historycy czerpią wiedzę o przeszłości ze źródeł historycznych.'),
+ O(1,'Smok Wawelski to postać:','legendarna',['baśniowa','historyczna'],'Smok Wawelski jest bohaterem legendy, czyli wymyślonej opowieści, w której mogą pojawiać się prawdziwe miejsca.'),
+ D(1,()=>{const x=P([['Królewna Śnieżka','baśniowa','legendarna','historyczna','Postacie baśniowe są wymyślone, a ich losy toczą się w nieokreślonym miejscu i czasie: dawno, dawno temu.'],['Robin Hood','legendarna','baśniowa','historyczna','Postacie legendarne są wymyślone, ale w legendach występują też prawdziwe osoby, miejsca i wydarzenia.'],['Stanisław August Poniatowski','historyczna','baśniowa','legendarna','Stanisław August Poniatowski był królem Polski i żył naprawdę, więc to postać historyczna.']]);return{q:`<b>${x[0]}</b> to postać:`,ok:x[1],bad:[x[2],x[3]],expl:x[4]}}),
+ O(1,'Po co nam historia?','Pozwala lepiej zrozumieć świat, w którym żyjemy',['Pozwala przewidywać pogodę','Uczy wymyślać bajki','Nie jest do niczego potrzebna'],'Praca historyków pomaga zrozumieć, jak różne okoliczności zmieniały życie ludzi, ich zajęcia i zwyczaje.'),
+ O(2,'Co jest najważniejsze dla historyków?','prawda',['wymyślanie ciekawych opowieści','piękne ilustracje','jak najdłuższe książki'],'Historycy opisują tylko prawdziwe postacie i wydarzenia, więc najważniejsza jest dla nich prawda.'),
+ O(2,'Co różni baśń od legendy?','W baśni wszystko jest wymyślone, a w legendzie prawda miesza się z nieprawdą',['Baśnie opisują tylko prawdziwe wydarzenia','W legendach nigdy nie ma prawdziwych miejsc','Baśnie to dzieła historyków'],'W baśniach są wymyśleni bohaterowie i nieprawdziwe zdarzenia, a w legendach pojawiają się też prawdziwe osoby, miejsca i wydarzenia.'),
+ D(2,()=>{const x=P([[1492,'Krzysztof Kolumb odkrył Amerykę','Maria Skłodowska-Curie dostała Nagrodę Nobla','Polska odzyskała niepodległość'],[1911,'Maria Skłodowska-Curie dostała Nagrodę Nobla za odkrycia naukowe','Krzysztof Kolumb odkrył Amerykę','Polska odzyskała niepodległość'],[1918,'Polska odzyskała niepodległość','Krzysztof Kolumb odkrył Amerykę','Maria Skłodowska-Curie dostała Nagrodę Nobla']]);return{q:`Co wydarzyło się w roku <b>${x[0]}</b>?`,ok:x[1],bad:[x[2],x[3]],expl:`W ${x[0]} roku: ${x[1][0].toLowerCase()+x[1].slice(1)}.`}}),
+ O(3,'Dlaczego znajomość historii pomaga unikać błędów?','Bo znając przyczyny dawnych wydarzeń, łatwiej przewidzieć skutki własnych działań',['Bo historia daje gotowe rozwiązania na każdy problem','Bo historia się nie zmienia, a świat też','Bo trzeba pamiętać wszystkie daty'],'Historia pozwala uczyć się na błędach przodków, ale nie daje gotowych rozwiązań, bo świat się zmienia i każda epoka jest inna.'),
+ O(3,'Czy historia jest nauczycielką życia?','I tak, i nie: uczy na błędach i wzorach, ale nie daje gotowych rozwiązań',['Tak, bo daje gotowe rozwiązania na każdą sytuację','Nie, bo nie można się z niej niczego nauczyć','Tak, ale tylko dla historyków'],'Świat się zmienia, a każda epoka jest inna, dlatego historia nie podaje gotowych rozwiązań.'),
+ O(3,'Czego uczysz się na lekcjach historii?','zbierać informacje o przeszłości i sprawdzać, czy są prawdziwe',['wymyślać legendy','zapamiętywać same daty bez znaczenia','przewidywać pogodę'],'Na historii uczysz się też rozpoznawać przyczyny i skutki wydarzeń oraz tworzyć własną opowieść ze sprawdzonych faktów.')
+],
+zrodla:[
+ O(1,'Do jakiej grupy źródeł należą ustne opowieści o przeszłości?','niematerialnych',['materialnych – pisanych','materialnych – niepisanych','żadnej, bo opowieści nie są źródłem'],'Ustne opowieści, tradycje i obyczaje to źródła niematerialne.'),
+ D(1,()=>{const x=P(SRC);return{q:`Do jakiej grupy źródeł należy: <b>${x[0]}</b>?`,ok:SRCN[x[1]],bad:SRCN.filter((_,i)=>i!==x[1]),expl:`${x[0][0].toUpperCase()+x[0].slice(1)} to źródło: ${SRCN[x[1]]}.`}}),
+ O(1,'Książki, dokumenty i gazety to źródła:','materialne pisane',['materialne niepisane','niematerialne'],'Źródła pisane to książki, dokumenty i gazety.'),
+ SQ(2,'Przyporządkuj do właściwego typu źródeł.',SRCN,SRC,5,listExpl),
+ O(2,'Budowle, dzieła sztuki i dawne przedmioty to źródła:','materialne niepisane',['materialne pisane','niematerialne'],'To źródła materialne, ale bez tekstu, więc niepisane.'),
+ O(2,'Taniec ludowy jest źródłem:','niematerialnym',['materialnym pisanym','materialnym niepisanym'],'Taniec ludowy, tradycja, obyczaje i opowieści to źródła niematerialne.'),
+ SQ(3,'Przyporządkuj do właściwego typu źródeł.',SRCN,SRC,7,listExpl),
+ O(3,'Które ze źródeł mogło zostać odnalezione na wykopaliskach archeologicznych?','starożytny miecz',['taniec ludowy','opowieść przekazywana ustnie','zwyczaj obchodzenia świąt'],'Miecz to przedmiot (źródło materialne niepisane), więc można go wykopać. Tańca, opowieści i zwyczaju nie da się wykopać, bo są niematerialne.'),
+ O(3,'Pamiętnik babci należy do źródeł:','materialnych pisanych',['materialnych niepisanych','niematerialnych'],'Pamiętnik jest przedmiotem z tekstem, czyli to źródło materialne pisane.'),
+ O(1,'Co jest źródłem historycznym?','każdy ślad działalności człowieka z przeszłości',['tylko gruba kronika','tylko budowla','tylko to, co napisał król'],'Źródłem może być wszystko, od kroniki po garnek, od budowli po gazetę i wspomnienia starszej osoby.'),
+ O(1,'Kto pomaga historykom w odkrywaniu przeszłości, szukając śladów pod ziemią?','archeolodzy',['piekarze','kronikarze z XXI wieku','żeglarze'],'Archeolodzy szukają materialnych śladów działalności człowieka, m.in. na wykopaliskach.'),
+ O(2,'Czym są wykopaliska?','pracami, które pozwalają odnaleźć przedmioty ukryte pod ziemią',['dawnymi budowlami','książkami o przeszłości','zbiorem praw'],'Wykopaliska to ważna metoda pracy archeologów. Wymagają dużej cierpliwości.'),
+ O(2,'Czego dowiadujemy się dzięki archeologom?','jak dawniej budowano domy, jakich używano narzędzi i co jedzono',['kto wygra następne wybory','jaka będzie pogoda','jak wyglądają baśnie'],'Przedmioty znajdowane przez archeologów to źródła historyczne.'),
+ O(2,'Najstarsze źródło z nazwą „Polska” to:','moneta z czasów Bolesława Chrobrego',['kronika Kadłubka','list z XX wieku','gazeta'],'Ta moneta sprzed tysiąca lat ma zaledwie 19 mm średnicy. Źródło historyczne może być bardzo małe.'),
+ NM(2,()=>({q:'Moneta z czasów Bolesława Chrobrego, pierwsze źródło z nazwą „Polska”, ma średnicę tylko... Ile milimetrów?',fields:[F('średnica monety (mm)',19,'n')],expl:'Moneta ma zaledwie 19 mm średnicy.',hint:'Mniej niż 2 cm.'})),
+ O(3,'Co wytwarzamy obecnie, może w przyszłości stać się:','źródłem historycznym',['legendą','baśnią','wykopaliskiem'],'Wszystko, co wytwarzamy, może stać się źródłem historycznym.'),
+ O(3,'Potrawy wigilijne należą do źródeł:','niematerialnych (to część tradycji)',['materialnych pisanych','materialnych niepisanych'],'Zwyczaje wigilijne, w tym potrawy, są częścią naszej tradycji.'),
+ O(3,'Co pokazują historykom stare gazety?','czym dawniej interesowali się ludzie',['jaka będzie pogoda','jak zbudować zamek','kto napisał baśnie'],'Stare gazety to źródła materialne pisane. Dzieła sztuki z kolei pomagają badać historię mody.')
+],
+wiary:[
+ O(1,'Wiarygodność źródła to:','to, na ile zawarte w nim informacje są pewne',['to, jak dawno źródło powstało','to, jak duże jest źródło','to, ile kosztuje źródło'],'Historycy oceniają wiarygodność, by wiedzieć, czy źródłu można ufać.'),
+ O(1,'Kto ocenia wiarygodność źródeł historycznych?','historycy',['piekarze','kierowcy','tylko nauczyciele matematyki'],'Ocena wiarygodności to ważny etap pracy historyka.'),
+ O(1,'Dlaczego trzeba być ostrożnym przy badaniu źródeł?','Bo kroniki bywają nieprawdziwe, dokumenty fałszowane, a świadkowie nie pamiętają szczegółów',['Bo wszystkie źródła mówią prawdę','Bo źródła są zawsze zbyt małe','Bo nikt ich nie czyta'],'Świadkowie wydarzeń czasem przedstawiają swoje opinie jako fakty.'),
+ SQ(1,'Fakt czy opinia?',['fakt','opinia'],[['Krzysztof Kolumb odkrył Amerykę w 1492 roku.',0],['Polska odzyskała niepodległość w 1918 roku.',0],['Maria Skłodowska-Curie dostała Nagrodę Nobla w 1911 roku.',0],['Dawniej było lepiej niż dziś.',1],['Najpiękniejszą budowlą świata jest zamek.',1],['Historia jest nudna.',1]],4,(ch,c)=>ch.map(p=>p[0]+' – '+c[p[1]]).join(' ')+' Fakt można sprawdzić w źródłach, a opinia to czyjś pogląd.'),
+ O(2,'Od czego zaczyna historyk ocenę wiarygodności źródła?','od ustalenia, kto, kiedy i w jakim celu je stworzył',['od wyrzucenia źródła','od porównania z baśnią','od zgadywania'],'Potem historyk porównuje treść źródła z innymi relacjami i dostępnymi wiadomościami.'),
+ O(2,'Jak historyk sprawdza, czy źródło mówi prawdę, po ustaleniu autora i celu?','porównuje jego treść z innymi źródłami',['pyta tylko jednego świadka','wierzy w każde słowo','czeka na lepszą pogodę'],'Porównanie z innymi źródłami to ważny etap oceny wiarygodności.'),
+ Ord(2,'Ułóż etapy pracy historyka nad wzmianką z kroniki o bitwie na Psim Polu.',['Wzmianka w kronice','Pierwsze pytania o wiarygodność opisu','Porównanie z innymi źródłami','Badanie, co napisali inni historycy i archeolodzy','Wyciągnięcie wniosków i napisanie książki lub artykułu'],'Historyk czyta wzmiankę, zadaje pytania, porównuje źródła, bada stan wiedzy, a na końcu wyciąga wnioski.'),
+ O(2,'Dlaczego historycy uznali wzmiankę Kadłubka o bitwie na Psim Polu za niewiarygodną?','Bo wcześniejsi kronikarze o niej milczą, a archeolodzy nie znaleźli śladów starcia',['Bo kronika była za gruba','Bo Kadłubek nie umiał pisać','Bo bitwa odbyła się w nocy'],'Wniosek: do bitwy na Psim Polu nie doszło.'),
+ O(3,'W jaki sposób praca archeologów wspiera działania historyków?','Archeolodzy szukają materialnych śladów, które potwierdzają lub podważają opisy ze źródeł pisanych',['Archeolodzy piszą kroniki za historyków','Archeolodzy zastępują historyków','Nie wspierają ich wcale'],'Na Psim Polu archeolodzy nie znaleźli żadnych śladów starcia, co pomogło ocenić kronikę.'),
+ O(3,'Które pytanie pomaga ocenić wiarygodność kroniki?','Czy zapis kronikarza potwierdzają inne źródła?',['Czy kronika ma ładną okładkę?','Czy kronikarz lubił zwierzęta?','Czy kronika jest ciężka?'],'Historyk sprawdza, czy inne źródła potwierdzają opis wydarzenia.'),
+ O(3,'Świadek opowiada o wydarzeniu i swoją opinię przedstawia jako fakt. Co robi historyk?','sprawdza relację w innych źródłach',['przyjmuje ją bez sprawdzania','wyrzuca wszystkie relacje świadków','zmienia fakty na własne'],'Świadkowie już nie pamiętają szczegółów lub mylą opinie z faktami.')
+],
+przyczyny:[
+ O(1,'Jednym z ulubionych pytań historyków jest:','dlaczego?',['ile to kosztuje?','kto jest najsilniejszy?','jaka będzie pogoda?'],'Historycy starają się ustalić, dlaczego doszło do danego faktu.'),
+ O(1,'Przyczyny wydarzenia to:','działania lub zdarzenia, które do niego doprowadziły',['dalsze przemiany, jakie ono wywołało','jego data','miejsce, w którym się odbyło'],'Przyczyny odpowiadają na pytanie: dlaczego do tego doszło?'),
+ O(1,'Skutki wydarzenia to:','dalsze przemiany, jakie ono wywołało',['działania, które do niego doprowadziły','nazwiska uczestników','jego opis w kronice'],'Skutki odpowiadają na pytanie: co z tego wynikło?'),
+ O(1,'Kto wynalazł druk?','niemiecki drukarz Jan Gutenberg',['Mikołaj Kopernik','Kleopatra','Bolesław Chrobry'],'Druk to jeden z najważniejszych wynalazków ludzkości.'),
+ SQ(2,'Przyczyna czy skutek wynalezienia druku?',['przyczyna','skutek'],[['powolne, ręczne wytwarzanie książek',0],['bardzo wysoka cena książek',0],['obniżenie cen książek',1],['rozwój szkolnictwa',1],['rozwój kultury i literatury',1]],4,(ch,c)=>ch.map(p=>p[0]+' – '+c[p[1]]).join('; ')+'.'),
+ Ord(2,'Ułóż wydarzenia w porządku przyczynowo-skutkowym.',['Książki powstają ręcznie, są bardzo drogie','Jan Gutenberg wynajduje druk','Książki tanieją, rozwija się szkolnictwo'],'Przyczyna (drogie, ręcznie robione książki) prowadzi do wydarzenia (druk), a ono do skutków (tańsze książki, rozwój szkolnictwa i kultury).'),
+ O(2,'Co było wydarzeniem w schemacie przyczyn i skutków druku?','wynalezienie druku przez Jana Gutenberga',['wysoka cena książek','rozwój szkolnictwa','ręczne przepisywanie książek'],'Przyczyny były przed wydarzeniem, a skutki po nim.'),
+ O(3,'Związki przyczynowo-skutkowe to:','związki między wydarzeniami z przeszłości, z których jedno bezpośrednio prowadziło do drugiego',['wszystkie wydarzenia z jednego roku','związki rodzinne między królami','daty ułożone od najstarszej do najnowszej'],'Zrozumienie tych związków ułatwiają schematy z podręcznika.'),
+ O(3,'Dlaczego wynalezienie druku było jednym z najważniejszych wynalazków ludzkości?','Obniżyło ceny książek i przyczyniło się do rozwoju szkolnictwa, kultury i literatury',['Bo wynalazł go król Polski','Bo książki stały się droższe','Bo zlikwidowano szkoły'],'Druk sprawił, że książki stały się tańsze i bardziej dostępne.'),
+ SQ(3,'Przyczyna czy skutek wynalezienia druku?',['przyczyna','skutek'],[['powolne, ręczne wytwarzanie książek',0],['bardzo wysoka cena książek',0],['obniżenie cen książek',1],['rozwój szkolnictwa',1],['rozwój kultury i literatury',1]],5,(ch,c)=>ch.map(p=>p[0]+' – '+c[p[1]]).join('; ')+'.')
+],
+rodzina:[
+ O(1,'Skąd najczęściej czerpiemy wiadomości o historii rodziny?','z opowieści krewnych i pamiątek rodzinnych',['z prognozy pogody','tylko z gazet','z podręcznika do matematyki'],'Główne źródła historii rodziny to opowieści krewnych i pamiątki rodzinne.'),
+ O(1,'Krewni to:','osoby połączone więzami krwi, pochodzące od wspólnego przodka',['wszyscy ludzie mieszkający w jednej wsi','koledzy z klasy','sąsiedzi'],'Krewni mają wspólnego przodka.'),
+ O(1,'Pokolenie to:','grupa osób w podobnym wieku',['wszyscy ludzie z jednej rodziny','osoby o tym samym nazwisku','jeden dom'],'Np. dzieci to jedno pokolenie, a rodzice kolejne.'),
+ O(1,'Które z poniższych to pamiątka rodzinna?','zdjęcie pradziadka',['bilet na dzisiejszy autobus','paragon ze sklepu','ulotka reklamowa'],'Pamiątki rodzinne to przedmioty związane z rodziną: zdjęcia, dokumenty, listy.'),
+ O(2,'Dlaczego do zrozumienia zegarka dziadka potrzebna jest opowieść?','Bo dopiero opowieść mówi, dla kogo był ważny i z jakimi wydarzeniami się wiąże',['Bo zegarek bez opowieści się psuje','Bo opowieść zastępuje baterię','Nie potrzeba jej'],'Aby zrozumieć pamiątkę, trzeba poznać towarzyszące jej opowieści.'),
+ O(2,'Jak dawniej przekazywano rodzinne historie?','ustnie, z pokolenia na pokolenie',['przez internet','w gazetach codziennych','nie przekazywano ich wcale'],'Dziś taką relację możemy łatwo nagrać.'),
+ O(2,'Jak dziś najłatwiej ocalić rodzinną opowieść od zapomnienia?','nagrać ją',['zapomnieć o niej','schować ją do szuflady','przekazać tylko jednej osobie'],'Nagranie pozwala zachować opowieść dla przyszłych pokoleń.'),
+ SQ(2,'Opowieść krewnych czy pamiątka rodzinna?',['opowieść krewnych','pamiątka rodzinna'],[['Dziadek wspomina swoje dzieciństwo.',0],['Babcia opowiada o swojej pracy.',0],['Pradziadek opisuje dawny dom.',0],['Stare zdjęcia.',1],['Listy sprzed lat.',1],['Zegarek po prapradziadku.',1],['Pamiętnik.',1],['Dokumenty rodziny.',1]],5,listExpl),
+ O(3,'Genealogia to:','nauka zajmująca się badaniem historii rodziny i więzi między jej członkami',['nauka o pogodzie','sztuka rysowania portretów','nauka o mierzeniu czasu'],'Genealogia pomaga zrozumieć, kim kto jest w rodzinie.'),
+ O(3,'Które źródło wiedzy o rodzinie jest niematerialne?','opowieść babci',['zdjęcie','list','dokument'],'Opowieść to źródło niematerialne. Zdjęcie, list i dokument są przedmiotami.')
+],
+drzewo:[
+ O(1,'Drzewo genealogiczne to:','schemat przedstawiający powiązania między członkami rodziny z różnych pokoleń',['rysunek prawdziwego drzewa w ogrodzie','lista zakupów rodziny','mapa miejscowości'],'Pokazuje, kto jest z kim spokrewniony.'),
+ O(1,'Gdzie na drzewie genealogicznym umieszczamy najstarszych krewnych?','na dole, na pniu drzewa',['na górze','pośrodku zawsze','nie umieszczamy ich'],'Z najstarszych przodków „wyrasta” reszta rodziny.'),
+ O(1,'Gdzie na drzewie genealogicznym umieszczamy najmłodszych krewnych?','na górze, na szczycie drzewa',['na dole','na pniu','obok najstarszych'],'Na szczycie drzewa są najmłodsi.'),
+ famRole(1),
+ famRole(1),
+ O(2,'Jakie informacje zwykle umieszczamy na drzewie genealogicznym?','imiona, nazwiska i daty życia bliskich',['adresy i numery telefonów','oceny szkolne','ceny pamiątek'],'Można dodać też zawody, dokonania i zdjęcia.'),
+ D(2,()=>{const p=fam();return{q:famHTML(p)+'<br>Ile pokoleń przedstawiono na tym drzewie?',ok:'4',bad:['2','3','5'],expl:'Cztery poziomy: najstarsi na dole, potem dziadkowie i ich dzieci, rodzice, a na górze najmłodsi.'}}),
+ D(2,()=>{const p=fam();return{q:famHTML(p)+'<br>Kto należy do najstarszego pokolenia na tym drzewie?',ok:`${p.pb} i ${p.pd}`,bad:[`${p.bab} i ${p.dz}`,`${p.mama} i ${p.tata}`,`${p.sis} i ${p.bro}`],expl:`Najstarsi przodkowie są na samym dole, na pniu: ${p.pb} i ${p.pd}.`}}),
+ famRole(2),
+ famRole(2),
+ SQ(3,'Odczytaj z drzewa Ani, kim są dla niej wymienione osoby.<div class="tree"><div class="tr"><span class="tl">góra – najmłodsi</span><span class="tb">Ania</span><span class="tb">Tomek</span><span class="tb">Zuzia</span></div><div class="tr"><span class="tb">Jan 💍 Barbara</span><span class="tb">Andrzej 💍 Laura</span></div><div class="tr"><span class="tl">dół – najstarsi</span><span class="tb">Antonina 💍 Ryszard</span></div><p class="tdesc">💍 = małżeństwo. Antonina i Ryszard mają dzieci: Barbarę i Andrzeja. Jan i Barbara mają dzieci: Anię, Tomka i Zuzię. Laura jest żoną Andrzeja.</p></div>',['mama','tata','dziadek','babcia','wujek','ciocia (żona wujka)'],[['Barbara',0],['Jan',1],['Ryszard',2],['Antonina',3],['Andrzej',4],['Laura',5]],4,(ch,c)=>listExpl(ch,c)+' Barbara jest mamą Ani, a jej rodzice to Antonina i Ryszard.'),
+ famRole(3),
+ famRole(3)
+],
+tradycje:[
+ O(1,'Rodzinna tradycja to:','element łączący członków rodziny, np. zwyczaje',['każda rzecz kupiona w sklepie','tylko stare meble','przypadkowe spotkanie'],'Tradycje wzmacniają poczucie więzi.'),
+ D(1,()=>{const ok=P(NOTRAD);return{q:'Które z poniższych <b>nie jest</b> rodzinną tradycją?',ok,bad:pickN(TRAD,3),expl:`„${ok}” nie jest tradycją rodzinną. Tradycją są np. wspólne obchody świąt i przepis na ciasto przekazywany przez pokolenia.`}}),
+ D(1,()=>{const ok=P(TRAD);return{q:'Które z poniższych może być częścią rodzinnej tradycji?',ok,bad:pickN(NOTRAD,3),expl:`„${ok}” może być częścią rodzinnej tradycji.`}}),
+ O(2,'Kiedy najczęściej przypominamy sobie o rodzinnej tradycji?','w czasie planowania spotkań świątecznych',['podczas lekcji matematyki','gdy robimy zakupy','nigdy'],'Staramy się wtedy, by przebiegały jak zwykle.'),
+ O(2,'Po co są tradycje rodzinne?','wzmacniają więzi i pozwalają rodzinie utrzymać stały, bliski kontakt',['żeby rodzina się nie spotykała','żeby kłócić się o święta','nie służą do niczego'],'Tradycje łączą członków rodziny.'),
+ O(2,'Co oprócz zwyczajów może składać się na tradycję rodzinną?','wykonywanie tego samego zawodu, zamiłowanie do muzyki lub sportu, przepis na ciasto',['tylko liczba pokoi w domu','tylko kolor ścian','tylko nazwisko'],'Tradycja to nie tylko zwyczaje.'),
+ O(3,'Rodzina od pokoleń piecze na święta ciasto według tego samego przepisu. Co to jest?','rodzinna tradycja',['przypadek','dowód, że dziadek był królem','źródło materialne pisane'],'Przepis przekazywany przez dziesięciolecia jest częścią tradycji rodzinnej.'),
+ O(3,'Do jakiej grupy źródeł historycznych należy tradycja rodzinna?','do źródeł niematerialnych',['do źródeł materialnych pisanych','do źródeł materialnych niepisanych','do żadnej'],'Tradycja, obyczaje i opowieści to źródła niematerialne.')
+],
+chrono:[
+ O(1,'Chronologia to:','nauka o mierzeniu czasu',['nauka o roślinach','zbiór legend','mapa'],'Pomaga ustalać daty wydarzeń.'),
+ O(1,'Porządek chronologiczny to układ wydarzeń:','od najdawniejszego do najnowszego',['od najnowszego do najdawniejszego','alfabetyczny','losowy'],'Dzięki temu łatwiej zrozumieć, jak wydarzenia mogły na siebie wpływać.'),
+ O(1,'Na osi czasu najstarsze wydarzenia umieszczamy:','po lewej stronie',['po prawej stronie','na górze','pośrodku'],'Najnowsze są po prawej.'),
+ O(1,'Co pokazuje strzałka na końcu osi czasu?','w którą stronę płynie czas',['gdzie jest północ','które wydarzenie jest najważniejsze','ile lat trwa epoka'],'Czas płynie od lewej do prawej.'),
+ O(1,'Skąd pochodzi słowo „chronologia”?','od imienia greckiego boga Chronosa, który miał rządzić czasem',['od nazwy rzeki Nil','od imienia rzymskiego cesarza','od słowa „zegar”'],'Artyści ukazywali Chronosa jako skrzydlatego starca z kosą.'),
+ O(2,'Co dają nam daty ułożone w porządku chronologicznym?','łatwiej zrozumieć, jak wydarzenia na siebie wpływały, oraz ustalić ich przyczyny i skutki',['nic, daty są niepotrzebne','tylko ładniejszy rysunek','wiemy, kto był mądrzejszy'],'Chronologia pomaga w poznaniu przyczyn i skutków.'),
+ O(2,'Rysujesz oś czasu rodziny. Gdzie zaznaczysz narodziny dziadków?','po lewej stronie, bo urodzili się najwcześniej',['po prawej stronie','na samym końcu strzałki','w środku, zawsze'],'Po lewej narodziny dziadków, w środku rodziców, po prawej nasze.'),
+ O(2,'Na osi czasu rodziny: narodziny babci 1951, mamy 1984, moje 2016. Kto urodził się najpóźniej?','ja (2016)',['babcia (1951)','mama (1984)','wszyscy w tym samym roku'],'Im większa data (w naszej erze), tym później.'),
+ OrdD(2,'Ułóż wydarzenia w porządku chronologicznym.',()=>{const e=pickN(EV.filter(x=>x.v>0),4).sort((a,b)=>a.v-b.v);return{steps:e.map(x=>x.t),expl:'Od najdawniejszego: '+e.map(x=>x.t).join(' → ')+'.'}}),
+ SQ(3,'Górna czy dolna oś na osi czasu w podręczniku?',['górna oś','dolna oś'],[['nazwy epok historycznych',0],['daty początkowe i końcowe epok',0],['kolorem oznaczona epoka omawianego tematu',0],['stulecia',1],['najważniejsze wydarzenia',1],['okres, o którym będzie mowa na lekcji',1]],4,listExpl),
+ OrdD(3,'Ułóż wydarzenia w porządku chronologicznym. Uważaj na daty p.n.e.!',()=>{const e=[...EV.filter(x=>x.v<0),...pickN(EV.filter(x=>x.v>0),4)].sort((a,b)=>a.v-b.v);return{steps:e.map(x=>x.t),expl:'W p.n.e. większa liczba oznacza wcześniejszy rok. Kolejność: '+e.map(x=>x.t).join(' → ')+'.'}}),
+ O(3,'Który rok jest najdawniejszy?','3400 rok p.n.e.',['44 rok p.n.e.','1 rok n.e.','80 rok n.e.'],'Przed naszą erą liczby maleją w stronę 1 roku n.e., więc 3400 p.n.e. jest najdawniejszy.')
+],
+jedn:[
+ O(1,'Ile dni ma rok?','365 lub 366',['100','12','30'],'Rok przestępny ma 366 dni.'),
+ O(1,'Wiek, inaczej stulecie, to:','100 lat',['10 lat','1000 lat','365 dni'],'Wiek = 100 lat.'),
+ O(1,'Tysiąclecie to:','1000 lat, czyli 10 wieków',['100 lat','10 lat','10 000 lat'],'Tysiąclecie = 10 wieków.'),
+ O(1,'W którym wieku żyjemy?','dwudziestym pierwszym',['dziewiętnastym','dwudziestym','dwudziestym drugim'],'Trwa XXI wiek.'),
+ O(2,'Jak inaczej nazywamy wiek?','stulecie',['tysiąclecie','dziesięciolecie','rok'],'Wiek i stulecie to to samo.'),
+ NM(2,()=>{const a=R(2,9),b=R(2,5),c=R(2,6);return{q:'Zamień jednostki czasu.',fields:[F(`${a} ${plural(a,'wiek','wieki','wieków')} to`,a*100,'n',{unit:'lat'}),F(`${b} tysiąclecia to`,b*10,'n',{unit:'wieków'}),F(`${c*100} lat to`,c,'n',{unit:'wieków'})],expl:`Wiek to 100 lat, tysiąclecie to 10 wieków. ${a}·100 = ${a*100}, ${b}·10 = ${b*10}, ${c*100}:100 = ${c}.`}}),
+ NM(2,()=>{const a=R(2,6)*1000,b=R(2,9)*100;return{q:'Ile to jest?',fields:[F(`${a/1000} ${plural(a/1000,'tysiąclecie','tysiąclecia','tysiącleci')} to`,a,'n',{unit:'lat'}),F(`${b} lat to`,b/100,'n',{unit:'wieków'}),F(`${a/1000} ${plural(a/1000,'tysiąclecie','tysiąclecia','tysiącleci')} to`,a/100,'n',{unit:'wieków'})],expl:'1 tysiąclecie = 1000 lat = 10 wieków.'}}),
+ NM(3,()=>({q:'Ile pełnych wieków upłynęło od 1 roku n.e. do dziś?',fields:[F('Pełnych wieków:',Math.floor((CUR-1)/100),'n',{unit:'wieków'})],expl:`Od 1 roku n.e. do ${CUR} roku upłynęło ${CUR-1} lat, czyli ${Math.floor((CUR-1)/100)} pełnych wieków.`,hint:'Odejmij 1 od obecnego roku (nie było roku zerowego), a potem podziel przez 100 i weź pełne wieki.'})),
+ O(3,'Kiedy skończyło się drugie tysiąclecie?','31 grudnia 2000 roku',['31 grudnia 1999 roku','1 stycznia 2000 roku','31 grudnia 2001 roku'],'Tysiąclecia zachowują się jak wieki: kończą się w roku z trzema zerami na końcu.'),
+ O(3,'Jakimi jednostkami czasu posługujemy się na lekcjach historii?','dzień, miesiąc, rok, wiek (stulecie) i tysiąclecie',['tylko godzinami i minutami','tylko dniami','tylko sekundami'],'Poznajemy większe jednostki: wiek i tysiąclecie.')
+],
+ery:[
+ O(1,'Na jakie dwie ery dzielimy dzieje ludzkości?','przed naszą erą (p.n.e.) i naszą erę (n.e.)',['starą i nową','wczesną i późną','ciemną i jasną'],'Skróty: p.n.e. i n.e.'),
+ O(1,'Od czego w Europie liczymy czas?','od narodzin Jezusa z Nazaretu',['od budowy piramid','od wynalezienia druku','od odkrycia Ameryki'],'To 1 rok naszej ery.'),
+ O(1,'Co znaczy skrót p.n.e.?','przed naszą erą',['po naszej erze','początek nowej epoki','piąta noc ery'],'To czasy przed narodzinami Jezusa z Nazaretu.'),
+ O(1,'Jaki wynalazek wyznacza początek historii?','pismo',['koło','druk','zegar'],'Od wynalezienia pisma zaczyna się historia. Wcześniejsze czasy to prehistoria.'),
+ O(1,'Czasy przed wynalezieniem pisma to:','prehistoria',['starożytność','średniowiecze','współczesność'],'Prehistoria poprzedza historię.'),
+ O(2,'Co następuje bezpośrednio po 1 roku p.n.e.?','1 rok n.e.',['rok zerowy','2 rok p.n.e.','2 rok n.e.'],'Nie było roku zerowego: po 31 grudnia 1 roku p.n.e. następuje 1 stycznia 1 roku n.e.'),
+ Ord(2,'Ułóż lata na przełomie er od najdawniejszego.',['2 rok p.n.e.','1 rok p.n.e.','1 rok n.e.','2 rok n.e.'],'Na przełomie er: 2 p.n.e., 1 p.n.e., 1 n.e., 2 n.e.'),
+ O(2,'Od jak dawna ludzie żyją na Ziemi?','od około 300 tysięcy lat',['od 300 lat','od 3000 lat','od 30 milionów lat'],'Historycy zajmują się jednak tylko niewielką częścią tego okresu: od wynalezienia pisma.'),
+ SQ(2,'Prehistoria czy historia?',['prehistoria','historia'],[['czasy przed wynalezieniem pisma',0],['okres, z którego nie ma zapisów pisanych',0],['czasy, o których czytamy w dawnych zapisach',1],['czasy po wynalezieniu pisma',1]],4,listExpl),
+ D(2,()=>{const a=R(60,900);return{q:'Który z tych lat jest <b>najdawniejszy</b>?',ok:`${a} rok p.n.e.`,bad:[`${Math.max(1,a-R(5,50))} rok p.n.e.`,`${R(2,200)} rok n.e.`,`1 rok n.e.`],expl:'Przed naszą erą im większa liczba, tym wcześniejszy rok. Lata n.e. są późniejsze niż wszystkie lata p.n.e.'}}),
+ O(3,'Dlaczego historia zaczyna się od wynalezienia pisma?','Dzięki pismu znamy nazwy dawnych miast i państw i możemy ustalić, jak toczyło się życie ich mieszkańców',['Bo wcześniej nikt nie żył','Bo pismo wynaleziono w 1 roku n.e.','Bo historycy nie lubią malowideł'],'Pismo daje historykom źródła.'),
+ O(3,'Czy w historii był rok zerowy?','Nie, po 1 roku p.n.e. od razu następuje 1 rok n.e.',['Tak, między erami','Tak, ale tylko w Polsce','Był, ale nie liczymy go'],'To dlatego przy obliczeniach między różnymi erami odejmujemy 1.')
+],
+epoki:[
+ O(1,'Jaką nazwę nosi pierwsza epoka historyczna?','starożytność',['średniowiecze','nowożytność','prehistoria'],'Zaczyna się około 3400 roku p.n.e., od wynalezienia pisma.'),
+ Ord(1,'Ułóż epoki historyczne od najstarszej.',['starożytność','średniowiecze','nowożytność','współczesność'],'Starożytność → średniowiecze → nowożytność → współczesność.'),
+ D(1,()=>{const x=P(EPDESC);return{q:`Do której epoki należą: <b>${x[0]}</b>?`,ok:EPO[x[1]],bad:EPO.filter((_,i)=>i!==x[1]),expl:`${x[0][0].toUpperCase()+x[0].slice(1)} to ${EPO[x[1]]}.`}}),
+ D(1,()=>{const p=P(PAIRS);return{q:`Co wydarzyło się w <b>${p[0]}</b>?`,ok:p[1],bad:pickN(PAIRS.filter(x=>x!==p).map(x=>x[1]),3),expl:`W ${p[0]}: ${p[1]}.`}}),
+ SQ(2,'Do której epoki należą te czasy?',EPO,EPDESC,6,listExpl),
+ D(2,()=>{const p=P(PAIRS);return{q:`Kiedy: <b>${p[1]}</b>?`,ok:p[0],bad:pickN(PAIRS.filter(x=>x!==p).map(x=>x[0]),3),expl:`${p[1][0].toUpperCase()+p[1].slice(1)}: ${p[0]}.`}}),
+ D(2,()=>{const bc=R(0,4)===0;const y=bc?R(30,3300):R(1,2024);const yy=[476,1492,1918].includes(y)?y+1:y;const e=epokaOf(yy,bc);return{q:`Do której epoki należy rok <b>${yy}${bc?' p.n.e.':''}</b>?`,ok:EPO[e],bad:EPO.filter((_,i)=>i!==e),expl:`Granice epok: starożytność do 476 roku, średniowiecze 476–1492, nowożytność 1492–1918, współczesność od 1918. Rok ${yy}${bc?' p.n.e.':''} to ${EPO[e]}.`}}),
+ O(2,'Która epoka jest najdłuższa?','starożytność (około 3900 lat)',['średniowiecze (1016 lat)','nowożytność (426 lat)','współczesność'],'Epoki bliższe naszym czasom są dużo krótsze od dawniejszych.'),
+ O(3,'Co można powiedzieć o długości epok historycznych?','im bliższe naszym czasom, tym są krótsze',['wszystkie trwają tyle samo','im bliższe naszym czasom, tym są dłuższe','współczesność jest najdłuższa'],'Starożytność ~3900 lat, średniowiecze 1016, nowożytność 426, współczesność od 1918.'),
+ NM(3,()=>({q:'Oblicz, ile lat trwały epoki (od daty początku do daty końca).',fields:[F('średniowiecze (476–1492)',1016,'n',{unit:'lat'}),F('nowożytność (1492–1918)',426,'n',{unit:'lat'}),F(`współczesność (od 1918 do ${CUR})`,CUR-1918,'n',{unit:'lat'})],expl:`1492 − 476 = 1016, 1918 − 1492 = 426, ${CUR} − 1918 = ${CUR-1918}.`})),
+ Ord(3,'Kiedy skończyło się średniowiecze? Ułóż wskazywane wydarzenia chronologicznie.',['połowa XV wieku: Jan Gutenberg wynalazł druk','1453 rok: Turcy zdobyli Konstantynopol','1492 rok: Krzysztof Kolumb odkrył Amerykę','1543 rok: Mikołaj Kopernik ogłosił, że Ziemia kręci się wokół Słońca'],'Połowa XV w. (ok. 1450), 1453, 1492, 1543.'),
+ O(3,'Dlaczego historycy wskazują kilka wydarzeń jako koniec średniowiecza?','Bo nie zawsze da się łatwo ustalić, kiedy kończy się epoka, i kilka równie ważnych wydarzeń o tym decyduje',['Bo średniowiecze skończyło się kilka razy','Bo nie znają dat','Bo każdy kraj miał inny rok zerowy'],'W podręczniku w ramce „Dowiedz się więcej”.')
+],
+rzym:[
+ D(1,()=>{const n=R(1,20);return{q:`Zapisz liczbę <b>${n}</b> cyframi rzymskimi.`,ok:toRoman(n),bad:rnear(n),expl:`${n} = ${toRoman(n)}.`}}),
+ D(1,()=>{const n=R(1,20);return{q:`Jaką liczbę oznacza zapis <b>${toRoman(n)}</b>?`,ok:String(n),bad:near(n),expl:`${toRoman(n)} = ${n}.`}}),
+ D(1,()=>{const c=P([['I',1],['V',5],['X',10],['L',50],['C',100],['D',500],['M',1000]]);return{q:`Ile wynosi znak <b>${c[0]}</b>?`,ok:String(c[1]),bad:pickN(['1','5','10','50','100','500','1000'].filter(x=>x!==String(c[1])),3),expl:'I = 1, V = 5, X = 10, L = 50, C = 100, D = 500, M = 1000.'}}),
+ O(2,'Do czego na lekcjach historii używamy liczb rzymskich?','do oznaczania wieków, tysiącleci i miesięcy',['do zapisu godzin','do liczenia kroków','do zapisu temperatury'],'Np. XXI wiek.'),
+ D(2,()=>{const n=P([R(21,39),R(40,99)]);return{q:`Zapisz liczbę <b>${n}</b> cyframi rzymskimi.`,ok:toRoman(n),bad:rnear(n),expl:`${n} = ${toRoman(n)}.`}}),
+ NM(2,()=>{const a=R(21,39),b=R(41,69),c=R(71,99);return{q:'Zapisz cyframi rzymskimi (wielkimi literami).',fields:[a,b,c].map(n=>F(`${n}`,toRoman(n),'r',{ph:'np. XIV'})),expl:[a,b,c].map(n=>`${n} = ${toRoman(n)}`).join(', ')+'.'}}),
+ O(2,'Rzymianin stoi przy tablicy „DO RZYMU CLXVI km”. Ile kilometrów dzieli go od Rzymu?','166',['116','176','616'],'C = 100, L = 50, X = 10, V = 5, I = 1, więc CLXVI = 100 + 50 + 10 + 5 + 1 = 166.'),
+ NM(3,()=>{const a=R(100,399),b=R(400,899),c=P([R(900,1000),R(1001,1500)]);return{q:'Zapisz cyframi rzymskimi (wielkimi literami).',fields:[a,b,c].map(n=>F(`${n}`,toRoman(n),'r',{ph:'np. CXIV'})),expl:[a,b,c].map(n=>`${n} = ${toRoman(n)}`).join(', ')+'.'}}),
+ NM(3,()=>{const a=R(21,99),b=R(100,399),c=R(400,1200);return{q:'Zapisz liczbami arabskimi.',fields:[a,b,c].map(n=>F(toRoman(n),n,'n')),expl:[a,b,c].map(n=>`${toRoman(n)} = ${n}`).join(', ')+'.'}}),
+ D(3,()=>{const n=R(400,1500);return{q:`Jaką liczbę oznacza zapis <b>${toRoman(n)}</b>?`,ok:String(n),bad:near(n,[n+100,n-100]),expl:`${toRoman(n)} = ${n}.`}})
+],
+oblicz:[
+ O(1,'Jak obliczamy upływ czasu między wydarzeniami z tej samej ery n.e.?','od daty późniejszej (większej) odejmujemy wcześniejszą (mniejszą)',['dodajemy obie daty','od mniejszej odejmujemy większą','mnożymy daty'],'Np. 1333 − 1310 = 23.'),
+ O(1,'Jak obliczamy upływ czasu dla wydarzeń z p.n.e.?','od daty wcześniejszej (większej) odejmujemy późniejszą (mniejszą)',['od mniejszej odejmujemy większą','dodajemy obie daty','dodajemy i odejmujemy 1'],'W p.n.e. wcześniejsze wydarzenie ma większą liczbę. Np. 69 − 30 = 39.'),
+ O(1,'Jak obliczamy upływ czasu dla wydarzeń z różnych er?','dodajemy obie daty i odejmujemy 1',['po prostu odejmujemy','po prostu dodajemy','mnożymy przez 2'],'Odejmujemy 1, bo nie było roku zerowego.'),
+ D(1,()=>{const b=R(1000,1450),a=R(25,70);return{q:`${P(WHO)} urodził się w ${b} roku, a zmarł w ${b+a} roku. Ile lat żył?`,ok:String(a),bad:near(a,[b-a]),expl:`${b+a} − ${b} = ${a}.`}}),
+ O(1,'Dlaczego przy datach z różnych er odejmujemy 1?','bo w historii nie było roku zerowego',['bo tak jest łatwiej','bo rok ma 364 dni','bo każdy wiek ma 99 lat'],'Po 31 grudnia 1 roku p.n.e. od razu następuje 1 stycznia 1 roku n.e.'),
+ NM(2,()=>{const b=R(1100,1400),k=R(18,35),r=R(10,45);return{q:`${P(WHO)} urodził się w ${b} roku, został koronowany w ${b+k} roku i zmarł w ${b+k+r} roku.`,fields:[F('Ile lat miał w chwili koronacji?',k,'n',{unit:'lat'}),F('Ile lat panował?',r,'n',{unit:'lat'}),F('Ile lat żył?',k+r,'n',{unit:'lat'})],expl:`Koronacja: ${b+k} − ${b} = ${k}. Panowanie: ${b+k+r} − ${b+k} = ${r}. Życie: ${b+k+r} − ${b} = ${k+r}.`}}),
+ NM(2,()=>{const d=R(30,150),a=R(25,60),k=R(10,25);const b=d+a;return{q:`${P(WHO)} urodził się w ${b} roku p.n.e., a zmarł w ${d} roku p.n.e. W ${b-k} roku p.n.e. został władcą.`,fields:[F('Ile lat żył?',a,'n',{unit:'lat'}),F('Ile lat miał, gdy został władcą?',k,'n',{unit:'lat'})],expl:`Odejmujemy od wcześniejszej (większej) daty późniejszą. Życie: ${b} − ${d} = ${a}. Władca: ${b} − ${b-k} = ${k}.`}}),
+ SQd(2,'Jak obliczysz upływ czasu? Dobierz sposób.',['późniejsza − wcześniejsza','wcześniejsza − późniejsza','dodaj i odejmij 1'],()=>{const a=R(1000,1400),b=a+R(10,80),c=R(100,300),d=c-R(10,80),e=R(20,200),f=R(20,200);return[[`od ${a} roku n.e. do ${b} roku n.e.`,0],[`od ${R(1100,1500)} roku do ${R(1600,1900)} roku`,0],[`od ${c} roku p.n.e. do ${d} roku p.n.e.`,1],[`od ${R(200,400)} roku p.n.e. do ${R(10,100)} roku p.n.e.`,1],[`od ${e} roku p.n.e. do ${f} roku n.e.`,2],[`od ${R(30,300)} roku p.n.e. do ${R(30,300)} roku n.e.`,2]]},4,'Ta sama era n.e.: późniejsza − wcześniejsza. P.n.e.: wcześniejsza (większa) − późniejsza. Różne ery: dodaj i odejmij 1.'),
+ NM(2,()=>({q:'Kazimierz Wielki urodził się w 1310 roku, został koronowany w 1333 roku i zmarł w 1370 roku.',fields:[F('Ile lat żył?',60,'n',{unit:'lat'}),F('Ile lat panował?',37,'n',{unit:'lat'})],expl:'Żył 1370 − 1310 = 60 lat. Panował 1370 − 1333 = 37 lat.'})),
+ NM(3,()=>{const a=R(30,120),b=R(20,80),k=R(10,25);const c=a+b-1;return{q:`${P(WHO)} urodził się w ${a} roku p.n.e. i zmarł w ${b} roku n.e. Rządy rozpoczął w wieku ${k} lat.`,fields:[F('Ile lat żył?',a+b-1,'n',{unit:'lat'}),F('W którym roku p.n.e. objął rządy?',a-k,'n',{unit:'rok p.n.e.'})].slice(0,1),expl:`${a} + ${b} − 1 = ${a+b-1}. Nie było roku zerowego, więc odejmujemy 1.`}}),
+ NM(3,()=>{const a=R(60,120),c=R(20,a-5),b=R(5,60);return{q:`${P(WHO)} urodził się w ${a} roku p.n.e., rządy rozpoczął w ${c} roku p.n.e., a zmarł w ${b} roku n.e.`,fields:[F('Ile lat żył?',a+b-1,'n',{unit:'lat'}),F('Ile lat panował?',c+b-1,'n',{unit:'lat'})],expl:`Różne ery: dodajemy daty i odejmujemy 1. Życie: ${a} + ${b} − 1 = ${a+b-1}. Panowanie: ${c} + ${b} − 1 = ${c+b-1}.`}}),
+ NM(3,()=>{const a=R(1500,1900),b=a+R(20,150),c=R(300,800),d=c-R(5,40),e=R(30,100),f=R(30,100);return{q:'Policz, ile lat upłynęło między podanymi datami.',fields:[F(`Od ${a} roku do ${b} roku minęło`,b-a,'n',{unit:'lat'}),F(`Od ${c} roku p.n.e. do ${d} roku p.n.e. minęło`,c-d,'n',{unit:'lat'}),F(`Od ${e} roku p.n.e. do ${f} roku n.e. minęło`,e+f-1,'n',{unit:'lat'})],expl:`${b} − ${a} = ${b-a}. ${c} − ${d} = ${c-d}. ${e} + ${f} − 1 = ${e+f-1}.`}}),
+ NM(3,()=>{const a=R(1800,1990),n=R(100,900);return{q:'Policz, ile lat minęło od podanych dat do dziś.',fields:[F(`Od ${a} roku do ${CUR} roku minęło`,CUR-a,'n',{unit:'lat'}),F(`Od ${n} roku p.n.e. do ${CUR} roku minęło`,n+CUR-1,'n',{unit:'lat'})],expl:`${CUR} − ${a} = ${CUR-a}. ${n} + ${CUR} − 1 = ${n+CUR-1}.`}}),
+ NM(3,()=>({q:'Oblicz (przykłady z podręcznika).',fields:[F('Od 1795 roku do 1918 roku minęło',123,'n',{unit:'lat'}),F('Od 753 roku p.n.e. do 476 roku n.e. minęło',1228,'n',{unit:'lat'}),F('Kleopatra VII urodziła się w 69 roku p.n.e. Ile miała lat, gdy w 51 roku p.n.e. została królową?',18,'n',{unit:'lat'}),F('Oktawian August rządził od 27 roku p.n.e. do śmierci w 14 roku n.e. Ile lat panował?',40,'n',{unit:'lat'})],expl:'1918 − 1795 = 123. 753 + 476 − 1 = 1228. 69 − 51 = 18. 27 + 14 − 1 = 40.'}))
+],
+wiek:[
+ O(1,'Jak ustalić wiek dla roku 1410?','odrzucić dwie ostatnie cyfry i dodać 1: 14 + 1 = 15, czyli XV wiek',['dodać 1 do całej liczby','odjąć 1000','podzielić przez 2'],'Metoda: zasłaniamy dwie ostatnie cyfry i dodajemy 1.'),
+ D(1,()=>{let y;do{y=R(1000,1999)}while(y%100===0);const c=cent(y);return{q:`Który to wiek? Rok <b>${y}</b>.`,ok:toRoman(c),bad:wnear(c),expl:`${y} → ${Math.floor(y/100)} + 1 = ${c} → ${toRoman(c)} wiek.`}}),
+ D(1,()=>{const c=R(10,20);const y=R(c*100-99,c*100-1);return{q:`Do którego wieku należy rok <b>${y}</b>?`,ok:toRoman(c),bad:wnear(c),expl:`${y} → ${Math.floor(y/100)} + 1 = ${c} → ${toRoman(c)} wiek.`}}),
+ O(2,'Kiedy trwał XX wiek?','od 1901 do 2000 roku',['od 1900 do 1999 roku','od 2000 do 2100 roku','od 1801 do 1900 roku'],'Wiek zaczyna się w roku kończącym się na 01, a kończy w roku z dwoma zerami na końcu.'),
+ D(2,()=>{const c=R(3,20);const y=P([c*100,c*100,R((c-1)*100+1,c*100-1)]);return{q:`Który to wiek? Rok <b>${y}</b>.`,ok:toRoman(c),bad:wnear(c),expl:y%100===0?`Rok ${y} kończy się dwoma zerami, więc nie dodajemy 1: ${y/100} → ${toRoman(c)} wiek (to ostatni rok tego wieku).`:`${y} → ${Math.floor(y/100)} + 1 = ${c} → ${toRoman(c)} wiek.`}}),
+ NM(2,()=>{let a;do{a=R(1000,1999)}while(a%100===0);let b;do{b=R(101,999)}while(b%100===0);const c=R(5,19)*100;return{q:'Podaj, na który wiek przypadają wymienione daty (rzymskimi lub arabskimi).',fields:[F(`${a} rok to`,cent(a),'w',{unit:'wiek',ph:'np. XV'}),F(`${b} rok to`,cent(b),'w',{unit:'wiek',ph:'np. VI'}),F(`${c} rok to`,cent(c),'w',{unit:'wiek',ph:'np. XIV'})],expl:`${a} → ${Math.floor(a/100)}+1 = ${cent(a)}; ${b} → ${Math.floor(b/100)}+1 = ${cent(b)}; ${c} kończy się dwoma zerami → ${c/100}.`}}),
+ NM(2,()=>{const c=R(5,20);return{q:`Podaj pierwszy i ostatni rok ${toRoman(c)} wieku naszej ery.`,fields:[F('Pierwszy rok:',(c-1)*100+1,'n'),F('Ostatni rok:',c*100,'n')],expl:`${toRoman(c)} wiek trwał od ${(c-1)*100+1} do ${c*100} roku.`}}),
+ D(3,()=>{const bc=R(0,1)===1,c=R(2,19);const y=bc?c*100:(c-1)*100+1;const ok=toRoman(c)+(bc?' p.n.e.':'');return{q:`Który wiek zaczął się w roku <b>${y}${bc?' p.n.e.':''}</b>?`,ok,bad:wnear(c,bc),expl:bc?`Wieki p.n.e. zaczynają się w roku z dwoma zerami: ${y} p.n.e. to początek ${ok} wieku.`:`Wieki n.e. zaczynają się w roku kończącym się na 01: ${y} to początek ${ok} wieku.`}}),
+ NM(3,()=>{const a=R(30,99),b=R(101,999);let c=R(2,9)*100+R(1,99);return{q:'Podaj, na który wiek p.n.e. przypadają wymienione daty.',fields:[F(`${a} rok p.n.e. to`,cent(a),'w',{unit:'wiek p.n.e.',ph:'np. I'}),F(`${c} rok p.n.e. to`,cent(c),'w',{unit:'wiek p.n.e.',ph:'np. V'}),F(`${Math.floor(b/100)*100} rok p.n.e. to`,cent(Math.floor(b/100)*100),'w',{unit:'wiek p.n.e.',ph:'np. III'})],expl:'Dla p.n.e. stosujemy tę samą metodę: odrzucamy dwie ostatnie cyfry i dodajemy 1 (a gdy są dwa zera, nie dodajemy). Np. 480 p.n.e. → 4 + 1 = V wiek p.n.e.'}}),
+ NM(3,()=>{const c=R(2,9);return{q:`Podaj pierwszy i ostatni rok ${toRoman(c)} wieku p.n.e.`,fields:[F('Pierwszy rok (p.n.e.):',c*100,'n'),F('Ostatni rok (p.n.e.):',(c-1)*100+1,'n')],expl:`${toRoman(c)} wiek p.n.e. trwał od ${c*100} roku p.n.e. do ${(c-1)*100+1} roku p.n.e. Np. II wiek p.n.e. to lata 200–101 p.n.e.`}}),
+ NM(3,()=>({q:'Który to wiek? (przykłady z podręcznika)',fields:[F('Halina Konopacka zdobyła złoty medal w 1928 roku. To był',20,'w',{unit:'wiek',ph:'np. XX'}),F('Spotkanie Bolesława Chrobrego z Ottonem III w Gnieźnie było w 1000 roku. To był',10,'w',{unit:'wiek',ph:'np. X'}),F('Bitwa pod Termopilami była w 480 roku p.n.e. To był',5,'w',{unit:'wiek p.n.e.',ph:'np. V'})],expl:'1928 → 19 + 1 = XX. 1000 → 10 (dwa zera), czyli X. 480 p.n.e. → 4 + 1 = V wiek p.n.e.'})),
+ NM(3,()=>({q:'Które wieki rozpoczynały się w podanych latach?',fields:[F('300 rok p.n.e.',3,'w',{unit:'wiek p.n.e.',ph:'np. III'}),F('301 rok n.e.',4,'w',{unit:'wiek',ph:'np. IV'}),F('1001 rok',11,'w',{unit:'wiek',ph:'np. XI'})],expl:'Wieki p.n.e. zaczynają się w roku z dwoma zerami (300 p.n.e. – III wiek p.n.e.). Wieki n.e. zaczynają się w roku na 01 (301 – IV wiek, 1001 – XI wiek).'}))
+],
+zegary:[
+ O(1,'Co było najstarszym zegarem?','Słońce',['klepsydra','zegar mechaniczny','zegarek cyfrowy'],'Słońce wyznaczało pory roku i godziny.'),
+ O(1,'Jak działały pierwsze zegary słoneczne?','wskazywał godzinę cień wbitego w ziemię kija',['wskazówkami','piaskiem','dzwonami'],'Starożytni Egipcjanie i Grecy obserwowali, jak cień się wydłuża i skraca.'),
+ O(1,'Kiedy cień kija jest najkrótszy?','w południe',['rano','wieczorem','w nocy'],'Wtedy wiadomo było, że to środek dnia.'),
+ O(1,'W jakiej epoce skonstruowano pierwsze zegary mechaniczne?','w średniowieczu',['w starożytności','w nowożytności','we współczesności'],'Miały ciężarki i koła zębate, a ich dzwony biły co godzinę.'),
+ O(2,'Co pomagało mierzyć czas, gdy słońce schowało się za chmury albo zapadła noc?','klepsydra z przesypującym się piaskiem',['zegar słoneczny','cień kija','kalendarz'],'Klepsydra wskazuje tylko upływ konkretnego odcinka czasu i po przesypaniu trzeba ją odwrócić.'),
+ O(2,'Do czego służyły dzwony dawnych zegarów mechanicznych?','dzięki nim cała okolica wiedziała, że czas na modlitwę, obiad albo sen',['do straszenia ptaków','do zapisu dat','do mierzenia temperatury'],'Dzwony biły co godzinę.'),
+ Ord(2,'Ułóż zegary od najstarszych do współczesnych.',['zegar słoneczny','zegar mechaniczny z dzwonami','zegarek kieszonkowy','zegarek na rękę','zegarek cyfrowy'],'Najpierw zegar słoneczny, potem mechaniczny w średniowieczu, kieszonkowy, na rękę i cyfrowy.'),
+ SQ(2,'Który zegar ma tę cechę?',['zegar słoneczny','klepsydra','zegar mechaniczny'],[['Wskazuje godzinę cieniem.',0],['Nie działa bez słońca.',0],['Przesypuje się w nim piasek.',1],['Po przesypaniu trzeba go odwrócić.',1],['Ma ciężarki i koła zębate.',2],['Jego dzwony biły co godzinę.',2]],4,listExpl),
+ O(3,'Dlaczego zegar słoneczny nie wystarczał, gdy zapadała noc?','bo potrzebował słońca, żeby rzucać cień',['bo był za mały','bo wskazywał tylko rok','bo miał ciężarki'],'Dlatego potrzebne były klepsydry.'),
+ O(3,'Co wskazuje klepsydra?','tylko upływ konkretnego odcinka czasu, a nie godzinę',['dokładną godzinę','porę roku','datę'],'To odróżnia ją od zegara.')
+],
+kal:[
+ O(1,'Ile dni potrzebuje Księżyc na przejście przez swoje fazy?','około 29',['około 7','około 100','około 365'],'W ciągu roku przechodzi przez nie około dwunastu razy, dlatego rok ma 12 miesięcy.'),
+ O(1,'Dlaczego rok ma 12 miesięcy?','bo Księżyc około dwunastu razy w roku przechodzi przez swoje fazy',['bo tak zdecydował król','bo ludzie mają 12 palców','bo rzeka Nil ma 12 ramion'],'Tak powstał pierwszy kalendarz księżycowy.'),
+ O(1,'Kto udoskonalił kalendarz, obserwując słońce i rzekę Nil?','starożytni Egipcjanie',['Grecy w średniowieczu','Polacy w XX wieku','Wikingowie'],'Nil wylewał prawie zawsze po 365 dniach.'),
+ O(2,'Dlaczego kalendarz księżycowy się nie sprawdzał?','rok księżycowy był za krótki, więc po pewnym czasie wiosna wypadała zimą',['był za długi','miał za dużo świąt','nie miał miesięcy'],'12 pełni Księżyca nie odpowiada pełnemu obiegowi Ziemi wokół Słońca.'),
+ O(2,'Jak zbudowano kalendarz egipski?','12 miesięcy po 30 dni i 5 dni świąt na końcu',['10 miesięcy po 36 dni','13 miesięcy po 28 dni','12 miesięcy po 29 dni'],'12 · 30 + 5 = 365 dni. To był pierwszy naprawdę dokładny kalendarz.'),
+ O(2,'Kto zreformował kalendarz w I wieku p.n.e. i dodał dzień 29 lutego?','Juliusz Cezar',['Grzegorz XIII','Kolumb','Gutenberg'],'Od tej pory co cztery lata dodawano jeden dzień. Powstał kalendarz juliański i rok przestępny.'),
+ Ord(2,'Ułóż kalendarze od najstarszego.',['kalendarz księżycowy','kalendarz egipski','kalendarz juliański','kalendarz gregoriański'],'Księżycowy → egipski → juliański (Juliusz Cezar) → gregoriański (Grzegorz XIII).'),
+ NM(3,()=>({q:'Kalendarz egipski i księżycowy.',fields:[F('Ile dni mają 12 miesięcy po 30 dni?',360,'n',{unit:'dni'}),F('Ile dni liczył cały rok egipski (z 5 dniami świąt)?',365,'n',{unit:'dni'})],expl:'12 · 30 = 360, a po dodaniu 5 dni świąt jest 365.'})),
+ O(3,'Co wydarzyło się w październiku 1582 roku?','po 4 października nadszedł 15 października: wprowadzono kalendarz gregoriański',['po 4 października nadszedł 5 października','kalendarz przesunięto o rok','nic niezwykłego'],'Papież Grzegorz XIII wprowadził nowy kalendarz, bo juliański nie zgadzał się z porami roku.'),
+ NM(3,()=>({q:'Kalendarz gregoriański „połknął” dni, by naprawić czas.',fields:[F('Ile dni pominięto w październiku 1582 roku? (od 5 do 14 października)',10,'n',{unit:'dni'}),F('Co ile lat w kalendarzu juliańskim dodawano jeden dzień?',4,'n',{unit:'lat'})],expl:'Pominięto 10 dni. W kalendarzu juliańskim co cztery lata dodawano 29 lutego, czyli rok przestępny ma 366 dni.'}))
+]
+};
+
+/* ---------- zapis ---------- */
+const KEY='hist4-v1';
+function blank(){return{v:1,name:'Franek',topics:{},levels:{},sessions:[],days:[],daily:{},count:0}}
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&s.v===1)return Object.assign(blank(),s)}catch(e){}return blank()}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+let S=load();
+const tst=id=>S.topics[id]||(S.topics[id]={att:0,ok:0,recent:[],st:0,wr:0});
+const lvl=id=>S.levels[id]||1;
+function acc(id){const t=S.topics[id];if(!t||!t.recent.length)return null;return t.recent.reduce((a,b)=>a+b,0)/t.recent.length}
+function status(a){if(a==null)return['new','nowy'];if(a<.5)return['low','do poprawy'];if(a<.8)return['mid','ćwicz dalej'];return['top','opanowane']}
+function record(q,pts,max,adapt){
+  const t=tst(q.topic),fr=pts/max;t.att++;t.ok+=fr;t.recent.push(fr);if(t.recent.length>20)t.recent.shift();
+  S.count++;const d=today();if(!S.days.includes(d))S.days.push(d);S.daily[d]=(S.daily[d]||0)+1;
+  let msg='';
+  if(adapt){
+    if(fr===1){t.st++;t.wr=0}else if(fr<.5){t.wr++;t.st=0}else{t.st=0;t.wr=0}
+    const L=lvl(q.topic);
+    if(t.st>=3&&L<3){S.levels[q.topic]=L+1;t.st=0;msg=`Trzy razy pod rząd bez błędu. Temat „${T[q.topic].name}” przechodzi na poziom ${LV[L+1]}.`}
+    else if(t.wr>=2&&L>1){S.levels[q.topic]=L-1;t.wr=0;msg=`Wracamy na chwilę do łatwiejszych zadań z tego tematu (poziom ${LV[L-1]}).`}
+  }
+  save();return msg;
+}
+function streak(){const set=new Set(S.days);const d=new Date();if(!set.has(ymd(d)))d.setDate(d.getDate()-1);let n=0;while(set.has(ymd(d))){n++;d.setDate(d.getDate()-1)}return n}
+function gradeOf(p){if(p>=98)return[6,'cel'];if(p>=90)return[5,'bdb'];if(p>=75)return[4,'db'];if(p>=60)return[3,'dst'];if(p>=40)return[2,'dop'];return[1,'ndst']}
+function weakTopics(){return TOPICS.map(t=>({id:t.id,s:acc(t.id)==null?0.6:acc(t.id),r:Math.random()})).sort((a,b)=>a.s-b.s||a.r-b.r).slice(0,3).map(x=>x.id)}
+
+/* ---------- zadania ---------- */
+function makeQ(id,L,seen){
+  const bank=B[id];let pool=bank.filter(e=>e.l===L);if(pool.length<3)pool=pool.concat(bank.filter(e=>Math.abs(e.l-L)===1));if(!pool.length)pool=bank;
+  let q;for(let k=0;k<10;k++){q=P(pool).f();if(!seen||!seen.has(q.key))break}
+  q.topic=id;q.level=L;q.max=q.fields.length;if(!q.hint)q.hint=T[id].hint;seen&&seen.add(q.key);return q;
+}
+function isEmpty(q,v){if(q.type==='one')return v[0]==null;if(q.type==='order')return v.length<q.fields.length;if(q.type==='num')return q.fields.some((_,k)=>v[k]==null||String(v[k]).trim()==='');return q.fields.some((_,k)=>v[k]==null)}
+function gradeQ(q,v){const ok=q.type==='num'?q.fields.map((fd,k)=>chk(fd,v[k])):q.fields.map((fd,k)=>v[k]===fd.ans);return{ok,pts:ok.filter(Boolean).length,max:q.max}}
+
+function qBody(q,ns,v,locked,show){
+  const dis=locked?' disabled':'';let h=`<div class="q-text">${q.html}</div>`;
+  if(q.type==='one'){
+    const a=q.fields[0].ans;
+    h+='<div class="opts">'+q.opts.map((o,i)=>{let c='opt';if(v[0]===i)c+=' sel';if(show&&i===a)c+=' right';if(show&&v[0]===i&&i!==a)c+=' wrong';
+      return`<button class="${c}" data-act="pick" data-ns="${ns}" data-v="${i}"${dis}><span class="lt">${'ABCD'[i]}</span><span>${o}</span></button>`}).join('')+'</div>';
+  }else if(q.type==='sort'){
+    h+='<div class="sorts">'+q.fields.map((fd,k)=>{const x=v[k];let rc='srow';if(show)rc+=x===fd.ans?' ok':' bad';
+      return`<div class="${rc}"><span class="si">${fd.item}</span><span class="cats">${q.cats.map((c,ci)=>{let cc='chip';if(x===ci)cc+=' on';if(show&&ci===fd.ans)cc+=' right';if(show&&x===ci&&ci!==fd.ans)cc+=' wrong';
+        return`<button class="${cc}" data-act="sort" data-ns="${ns}" data-k="${k}" data-v="${ci}"${dis}>${c}</button>`}).join('')}</span></div>`}).join('')+'</div>';
+  }else if(q.type==='num'){
+    h+='<div class="sorts">'+q.fields.map((fd,k)=>{const x=v[k]==null?'':v[k];const good=show&&chk(fd,x);let rc='srow nrow';if(show)rc+=good?' ok':' bad';
+      return`<label class="${rc}"><span class="si">${fd.label||''}</span><input class="num-in" type="text" inputmode="${fd.kind==='n'?'numeric':'text'}" autocomplete="off" autocapitalize="characters" data-nk="${k}" data-ns="${ns}" value="${esc(x)}"${dis} placeholder="${esc(fd.ph||'…')}" aria-label="${esc(fd.label||'odpowiedź')}">${fd.unit?`<span class="unit">${fd.unit}</span>`:''}${show&&!good?`<span class="fix">Powinno być: ${fd.disp!=null?fd.disp:(fd.kind==='w'?toRoman(fd.ans):fd.ans)}</span>`:''}</label>`}).join('')+'</div>';
+  }else{
+    h+='<ol class="seq">'+q.fields.map((fd,k)=>{const it=v[k];let c='slot';if(it!=null)c+=' full';if(show)c+=it===k?' ok':' bad';
+      return`<li class="${c}"><span class="num">${k+1}</span>${it!=null?`<button class="step" data-act="unord" data-ns="${ns}" data-k="${k}"${dis} aria-label="Usuń: ${esc(q.steps[it])}">${q.steps[it]}</button>`:'<span class="ph">dotknij kroku poniżej</span>'}${show&&it!==k?`<span class="fix">Powinno być: ${q.steps[k]}</span>`:''}</li>`}).join('')+'</ol>';
+    if(!locked){const rest=q.shuf.filter(i=>!v.includes(i));if(rest.length)h+=`<div class="pool">${rest.map(i=>`<button class="step" data-act="ord" data-ns="${ns}" data-v="${i}">${q.steps[i]}</button>`).join('')}</div>`}
+  }
+  return h;
+}
+function fbHTML(q,r){
+  const c=r.pts===r.max?'ok':r.pts?'part':'bad';
+  const note=r.pts<r.max&&q.type!=='one'?'<p>Poprawne odpowiedzi są zaznaczone na zielono lub podane pod polami.</p>':'';
+  return`<div class="fb ${c}" role="status"><p class="fb-v">${r.verdict}</p>${note}<p class="expl">${q.expl}</p>${r.lvMsg?`<p class="lvmsg">${r.lvMsg}</p>`:''}</div>`;
+}
+const verdict=r=>r.pts===r.max?P(['Dobrze!','Świetnie!','Brawo!','Tak jest!','Bez błędu!']):r.pts?'Prawie. Część jest dobrze.':P(['Jeszcze nie.','Zobacz, jak to jest:']);
+
+/* ---------- stan ---------- */
+let VIEW='home',RUN=null,WARM=null,TIMER=null,CONFIRM_RESET=false;
+const TRAIN={topics:new Set(TOPICS.map(t=>t.id)),level:'auto',n:10};
+const TEST={level:2,timer:false,long:false};
+const $=s=>document.querySelector(s);
+function newWarm(){const id=P(TOPICS).id;WARM={q:makeQ(id,lvl(id)),vals:[],res:null,hint:false,msg:''}}
+function valsOf(ns){return ns==='w'?WARM.vals:RUN.vals[RUN.i]}
+
+function startRun(mode,o){
+  clearInterval(TIMER);const seen=new Set();
+  RUN={mode,level:o.level,n:o.n,qs:[],vals:[],res:[],hint:[],i:0,seen,t0:Date.now(),done:false,msg:'',pending:null,confirmEnd:false,group:P(['A','B'])};
+  if(mode==='test'){const ids=o.long?TOPICS.flatMap(t=>[t.id,t.id]):TOPICS.map(t=>t.id);RUN.qs=ids.map(id=>makeQ(id,o.level,seen));RUN.n=RUN.qs.length;RUN.vals=RUN.qs.map(()=>[]);
+    if(o.timer){RUN.deadline=Date.now()+45*60000;TIMER=setInterval(tick,1000)}}
+  else{let order=[];while(order.length<o.n){let s=shuffle(o.topics);if(order.length&&s.length>1&&s[0]===order[order.length-1])s.push(s.shift());order=order.concat(s)}RUN.order=order.slice(0,o.n);ensureQ(0)}
+  VIEW='run';render();scrollTo(0,0);
+}
+function ensureQ(i){if(!RUN.qs[i]){const id=RUN.order[i];RUN.qs[i]=makeQ(id,RUN.level==='auto'?lvl(id):RUN.level,RUN.seen);RUN.vals[i]=[]}}
+function tick(){if(!RUN||RUN.done||!RUN.deadline){clearInterval(TIMER);return}const left=RUN.deadline-Date.now();
+  if(left<=0){finishTest();return}const el=$('#timer');if(el){el.textContent=mmss(left);el.classList.toggle('low',left<5*60000)}}
+const mmss=ms=>{const s=Math.max(0,Math.round(ms/1000));return`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`};
+const emptyMsg=q=>q.type==='one'?'Wybierz jedną odpowiedź.':q.type==='sort'?'Wybierz odpowiedź w każdym wierszu.':q.type==='num'?'Wpisz odpowiedź w każde pole.':'Ułóż wszystkie kroki.';
+
+function doCheck(){
+  const i=RUN.i,q=RUN.qs[i],v=RUN.vals[i];
+  if(isEmpty(q,v)){RUN.msg=emptyMsg(q);render();return}
+  const r=gradeQ(q,v);r.hint=!!RUN.hint[i];r.verdict=verdict(r);
+  r.lvMsg=record(q,r.pts,r.max,RUN.level==='auto');RUN.res[i]=r;RUN.msg='';render();
+  const b=document.querySelector('[data-act="next"]');b&&b.focus({preventScroll:true});
+}
+function doNext(){if(RUN.i+1>=RUN.n){finishRun();return}RUN.i++;ensureQ(RUN.i);RUN.msg='';render();scrollTo(0,0)}
+function finishRun(){
+  RUN.done=true;clearInterval(TIMER);
+  const pts=RUN.res.reduce((a,r)=>a+(r?r.pts:0),0),max=RUN.qs.reduce((a,q,k)=>a+(RUN.res[k]?q.max:0),0)||1,pct=Math.round(pts/max*100);
+  const s={d:Date.now(),mode:RUN.mode,pts,max,pct,n:RUN.n,level:RUN.level,time:Date.now()-RUN.t0};
+  if(RUN.mode==='test')s.grade=gradeOf(pct)[0];
+  S.sessions.push(s);if(S.sessions.length>200)S.sessions.shift();save();
+  RUN.summary=s;VIEW='result';render();scrollTo(0,0);
+}
+function finishTest(){RUN.qs.forEach((q,i)=>{const r=gradeQ(q,RUN.vals[i]||[]);r.verdict=verdict(r);RUN.res[i]=r;record(q,r.pts,r.max,false)});finishRun()}
+
+/* ---------- widoki ---------- */
+function topicChip(t){const a=acc(t.id),[c,l]=status(a);
+  return`<button class="tchip" data-act="topic" data-id="${t.id}"><span class="nm">${t.name}</span><span class="st ${c}">${l}</span><span class="mini">${a!=null?`<i class="c-${c}" style="width:${Math.max(4,Math.round(a*100))}%"></i>`:''}</span></button>`}
+
+function vHome(){
+  const td=S.daily[today()]||0,st=streak(),w=weakTopics();
+  if(!WARM)newWarm();
+  const q=WARM.q,r=WARM.res;
+  return`
+  <section class="hello"><span class="eyebrow">Historia kl. 4 · rozdział I, str. 15–34</span>
+    <h1>Cześć, ${esc(S.name)}!</h1>
+    <p class="lead">${td?`Dziś rozwiązane zadania: <b>${td}</b>.`:'Dziś jeszcze nic nie rozwiązane.'} ${st>1?`Seria nauki: <span class="hl"><b>${st}</b> ${plural(st,'dzień','dni','dni')} z rzędu</span>.`:'Zacznij od zadania na rozgrzewkę.'}</p></section>
+  <section class="card task">
+    <div class="task-h"><span class="tn">Rozgrzewka</span><span class="pts">(${r?`<span class="got">${r.pts}</span>`:'.....'} / ${q.max} p.)</span><span class="tag">${T[q.topic].name} · ${LV[q.level]}</span></div>
+    ${qBody(q,'w',WARM.vals,!!r,!!r)}
+    ${WARM.hint&&!r?`<p class="hint"><b>Podpowiedź:</b> ${q.hint}</p>`:''}
+    ${r?fbHTML(q,r):''}
+    <div class="acts">${r?`<button class="primary" data-act="wnext">Następne zadanie</button>`:`<button class="primary" data-act="wcheck">Sprawdź</button>${WARM.hint?'':'<button class="ghost" data-act="whint">Podpowiedź</button>'}${WARM.msg?`<span class="warn">${WARM.msg}</span>`:''}`}</div>
+  </section>
+  <section class="modes dim">
+    <button class="mode" data-act="go" data-v="train"><span class="eyebrow">Trening</span><b>Wybierz tematy i poziom</b><small>Po każdym zadaniu od razu widać, czy dobrze, i dlaczego.</small></button>
+    <button class="mode" data-act="go" data-v="test"><span class="eyebrow">Sprawdzian</span><b>${TOPICS.length} albo ${TOPICS.length*2} zadań, ocena 1–6</b><small>Wynik dopiero po oddaniu, jak na klasówce. Można włączyć 45 minut.</small></button>
+    <button class="mode" data-act="weak"><span class="eyebrow">Słabe strony</span><b>10 zadań z tego, co sprawia kłopot</b><span class="ex">${w.map(id=>T[id].name).join(' · ')}</span></button>
+  </section>
+  <section class="stack dim"><div class="row" style="justify-content:space-between"><h2>Tematy z podręcznika</h2><span class="note">Kliknij temat, żeby go poćwiczyć.</span></div>
+    ${[1,2,3,4,5].map(c=>`<div class="chap"><h3>${CHAPTERS[c]}</h3><div class="tmap">${TOPICS.filter(t=>t.ch===c).map(topicChip).join('')}</div></div>`).join('')}</section>`;
+}
+
+function vTrain(){
+  const all=TRAIN.topics.size===TOPICS.length;
+  return`<section class="hello"><span class="eyebrow">Trening</span><h1>Ćwicz krok po kroku</h1>
+    <p class="lead">Po każdym zadaniu zobaczysz wyjaśnienie. Zadania z obliczeniami losują nowe liczby, więc możesz je powtarzać wiele razy. Na poziomie <b>automatycznym</b> zadania robią się trudniejsze po trzech dobrych odpowiedziach z rzędu.</p></section>
+  <section class="card stack">
+    <div class="row" style="justify-content:space-between"><span class="lbl">Tematy</span><button class="soft" data-act="tall">${all?'Odznacz wszystkie':'Zaznacz wszystkie'}</button></div>
+    <div class="tchips">${TOPICS.map(t=>`<button class="tc${TRAIN.topics.has(t.id)?' on':''}" data-act="tchip" data-id="${t.id}" aria-pressed="${TRAIN.topics.has(t.id)}">${t.name}</button>`).join('')}</div>
+    <span class="lbl">Poziom</span>
+    <div class="seg" role="group">${[['auto','Automatyczny'],[1,'Łatwy'],[2,'Średni'],[3,'Trudny']].map(([v,l])=>`<button class="${String(TRAIN.level)===String(v)?'on':''}" data-act="tlv" data-v="${v}">${l}</button>`).join('')}</div>
+    <span class="lbl">Liczba zadań</span>
+    <div class="seg" role="group">${[5,10,15,20].map(n=>`<button class="${TRAIN.n===n?'on':''}" data-act="tn" data-v="${n}">${n}</button>`).join('')}</div>
+    <div class="acts"><button class="primary" data-act="tstart"${TRAIN.topics.size?'':' disabled'}>Zacznij trening</button>${TRAIN.topics.size?'':'<span class="warn">Wybierz co najmniej jeden temat.</span>'}</div>
+  </section>`;
+}
+
+function vTest(){
+  const tests=S.sessions.filter(s=>s.mode==='test').slice(-3).reverse();
+  return`<section class="hello"><span class="eyebrow">Sprawdzian</span><h1>Próbny sprawdzian z historii</h1>
+    <p class="lead">Zadania ze wszystkich tematów rozdziału I. Odpowiedzi możesz zmieniać do końca. Ocenę i wyjaśnienia zobaczysz po oddaniu pracy. Liczby w zadaniach z obliczeniami za każdym razem są inne.</p></section>
+  <section class="card stack">
+    <span class="lbl">Długość</span>
+    <div class="seg" role="group"><button class="${TEST.long?'':'on'}" data-act="xlen" data-v="0">${TOPICS.length} zadań</button><button class="${TEST.long?'on':''}" data-act="xlen" data-v="1">${TOPICS.length*2} zadań</button></div>
+    <span class="lbl">Poziom trudności</span>
+    <div class="seg" role="group">${[[1,'Łatwy'],[2,'Jak na sprawdzianie'],[3,'Trudny']].map(([v,l])=>`<button class="${TEST.level===v?'on':''}" data-act="xlv" data-v="${v}">${l}</button>`).join('')}</div>
+    <label class="switch" for="x-timer"><input type="checkbox" id="x-timer"${TEST.timer?' checked':''}> Odliczaj 45 minut (jedna lekcja)</label>
+    <p class="scale">Skala ocen: 98–100% celujący (6), 90–97% bardzo dobry (5), 75–89% dobry (4), 60–74% dostateczny (3), 40–59% dopuszczający (2), 0–39% niedostateczny (1).</p>
+    <div class="acts"><button class="primary" data-act="xstart">Rozpocznij sprawdzian</button></div>
+  </section>
+  ${tests.length?`<section class="stack"><h2>Ostatnie sprawdziany</h2><div class="card hist">${tests.map(histRow).join('')}</div></section>`:''}`;
+}
+
+function confirmBar(){
+  if(!RUN.pending)return'';
+  const t=RUN.mode==='test'?'Przerwać sprawdzian? Odpowiedzi nie zostaną ocenione ani zapisane.':'Zakończyć trening? Rozwiązane zadania są już zapisane w postępach.';
+  return`<div class="confirm"><p>${t}</p><button class="danger primary" data-act="quitok">Tak, zakończ</button><button class="ghost" data-act="quitno">Wróć do zadań</button></div>`;
+}
+
+function vRun(){
+  const r=RUN,i=r.i,q=r.qs[i],test=r.mode==='test';
+  const title=test?'Sprawdzian':r.mode==='weak'?'Słabe strony':'Trening';
+  const lvTxt=r.level==='auto'?'poziom automatyczny':'poziom '+LV[r.level];
+  const done=test?r.vals.filter((v,k)=>!isEmpty(r.qs[k],v)).length:r.res.filter(Boolean).length;
+  const res=test?null:r.res[i];
+  let h=`<div class="run-top"><button class="soft" data-act="quit">Zakończ</button><span class="t">${title}</span><span class="note">${lvTxt}</span>${r.deadline?`<span class="timer" id="timer">${mmss(r.deadline-Date.now())}</span>`:''}<span class="cnt">${i+1} / ${r.n}</span></div>
+  <div class="bar" aria-hidden="true"><i style="width:${done/r.n*100}%"></i></div>${confirmBar()}`;
+  if(test){
+    h+=`<div class="sheet-h"><b>Historia kl. 4 · rozdział I · grupa ${r.group}</b><span>${esc(S.name)} · ${new Date().toLocaleDateString('pl-PL')}</span></div>
+    <div class="dots" aria-label="Przejdź do zadania">${r.qs.map((qq,k)=>`<button class="${k===i?'cur':''}${!isEmpty(qq,r.vals[k])?' filled':''}" data-act="jump" data-v="${k}" aria-label="Zadanie ${k+1}">${k+1}</button>`).join('')}</div>`;
+  }
+  h+=`<article class="card task"><div class="task-h"><span class="tn">Zadanie ${i+1}.</span><span class="pts">(${res?`<span class="got">${res.pts}</span>`:'.....'} / ${q.max} p.)</span><span class="tag">${T[q.topic].name}${test?'':' · '+LV[q.level]}</span></div>
+  ${qBody(q,'r',r.vals[i],!!res,!!res)}
+  ${!test&&r.hint[i]&&!res?`<p class="hint"><b>Podpowiedź:</b> ${q.hint}</p>`:''}
+  ${res?fbHTML(q,res):''}
+  <div class="acts">`;
+  if(test){
+    const left=r.qs.filter((qq,k)=>isEmpty(qq,r.vals[k])).length;
+    h+=`${i>0?'<button class="ghost" data-act="prev">Poprzednie</button>':''}${i+1<r.n?'<button class="primary" data-act="tnext">Następne</button>':''}<button class="${i+1<r.n?'ghost':'primary'} sp" data-act="hand">Oddaj sprawdzian</button></div>`;
+    if(r.confirmEnd)h+=`<div class="confirm" style="margin-top:14px"><p>${left?`Bez pełnej odpowiedzi ${plural(left,'zostało','zostały','zostało')} ${left} ${plural(left,'zadanie','zadania','zadań')}. `:''}Oddać sprawdzian do oceny?</p><button class="primary" data-act="handok">Oddaj</button><button class="ghost" data-act="handno">Jeszcze sprawdzę</button></div>`;
+  }else{
+    h+=res?`<button class="primary" data-act="next">${i+1<r.n?'Następne zadanie':'Zobacz wynik'}</button>`:`<button class="primary" data-act="check">Sprawdź</button>${r.hint[i]?'':'<button class="ghost" data-act="hint">Podpowiedź</button>'}${r.msg?`<span class="warn">${r.msg}</span>`:''}`;
+    h+='</div>';
+  }
+  return h+'</article>';
+}
+
+function vResult(){
+  const r=RUN,s=r.summary,test=r.mode==='test',[g,gn]=gradeOf(s.pct);
+  const full=r.res.filter(x=>x&&x.pts===x.max&&!x.hint).length;
+  const errTopics=[...new Set(r.qs.map((q,k)=>r.res[k]&&r.res[k].pts<q.max?q.topic:null).filter(Boolean))];
+  const names={6:'celujący',5:'bardzo dobry',4:'dobry',3:'dostateczny',2:'dopuszczający',1:'niedostateczny'};
+  let h=`<section class="hello"><span class="eyebrow">${test?'Wynik sprawdzianu':'Wynik treningu'}</span><h1>${s.pct>=90?'Świetna robota!':s.pct>=60?'Dobra robota!':'Jest nad czym popracować'}</h1></section>
+  <section class="card res-top">
+    ${test?`<div class="stamp" aria-label="Ocena ${g}"><b>${g}</b><span>${gn}</span></div>`:''}
+    <div class="stack" style="gap:6px;min-width:0">
+      <div class="big">${s.pts} <small>/ ${s.max} p.</small></div>
+      <p><b>${s.pct}%</b> ${test?`· ocena ${names[g]}`:`· ${full} ${plural(full,'zadanie','zadania','zadań')} bez błędu i bez podpowiedzi`} · czas ${mmss(s.time)}</p>
+      ${test?'<p class="scale">Skala: 98–100% = 6, 90–97% = 5, 75–89% = 4, 60–74% = 3, 40–59% = 2, 0–39% = 1.</p>':''}
+    </div>
+  </section>
+  <div class="acts" style="margin-top:0">${errTopics.length?`<button class="primary" data-act="fix" data-v="${errTopics.join(',')}">Poćwicz tematy z błędami (${errTopics.length})</button>`:''}
+    <button class="${errTopics.length?'ghost':'primary'}" data-act="again">${test?'Nowy sprawdzian':'Jeszcze raz'}</button><button class="ghost" data-act="go" data-v="progress">Zobacz postępy</button></div>
+  <section class="stack"><h2>Zadania</h2><p class="note">Kliknij zadanie, żeby zobaczyć odpowiedzi i wyjaśnienie.</p><div class="rlist">`;
+  r.qs.forEach((q,k)=>{const x=r.res[k];if(!x)return;const m=x.pts===x.max?['y','✓']:x.pts?['p','½']:['n','✗'];
+    h+=`<details class="ritem"${x.pts<x.max&&test?' open':''}><summary><span class="mark ${m[0]}">${m[1]}</span><span>Zadanie ${k+1}. ${T[q.topic].name}</span><span class="rp">${x.pts}/${x.max}</span></summary>
+    <div class="rb">${qBody(q,'v'+k,r.vals[k],true,true)}<p class="expl">${q.expl}</p></div></details>`});
+  return h+'</div></section>'+sendPanel();
+}
+
+function histRow(s){const d=new Date(s.d);const m={train:'Trening',test:'Sprawdzian',weak:'Słabe strony'}[s.mode]||s.mode;
+  return`<div class="hrow"><span class="d">${d.toLocaleDateString('pl-PL',{day:'2-digit',month:'2-digit'})} ${d.toLocaleTimeString('pl-PL',{hour:'2-digit',minute:'2-digit'})}</span><span>${m}${s.level&&s.level!=='auto'?' · '+LV[s.level]:''}</span><span class="s">${s.pts}/${s.max} · ${s.pct}%</span><span class="g">${s.grade||''}</span></div>`}
+
+function chartSVG(list){
+  const W=620,H=210,l=36,rt=10,t=26,b=28,ih=H-t-b,n=list.length,slot=(W-l-rt)/Math.max(n,6),bw=Math.min(34,slot*.6);
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Wyniki ostatnich sesji w procentach">`;
+  [0,50,75,100].forEach(v=>{const y=t+ih-ih*v/100;s+=`<line x1="${l}" x2="${W-rt}" y1="${y}" y2="${y}" class="gl"/><text x="${l-6}" y="${y+4}" class="gt" text-anchor="end">${v}%</text>`});
+  list.forEach((x,i)=>{const cx=l+slot*i+slot/2,hgt=Math.max(2,ih*x.pct/100),y=t+ih-hgt;
+    s+=`<rect x="${cx-bw/2}" y="${y}" width="${bw}" height="${hgt}" rx="3" class="${x.mode==='test'?'bx':'bt'}"/>`;
+    s+=x.grade?`<text x="${cx}" y="${y-6}" class="gr">${x.grade}</text>`:`<text x="${cx}" y="${y-6}" class="vl">${x.pct}</text>`;
+    const d=new Date(x.d);s+=`<text x="${cx}" y="${H-8}" class="gt" text-anchor="middle">${d.getDate()}.${d.getMonth()+1}</text>`});
+  return s+'</svg>';
+}
+
+function vProgress(){
+  const all=TOPICS.flatMap(t=>(S.topics[t.id]||{recent:[]}).recent);
+  const overall=all.length?Math.round(all.reduce((a,b)=>a+b,0)/all.length*100):null;
+  const grades=S.sessions.filter(s=>s.grade).map(s=>s.grade);
+  const last=S.sessions.slice(-12);
+  return`<section class="hello"><span class="eyebrow">Postępy</span><h1>Jak idzie nauka historii</h1>
+    <p class="lead">Skuteczność liczona jest z ostatnich 20 zadań w każdym temacie, więc pokazuje, co umiesz teraz.</p></section>
+  ${sendPanel()}
+  <section class="tiles">
+    <div class="tile"><b>${S.count}</b><span>rozwiązanych zadań</span></div>
+    <div class="tile"><b>${overall==null?'—':overall+'%'}</b><span>średnia skuteczność</span></div>
+    <div class="tile"><b>${streak()}</b><span>${plural(streak(),'dzień','dni','dni')} nauki z rzędu</span></div>
+    <div class="tile"><b>${grades.length?Math.max(...grades):'—'}</b><span>najlepsza ocena ze sprawdzianu</span></div>
+  </section>
+  <section class="stack"><h2>Ostatnie sesje</h2>
+    ${last.length?`<div class="card chart">${chartSVG(last)}<div class="legend"><span><i style="background:var(--ink)"></i>trening (% punktów)</span><span><i style="background:var(--red)"></i>sprawdzian (ocena)</span></div></div>`:'<div class="empty">Tu pojawi się wykres po pierwszym treningu lub sprawdzianie.</div>'}
+  </section>
+  <section class="stack"><h2>Tematy</h2><div class="card ttable">
+    ${TOPICS.map(t=>{const a=acc(t.id),[c]=status(a),L=lvl(t.id),n=(S.topics[t.id]||{att:0}).att;
+      return`<div class="trow"><span class="nm">${t.name}<br><span class="note">${n?`${n} ${plural(n,'zadanie','zadania','zadań')}`:'jeszcze nie ćwiczone'}</span></span>
+      <span class="mini">${a!=null?`<i class="c-${c}" style="width:${Math.max(4,Math.round(a*100))}%"></i>`:''}</span>
+      <span class="pc">${a==null?'—':Math.round(a*100)+'%'}</span>
+      <span class="lvdots" title="Poziom: ${LV[L]}">${[1,2,3].map(k=>`<i class="${k<=L?'on':''}"></i>`).join('')}</span>
+      <button class="soft" data-act="topic" data-id="${t.id}">Ćwicz</button></div>`}).join('')}
+  </div><p class="note">Kropki pokazują poziom automatyczny tematu: łatwy, średni albo trudny.</p></section>
+  ${S.sessions.length?`<section class="stack"><h2>Historia</h2><div class="card hist">${S.sessions.slice(-15).reverse().map(histRow).join('')}</div></section>`:''}
+  <section class="card stack"><h2>Ustawienia</h2>
+    <label class="row" for="name-in"><span class="lbl">Imię ucznia</span><input id="name-in" class="name-in" value="${esc(S.name)}" maxlength="24"></label>
+    <p class="note">Wyniki zapisują się w tej przeglądarce na tym urządzeniu.</p>
+    ${CONFIRM_RESET?`<div class="confirm"><p>Usunąć wszystkie wyniki i poziomy z historii? Tego nie da się cofnąć.</p><button class="primary danger" data-act="resetok">Tak, usuń</button><button class="ghost" data-act="resetno">Anuluj</button></div>`:'<div><button class="soft" data-act="reset">Wyczyść postępy</button></div>'}
+  </section>`;
+}
+
+/* ---------- wysyłanie wyników ---------- */
+const MAIL='tomek.kno@gmail.com',SMS_NR='793797447';
+let SEND={copied:false,show:false};
+const MODE_N={train:'Trening',test:'Sprawdzian',weak:'Słabe strony'};
+function sessLine(s){const d=new Date(s.d);return`${d.toLocaleDateString('pl-PL',{day:'2-digit',month:'2-digit'})} ${d.toLocaleTimeString('pl-PL',{hour:'2-digit',minute:'2-digit'})} · ${MODE_N[s.mode]||s.mode}${s.level&&s.level!=='auto'?' ('+LV[s.level]+')':''} · ${s.pts}/${s.max} p. · ${s.pct}%${s.grade?' · ocena '+s.grade:''}`}
+function overallTxt(){const all=TOPICS.flatMap(t=>(S.topics[t.id]||{recent:[]}).recent);return all.length?Math.round(all.reduce((a,b)=>a+b,0)/all.length*100)+'%':'brak danych'}
+function summaryText(){
+  const tests=S.sessions.filter(s=>s.mode==='test').slice(-5).reverse(),last=S.sessions[S.sessions.length-1];
+  let t=`Wyniki: ${S.name} · Historia kl. 4 (rozdział I)\nStan na: ${new Date().toLocaleString('pl-PL',{dateStyle:'short',timeStyle:'short'})}\n\n`;
+  const td=today(),tds=S.sessions.filter(s=>ymd(new Date(s.d))===td);
+  t+=`DZISIAJ: ${S.daily[td]||0} ${plural(S.daily[td]||0,'zadanie','zadania','zadań')}`;
+  if(tds.length){const p=tds.reduce((a,s)=>a+s.pts,0),m=tds.reduce((a,s)=>a+s.max,0);t+=` · ${tds.length} ${plural(tds.length,'sesja','sesje','sesji')} · ${p}/${m} p. (${Math.round(p/m*100)}%)\n${tds.map(s=>'- '+sessLine(s)).join('\n')}`}
+  t+='\n\n';
+  if(last&&ymd(new Date(last.d))!==td)t+=`Ostatnia nauka: ${sessLine(last)}\n\n`;
+  const wk=TOPICS.filter(x=>{const a=acc(x.id);return a!=null&&a<.5}).map(x=>x.name),top=TOPICS.filter(x=>{const a=acc(x.id);return a!=null&&a>=.8}).map(x=>x.name);
+  t+=`OGÓŁEM\nRozwiązane zadania: ${S.count}\nŚrednia skuteczność: ${overallTxt()}\nDni nauki z rzędu: ${streak()}\nDni nauki łącznie: ${S.days.length}\n`;
+  t+=`Opanowane tematy: ${top.length?top.join(', '):'jeszcze żaden'}\nDo poprawy: ${wk.length?wk.join(', '):'brak'}\n\n`;
+  t+=`Sprawdziany:\n${tests.length?tests.map(s=>'- '+sessLine(s)).join('\n'):'- jeszcze żadnego'}\n\nTematy (skuteczność z ostatnich 20 zadań):\n`;
+  t+=TOPICS.map(x=>{const a=acc(x.id);return`- ${x.name}: ${a==null?'nie ćwiczone':Math.round(a*100)+'% · '+status(a)[1]+' · poziom '+LV[lvl(x.id)]}`}).join('\n');
+  const rec=S.sessions.slice(-10).reverse();if(rec.length)t+=`\n\nOstatnie sesje:\n${rec.map(s=>'- '+sessLine(s)).join('\n')}`;
+  return t;
+}
+function smsText(){
+  const td=today(),tds=S.sessions.filter(s=>ymd(new Date(s.d))===td),n=S.daily[td]||0;
+  let t=`${S.name} - historia: dziś ${n} ${plural(n,'zadanie','zadania','zadań')}`;
+  if(tds.length){const p=tds.reduce((a,s)=>a+s.pts,0),m=tds.reduce((a,s)=>a+s.max,0);t+=`, ${p}/${m} p. (${Math.round(p/m*100)}%)`}
+  const g=tds.filter(s=>s.grade).map(s=>s.grade);
+  if(g.length)t+=`, ${g.length>1?'oceny':'ocena'} ze sprawdzianu: ${g.join(', ')}`;
+  else{const lt=S.sessions.filter(s=>s.grade).pop();if(lt)t+=`. Ostatni sprawdzian: ${lt.grade} (${new Date(lt.d).toLocaleDateString('pl-PL',{day:'2-digit',month:'2-digit'})})`}
+  t+=`. Razem ${S.count} zadań, skuteczność ${overallTxt()}, ${streak()} ${plural(streak(),'dzień','dni','dni')} z rzędu.`;
+  const wk=TOPICS.filter(x=>{const a=acc(x.id);return a!=null&&a<.5}).map(x=>x.name);if(wk.length)t+=` Do poprawy: ${wk.join(', ')}.`;
+  return t;
+}
+const smsHref=()=>`sms:+48${SMS_NR}?&body=${encodeURIComponent(smsText())}`;
+const mailHref=()=>`mailto:${MAIL}?subject=${encodeURIComponent('Wyniki z historii: '+S.name)}&body=${encodeURIComponent(summaryText())}`;
+function sendPanel(){
+  return`<section class="card stack"><h2>Wyślij wyniki do taty</h2>
+    <p class="note">E-mail z pełnym zestawieniem trafi na adres <span class="mail">${MAIL}</span>, a krótki SMS na numer <span class="mail">${SMS_NR.replace(/(\d{3})(?=\d)/g,'$1 ')}</span>.</p>
+    <div class="row"><a class="primary" href="${mailHref()}" target="_blank" rel="noopener">Wyślij e-mailem</a><a class="primary" href="${smsHref()}" target="_blank" rel="noopener">Wyślij SMS-em</a><button class="ghost" data-act="copy">Skopiuj zestawienie</button>${SEND.copied?'<span class="okmsg">Skopiowano</span>':''}</div>
+    <p class="note">Przyciski otwierają pocztę albo Wiadomości z gotowym tekstem, który trzeba jeszcze wysłać. Jeśli nic się nie otworzy, skopiuj zestawienie i wklej je do nowej wiadomości.</p>
+    ${SEND.show?`<textarea class="sum-box" id="sum-box" readonly aria-label="Zestawienie wyników">${esc(summaryText())}</textarea>`:''}
+  </section>`;
+}
+
+function render(){
+  const nav=VIEW==='run'||VIEW==='result'?(RUN&&RUN.mode==='test'?'test':RUN&&RUN.mode==='train'?'train':''):VIEW;
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('on',b.dataset.go===nav));
+  $('#main').innerHTML=({home:vHome,train:vTrain,test:vTest,progress:vProgress,run:vRun,result:vResult})[VIEW]();
+}
+function go(v){
+  if(VIEW==='run'&&RUN&&!RUN.done&&v!=='run'){RUN.pending=v;render();scrollTo(0,0);return}
+  CONFIRM_RESET=false;VIEW=v;render();scrollTo(0,0);
+}
+function refocus(sel){const el=document.querySelector(sel);el&&el.focus({preventScroll:true})}
+
+/* ---------- zdarzenia ---------- */
+document.querySelector('.nav').addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b)go(b.dataset.go)});
+$('#main').addEventListener('input',e=>{
+  if(e.target.id==='name-in'){S.name=e.target.value.trim()||'Franek';save();return}
+  if(e.target.classList&&e.target.classList.contains('num-in')){const ns=e.target.dataset.ns,k=+e.target.dataset.nk;const v=valsOf(ns);if(v){v[k]=e.target.value;if(ns==='w'&&WARM)WARM.msg='';else if(RUN)RUN.msg=''}}
+});
+$('#main').addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&e.target.classList&&e.target.classList.contains('num-in')){e.preventDefault();
+    if(e.target.dataset.ns==='w')act('wcheck',e.target);else if(RUN&&RUN.mode!=='test'&&!RUN.res[RUN.i])doCheck()}
+});
+$('#main').addEventListener('change',e=>{if(e.target.id==='x-timer')TEST.timer=e.target.checked});
+function act(a,el){
+  const v=el.dataset.v,ns=el.dataset.ns;
+  const clr=()=>{if(ns==='w')WARM.msg='';else if(RUN)RUN.msg=''};
+  switch(a){
+    case'go':go(v);break;
+    case'weak':startRun('weak',{topics:weakTopics(),level:'auto',n:10});break;
+    case'topic':startRun('train',{topics:[el.dataset.id],level:'auto',n:8});break;
+    case'pick':valsOf(ns)[0]=+v;clr();render();refocus(`[data-act="pick"][data-ns="${ns}"][data-v="${v}"]`);break;
+    case'sort':valsOf(ns)[+el.dataset.k]=+v;clr();render();refocus(`[data-act="sort"][data-ns="${ns}"][data-k="${el.dataset.k}"][data-v="${v}"]`);break;
+    case'ord':valsOf(ns).push(+v);clr();render();refocus(`[data-act="ord"][data-ns="${ns}"]`);break;
+    case'unord':valsOf(ns).splice(+el.dataset.k,1);render();refocus(`[data-act="ord"][data-ns="${ns}"]`);break;
+    case'wcheck':{const q=WARM.q;if(isEmpty(q,WARM.vals)){WARM.msg=emptyMsg(q);render();return}
+      const r=gradeQ(q,WARM.vals);r.verdict=verdict(r);r.lvMsg=record(q,r.pts,r.max,true);WARM.res=r;WARM.msg='';render();refocus('[data-act="wnext"]');break}
+    case'wnext':newWarm();render();break;
+    case'whint':WARM.hint=true;render();break;
+    case'tchip':{const id=el.dataset.id;TRAIN.topics.has(id)?TRAIN.topics.delete(id):TRAIN.topics.add(id);render();break}
+    case'tall':TRAIN.topics=TRAIN.topics.size===TOPICS.length?new Set():new Set(TOPICS.map(t=>t.id));render();break;
+    case'tlv':TRAIN.level=v==='auto'?'auto':+v;render();break;
+    case'tn':TRAIN.n=+v;render();break;
+    case'tstart':if(TRAIN.topics.size)startRun('train',{topics:[...TRAIN.topics],level:TRAIN.level,n:TRAIN.n});break;
+    case'xlv':TEST.level=+v;render();break;
+    case'xlen':TEST.long=v==='1';render();break;
+    case'xstart':startRun('test',{level:TEST.level,timer:TEST.timer,long:TEST.long});break;
+    case'check':doCheck();break;
+    case'hint':RUN.hint[RUN.i]=true;render();break;
+    case'next':doNext();break;
+    case'tnext':RUN.i++;RUN.confirmEnd=false;render();scrollTo(0,0);break;
+    case'prev':RUN.i--;RUN.confirmEnd=false;render();scrollTo(0,0);break;
+    case'jump':RUN.i=+v;RUN.confirmEnd=false;render();break;
+    case'hand':RUN.confirmEnd=true;render();break;
+    case'handno':RUN.confirmEnd=false;render();break;
+    case'handok':finishTest();break;
+    case'quit':RUN.pending='home';render();scrollTo(0,0);break;
+    case'quitno':RUN.pending=null;render();break;
+    case'quitok':{const t=RUN.pending;clearInterval(TIMER);RUN.done=true;RUN=null;VIEW=t;render();scrollTo(0,0);break}
+    case'again':if(RUN.mode==='test')startRun('test',{level:RUN.level,timer:!!RUN.deadline,long:RUN.n>TOPICS.length});else startRun(RUN.mode,{topics:[...new Set(RUN.order)],level:RUN.level,n:RUN.n});break;
+    case'fix':{const ts=v.split(',');startRun('train',{topics:ts,level:'auto',n:Math.max(6,Math.min(15,ts.length*2))});break}
+    case'copy':{const txt=summaryText();const done=ok=>{SEND.copied=ok;SEND.show=!ok;render();
+        if(!ok){const b=$('#sum-box');if(b){b.focus();b.select()}}else setTimeout(()=>{SEND.copied=false;if(VIEW==='progress'||VIEW==='result')render()},2500)};
+      try{navigator.clipboard.writeText(txt).then(()=>done(true),()=>done(false))}catch(e){done(false)}break}
+    case'reset':CONFIRM_RESET=true;render();break;
+    case'resetno':CONFIRM_RESET=false;render();break;
+    case'resetok':S=blank();save();CONFIRM_RESET=false;WARM=null;render();break;
+  }
+}
+$('#main').addEventListener('click',e=>{const el=e.target.closest('[data-act]');if(!el||el.disabled||el.tagName==='INPUT')return;act(el.dataset.act,el)});
+render();
+</script>
+</body>
+</html>

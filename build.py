@@ -1,5 +1,5 @@
 import re
-H=open('historia.html',encoding='utf-8').read()
+H=open('src/historia-engine.html',encoding='utf-8').read()
 lines=H.split('\n')
 # CSS: between <style> and </style>
 s=H.index('<style>')+7; e=H.index('</style>')
@@ -83,8 +83,8 @@ hdr='''<header class="top"><div class="top-in">
 </div></header>
 <main id="main"></main>'''
 
-ch=open('parts/common_helpers.js',encoding='utf-8').read()
-ct=open('parts/common_types.js',encoding='utf-8').read()
+ch=open('src/common_helpers.js',encoding='utf-8').read()
+ct=open('src/common_types.js',encoding='utf-8').read()
 # chk patches
 ct=ct.replace("function chk(fd,raw){\n","function chk(fd,raw){\n  if(fd.kind==='t'){const n=x=>String(x==null?'':x).trim().toLowerCase().replace(/\\s+/g,' ').replace(/[.!?]+$/,'');return [fd.ans,...(fd.alts||[])].map(n).includes(n(raw))}\n",1)
 assert "fd.kind==='t'" in ct
@@ -92,7 +92,7 @@ ct=ct.replace("return /^\\d+$/.test(s)&&+s===fd.ans;","s=s.replace(/ /g,'');retu
 assert "s=s.replace(/ /g,'')" in ct
 
 def mod(name,key,title,icon,eyebrow,topicsTitle,desc,short):
-    src=open(f'parts/{name}_data.js',encoding='utf-8').read()
+    src=open(f'src/{name}_data.js',encoding='utf-8').read()
     return f"SUBJECTS.{short}=(()=>{{\n{src}\nreturn{{id:'{short}',key:'{key}',name:'{title}',icon:'{icon}',eyebrow:'{eyebrow}',topicsTitle:'{topicsTitle}',desc:'{desc}',TOPICS,T,CHAPTERS,B}};\n}})();\n"
 mods=''
 mods+=mod('hist','hist4-v1','Historia','🏺','Historia kl. 4 · rozdział I, str. 8–34','Tematy z podręcznika','Źródła, czas, wieki, kalendarz','hist')
@@ -206,5 +206,5 @@ const SUBJECTS={{}};
 </body>
 </html>
 '''
-open('szkolne.html','w',encoding='utf-8').write(page)
+open('index.html','w',encoding='utf-8').write(page)
 print(len(page))
