@@ -1459,8 +1459,7 @@ function vProgress(){
 }
 
 /* ---------- wysyłanie wyników ---------- */
-const MAIL='tomek.kno@gmail.com';
-let SEND={copied:false,show:false,msg:'',f:{n:'',g:'',hard:'',note:''}};
+let SEND={copied:false,show:false,msg:''};
 const MODE_N={train:'Trening',test:'Sprawdzian',weak:'Słabe strony'};
 function sessLine(s){const d=new Date(s.d);return`${d.toLocaleDateString('pl-PL',{day:'2-digit',month:'2-digit'})} ${d.toLocaleTimeString('pl-PL',{hour:'2-digit',minute:'2-digit'})} · ${MODE_N[s.mode]||s.mode}${s.chs?' ['+s.chs.map(id=>C[id]?C[id].name:id).join(', ')+']':''}${s.level&&s.level!=='auto'?' ('+LV[s.level]+')':''} · ${s.pts}/${s.max} p. · ${s.pct}%${s.grade?' · ocena '+s.grade:''}`}
 function summaryText(){
@@ -1486,7 +1485,6 @@ function summaryText(){
   if(rec.length)t+=`\n\nOstatnie sesje:\n${rec.map(s=>'- '+sessLine(s)).join('\n')}`;
   return t;
 }
-const SMS_NR='793797447';
 function smsText(){
   const td=today(),tds=S.sessions.filter(s=>ymd(new Date(s.d))===td),n=S.daily[td]||0;
   const all=TOPICS.flatMap(t=>(S.topics[t.id]||{recent:[]}).recent);
@@ -1501,22 +1499,23 @@ function smsText(){
   if(wk.length)t+=` Do poprawy: ${wk.slice(0,6).join(', ')}.`;
   return t;
 }
-const SF_L={n:'Ile zadań zrobiłem dziś',g:'Ocena z ostatniego sprawdzianu',hard:'Co sprawiało mi trudność',note:'Uwagi (nieobowiązkowe)'};
-function sendText(){const f=SEND.f;return`Wyniki z matematyki: ${S.name}\nData: ${new Date().toLocaleDateString('pl-PL')}\n\n`+['n','g','hard','note'].filter(k=>f[k].trim()).map(k=>`${SF_L[k]}: ${f[k].trim()}`).join('\n')}
-function sendOk(){const f=SEND.f;if(!f.n.trim()||!f.g.trim()){SEND.msg='Wpisz najpierw, ile zadań zrobiłeś i jaką masz ocenę.';render();return false}SEND.msg='';return true}
+let CONTACT=(()=>{try{return Object.assign({mail:'',tel:''},JSON.parse(localStorage.getItem('kontakt-v1'))||{})}catch(e){return{mail:'',tel:''}}})();
+const saveContact=()=>{try{localStorage.setItem('kontakt-v1',JSON.stringify(CONTACT))}catch(e){}};
+const telDigits=()=>CONTACT.tel.replace(/[^\d+]/g,'');
+function contactOk(kind){
+  if(kind==='mail'&&!/^\S+@\S+\.\S+$/.test(CONTACT.mail.trim())){SEND.msg='Wpisz poprawny adres e-mail.';render();return false}
+  if(kind==='sms'&&telDigits().replace('+','').length<9){SEND.msg='Wpisz numer telefonu (9 cyfr).';render();return false}
+  SEND.msg='';return true}
+function smsHref(){const t=telDigits();return`sms:${t.startsWith('+')?t:'+48'+t}?&body=${encodeURIComponent(smsText())}`}
+function mailHref(){return`mailto:${CONTACT.mail.trim()}?subject=${encodeURIComponent('Wyniki z matematyki: '+S.name)}&body=${encodeURIComponent(summaryText())}`}
 function sendPanel(){
-  const td=S.daily[ymd(new Date())]||0,lt=S.sessions.filter(s=>s.grade).pop();
-  const f=SEND.f;
-  return`<section class="card stack"><h2>Wyślij wyniki do taty</h2>
-    <p class="note">Wpisz wyniki sam. W aplikacji dziś: <b>${td}</b> ${plural(td,'zadanie','zadania','zadań')}${lt?`, ostatnia ocena ze sprawdzianu: <b>${lt.grade}</b>`:''}.</p>
-    <label class="fld wide"><span>${SF_L.n}</span><input class="sf" data-sf="n" inputmode="numeric" autocomplete="off" value="${esc(f.n)}"></label>
-    <label class="fld wide"><span>${SF_L.g}</span><input class="sf" data-sf="g" inputmode="numeric" autocomplete="off" value="${esc(f.g)}"></label>
-    <label class="fld wide"><span>${SF_L.hard}</span><input class="sf txt" data-sf="hard" autocomplete="off" value="${esc(f.hard)}"></label>
-    <label class="fld wide"><span>${SF_L.note}</span><input class="sf txt" data-sf="note" autocomplete="off" value="${esc(f.note)}"></label>
-    <div class="symbar"><span>Znaki:</span>${['−','+','·',':','=','(',')',',','/'].map(c=>`<button type="button" data-sym="${c}">${c}</button>`).join('')}</div>
-    <div class="row"><button class="primary" data-act="smail">Wyślij e-mailem</button><button class="primary" data-act="ssms">Wyślij SMS-em</button><button class="ghost" data-act="copy">Skopiuj</button>${SEND.copied?'<span class="okmsg">Skopiowano</span>':''}${SEND.msg?`<span class="warn">${SEND.msg}</span>`:''}</div>
-    <p class="note">E-mail trafi na <span class="mail">${MAIL}</span>, SMS na <span class="mail">${SMS_NR.replace(/(\d{3})(?=\d)/g,'$1 ')}</span>. Otworzy się poczta albo Wiadomości z Twoim tekstem; trzeba go jeszcze wysłać.</p>
-    ${SEND.show?`<textarea class="sum-box" id="sum-box" readonly aria-label="Wyniki do wysłania">${esc(sendText())}</textarea>`:''}
+  return`<section class="card stack"><h2>Wyślij zestawienie wyników</h2>
+    <p class="note">Wpisz, dokąd wysłać zestawienie (zapamiętamy to na tym urządzeniu). Zestawienie uzupełnia się samo z Twoich wyników.</p>
+    <label class="fld wide"><span>Adres e-mail</span><input class="sf txt" data-ct="mail" type="email" inputmode="email" autocomplete="email" autocapitalize="none" placeholder="np. imie@gmail.com" value="${esc(CONTACT.mail)}"></label>
+    <label class="fld wide"><span>Numer telefonu (SMS)</span><input class="sf txt" data-ct="tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="np. 600 100 200" value="${esc(CONTACT.tel)}"></label>
+    <div class="row"><button class="primary" data-act="smail">Wyślij e-mailem</button><button class="primary" data-act="ssms">Wyślij SMS-em</button><button class="ghost" data-act="copy">Skopiuj zestawienie</button>${SEND.copied?'<span class="okmsg">Skopiowano</span>':''}${SEND.msg?`<span class="warn">${SEND.msg}</span>`:''}</div>
+    <p class="note">Przyciski otwierają pocztę albo Wiadomości z gotowym tekstem, który trzeba jeszcze wysłać. Jeśli nic się nie otworzy, skopiuj zestawienie i wklej je do nowej wiadomości.</p>
+    ${SEND.show?`<textarea class="sum-box" id="sum-box" readonly aria-label="Zestawienie wyników">${esc(summaryText())}</textarea>`:''}
   </section>`;
 }
 
@@ -1535,7 +1534,7 @@ document.querySelector('.nav').addEventListener('click',e=>{const b=e.target.clo
 $('#main').addEventListener('input',e=>{
   const el=e.target;
   if(el.id==='name-in'){S.name=el.value.trim()||'Franek';save();return}
-  if(el.dataset.sf){SEND.f[el.dataset.sf]=el.value;SEND.msg='';return}
+  if(el.dataset.ct){CONTACT[el.dataset.ct]=el.value;saveContact();SEND.msg='';return}
   if(el.dataset.k==null)return;const k=+el.dataset.k;
   if(el.dataset.ns==='w')WARM.vals[k]=el.value;
   else if(RUN){RUN.vals[RUN.i][k]=el.value;if(RUN.mode==='test'){const d=document.querySelectorAll('.dots button')[RUN.i];d&&d.classList.toggle('filled',!isEmpty(RUN.qs[RUN.i],RUN.vals[RUN.i]))}}
@@ -1584,9 +1583,9 @@ function act(a,el){
     case'quitok':{const t=RUN.pending;clearInterval(TIMER);RUN.done=true;RUN=null;VIEW=t;render();scrollTo(0,0);break}
     case'again':if(RUN.mode==='test')startRun('test',Object.assign({},RUN.opts,{timer:!!RUN.deadline}));else startRun(RUN.mode,Object.assign({},RUN.opts,{topics:[...new Set(RUN.order)]}));focusFirst();break;
     case'fix':{const ts=v.split(',');startRun('train',{topics:ts,level:'auto',n:Math.max(6,Math.min(15,ts.length*2))});focusFirst();break}
-    case'smail':if(sendOk())window.open(`mailto:${MAIL}?subject=${encodeURIComponent('Wyniki z matematyki: '+S.name)}&body=${encodeURIComponent(sendText())}`,'_blank');break;
-    case'ssms':if(sendOk())window.open(`sms:+48${SMS_NR}?&body=${encodeURIComponent(sendText().replace(/\n+/g,'; '))}`,'_blank');break;
-    case'copy':{if(!sendOk())break;const txt=sendText();const done=ok=>{SEND.copied=ok;SEND.show=!ok;render();
+    case'smail':if(contactOk('mail'))window.open(mailHref(),'_blank');break;
+    case'ssms':if(contactOk('sms'))window.open(smsHref(),'_blank');break;
+    case'copy':{const txt=summaryText();const done=ok=>{SEND.copied=ok;SEND.show=!ok;render();
         if(!ok){const b=$('#sum-box');if(b){b.focus();b.select()}}else setTimeout(()=>{SEND.copied=false;if(VIEW==='progress'||VIEW==='result')render()},2500)};
       try{navigator.clipboard.writeText(txt).then(()=>done(true),()=>done(false))}catch(e){done(false)}break}
     case'reset':CONFIRM_RESET=true;render();break;
