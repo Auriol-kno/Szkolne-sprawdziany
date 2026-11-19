@@ -629,6 +629,8 @@ const P=a=>a[Math.floor(Math.random()*a.length)];
 const f=n=>Number(n).toLocaleString('pl-PL');
 const plural=(n,a,b,c)=>{if(n===1)return a;const u=n%10,t=n%100;return(u>=2&&u<=4&&(t<12||t>14))?b:c};
 const lat=n=>plural(n,'rok','lata','lat');
+const kmm=x=>x%1000?`${Math.floor(x/1000)} km ${x%1000} m`:`${x/1000} km`;
+const HZ=n=>`${n} ${n<5?'proste poziome':'prostych poziomych'}`,VT=n=>`${n} ${n<5?'proste pionowe':'prostych pionowych'}`;
 const ex=s=>`<div class="expr">${s}</div>`;
 const BOX='<span class="box" aria-label="okienko">□</span>';
 const sq=n=>`${n}<sup>2</sup>`, cu=n=>`${n}<sup>3</sup>`;
@@ -961,10 +963,10 @@ puzzle(L){
 Object.assign(G,{
 dec(L){
   if(L===1){
-    const n=R(1000,9999),pl=P([[100,'setek'],[10,'dziesiątek'],[1000,'tysięcy']]),dg=Math.floor(n/pl[0])%10;
+    const n=R(1000,9999),pl=P([[100,'setek'],[10,'dziesiątek']]),dg=Math.floor(n/pl[0])%10;
     const nm={100:'setek',10:'dziesiątek',1000:'tysięcy'}[pl[0]];
     return{html:`Jaka cyfra stoi na miejscu ${nm} w liczbie ${f(n)}?`,fields:[{label:'Cyfra',ans:dg}],
-      path:[{label:`Ile ${nm} ma ta liczba łącznie (policz w całości)?`,ans:Math.floor(n/pl[0])}],
+      path:[{label:`Podziel ${f(n)} przez ${f(pl[0])} i zapisz część całkowitą wyniku. Ile wynosi?`,ans:Math.floor(n/pl[0])}],
       hint:`Podziel liczbę przez ${f(pl[0])} i zostaw samą cyfrę jedności wyniku.`,
       expl:`${f(n)} : ${f(pl[0])} = ${Math.floor(n/pl[0])} (część całkowita). Ostatnia cyfra tego wyniku to ${dg}, więc na miejscu ${nm} stoi ${dg}.`};
   }
@@ -1037,7 +1039,7 @@ money(L){
       expl:`${a} + ${b} = ${a+b} gr. Zapłacono ${paid} gr. Reszta: ${paid} − ${a+b} = ${paid-a-b} gr.`};
   }
   const k=R(3,7),p=R(2,9)*100+R(1,9)*10,cost=k*p,paid=Math.ceil((cost+1)/1000)*1000;
-  return{html:`${k} jednakowych zeszytów kosztuje razem tyle, ile ${k} razy cena jednego. Jeden zeszyt kosztuje ${Math.floor(p/100)} zł ${p%100} gr. Zapłacono ${paid/100} zł. Ile groszy reszty?`,fields:[{label:'Reszta (gr)',ans:paid-cost}],
+  return{html:`Jeden zeszyt kosztuje ${Math.floor(p/100)} zł ${p%100} gr. Kupiono ${k} takich zeszytów i zapłacono ${paid/100} zł. Ile groszy reszty?`,fields:[{label:'Reszta (gr)',ans:paid-cost}],
     path:[{label:'Ile groszy kosztuje jeden zeszyt?',ans:p},{label:`Ile groszy kosztuje ${k} zeszytów?`,ans:cost}],hint:'Najpierw cena jednego w groszach, potem mnożenie, na końcu odejmowanie od zapłaconej kwoty.',
     expl:`Jeden zeszyt: ${p} gr. ${k} zeszytów: ${k} · ${p} = ${cost} gr. Reszta: ${paid} − ${cost} = ${paid-cost} gr.`};
 },
@@ -1052,7 +1054,7 @@ len(L){
       expl:`${k1} km ${m1} m = ${f(k1*1000+m1)} m, ${k2} km ${m2} m = ${f(k2*1000+m2)} m. Razem ${f(tot)} m.`};
   }
   const a=R(1,2)*1000+R(1,9)*100,b=R(3,9)*100+R(0,9)*10,c=R(1,2)*1000+R(0,9)*50,goal=5000;let s=a+b+c;const total=s<goal?goal:Math.ceil((s+100)/1000)*1000;
-  return{html:`Franek przeszedł ${Math.floor(a/1000)} km ${a%1000} m, potem ${b} m, a na końcu ${Math.floor(c/1000)} km ${c%1000} m. Ile metrów brakuje mu do ${f(total)} m?`,fields:[{label:'Brakuje (m)',ans:total-s}],
+  return{html:`Franek przeszedł ${kmm(a)}, potem ${b} m, a na końcu ${kmm(c)}. Ile metrów brakuje mu do ${f(total)} m?`,fields:[{label:'Brakuje (m)',ans:total-s}],
     path:[{label:'Ile metrów przeszedł razem?',ans:s}],hint:'Zamień kilometry na metry, dodaj trzy odcinki i odejmij od celu.',
     expl:`${f(a)} + ${f(b)} + ${f(c)} = ${f(s)} m. Brakuje ${f(total)} − ${f(s)} = ${f(total-s)} m.`};
 },
@@ -1066,7 +1068,7 @@ mass(L){
     return{html:`Worek cukru waży ${Math.floor(a/1000)} kg ${a%1000} g. Wsypano do niego jeszcze ${b} g. Ile gramów waży worek?`,fields:[{label:'Gramów',ans:tot}],path:[{label:`Ile gramów waży worek na początku?`,ans:a}],hint:'Zamień kilogramy na gramy.',expl:`${Math.floor(a/1000)} kg ${a%1000} g = ${f(a)} g. Razem ${f(a)} + ${b} = ${f(tot)} g.`};
   }
   const n=R(3,8),p=R(2,9)*100+50,k=R(2,5),q=R(1,2)*1000+250,tot=n*p+k*q;
-  return{html:`W skrzynce jest ${n} paczek po ${p} g oraz ${k} paczki po ${Math.floor(q/1000)} kg ${q%1000} g. Ile gramów waży cały towar?`,fields:[{label:'Gramów',ans:tot}],
+  return{html:`W skrzynce jest ${n} ${plural(n,'paczka','paczki','paczek')} po ${p} g oraz ${k} ${plural(k,'paczka','paczki','paczek')} po ${Math.floor(q/1000)} kg ${q%1000} g. Ile gramów waży cały towar?`,fields:[{label:'Gramów',ans:tot}],
     path:[{label:`Ile gramów ważą paczki po ${p} g?`,ans:n*p},{label:`Ile gramów ważą paczki po ${f(q)} g?`,ans:k*q}],hint:'Policz osobno oba rodzaje paczek, potem dodaj.',
     expl:`${n} · ${p} = ${f(n*p)} g. ${k} · ${f(q)} = ${f(k*q)} g. Razem ${f(tot)} g.`};
 },
@@ -1108,7 +1110,7 @@ clock(L){
     const m1=m%5===0?m:Math.ceil(m/5)*5,e2=h*60+m1+dur;const H2=Math.floor(e2/60),M2=e2%60;
     return{html:`Lekcja zaczęła się o ${ft(h,m1)}, a skończyła o ${ft(H2,M2)}. Ile minut trwała?`,fields:[{label:'Minut',ans:dur}],
       path:[{label:`Ile minut mija od ${ft(h,m1)} do ${m1===0?ft(h,0):ft(h+1,0)}?`,ans:m1===0?0:60-m1}],hint:'Policz minuty do najbliższej pełnej godziny, potem dolicz resztę.',
-      expl:`Od ${ft(h,m1)} do ${ft(H2,M2)}: ${H2*60+M2} − ${h*60+m1} = ${dur} minut.`};
+      expl:`Liczymy minuty od północy: ${ft(H2,M2)} to ${H2*60+M2} min, ${ft(h,m1)} to ${h*60+m1} min. Różnica: ${H2*60+M2} − ${h*60+m1} = ${dur} minut.`};
   }
   if(L===2){
     const h=R(8,18),m=R(0,11)*5,dur=R(61,170),e=h*60+m+dur,fh=Math.floor(e/60),fm=e%60,ft=(a,b)=>`${a}:${String(b).padStart(2,'0')}`;
@@ -1174,7 +1176,7 @@ wmulz(L){
   let a,b,za,zb;
   if(L===1){a=R(12,99);za=1;b=R(2,9);zb=1}else if(L===2){a=R(12,99);za=P([1,2]);b=R(12,59);zb=1}else{a=R(12,99);za=P([2,3]);b=R(12,59);zb=P([1,2])}
   const A=a*Math.pow(10,za),B=b*Math.pow(10,zb),p=A*B;
-  return{html:'Pomnóż. Zera na końcu możesz dopisać na końcu.'+ex(`${f(A)} · ${f(B)} =`),fields:[{ans:p}],
+  return{html:'Pomnóż. Najpierw pomnóż liczby bez zer na końcu, a potem dopisz te zera.'+ex(`${f(A)} · ${f(B)} =`),fields:[{ans:p}],
     path:[{label:`Bez zer: ${a} · ${b} =`,ans:a*b},{label:'Ile zer dopiszesz razem?',ans:za+zb}],
     hint:'Pomnóż liczby bez zer na końcu. Potem dopisz tyle zer, ile było ich razem w obu czynnikach.',
     expl:`${a} · ${b} = ${a*b}. W ${f(A)} są ${za} ${plural(za,'zero','zera','zer')}, w ${f(B)} jest ${zb}. Dopisujemy ${za+zb}: ${f(p)}.`};
@@ -1209,9 +1211,9 @@ wtext(L){
   const v=R(0,2);
   if(v===0){
     const p=L===1?R(12,45):L===2?R(125,480):R(235,980),cost=k*p,paid=Math.ceil((cost+1)/(L===1?50:100))*(L===1?50:100);
-    return{html:`${nm} kupił ${k} jednakowe zeszyty po ${p} zł. Zapłacił ${f(paid)} zł. Ile złotych reszty dostał?`,fields:[{label:'Reszta (zł)',ans:paid-cost}],
-      path:[opSel('Pierwsze działanie (koszt wszystkich zeszytów)','m'),{label:'Ile kosztują wszystkie zeszyty (zł)?',ans:cost},opSel('Drugie działanie (reszta)','s')],
-      hint:'Najpierw ile kosztują wszystkie zeszyty, potem odejmij od zapłaconej kwoty.',expl:`${k} · ${f(p)} = ${f(cost)} zł. Reszta: ${f(paid)} − ${f(cost)} = ${f(paid-cost)} zł.`};
+    return{html:`${nm} kupił ${k} ${L===1?plural(k,'książkę','książki','książek'):plural(k,'hulajnogę','hulajnogi','hulajnóg')} po ${p} zł każda. Zapłacił ${f(paid)} zł. Ile złotych reszty dostał?`,fields:[{label:'Reszta (zł)',ans:paid-cost}],
+      path:[opSel('Pierwsze działanie (koszt wszystkich zakupów)','m'),{label:'Ile kosztują wszystkie zakupy (zł)?',ans:cost},opSel('Drugie działanie (reszta)','s')],
+      hint:'Najpierw ile kosztują wszystkie zakupy, potem odejmij od zapłaconej kwoty.',expl:`${k} · ${f(p)} = ${f(cost)} zł. Reszta: ${f(paid)} − ${f(cost)} = ${f(paid-cost)} zł.`};
   }
   if(v===1){
     const c=L===1?R(12,30):L===2?R(18,35):R(24,36),n=R(2,k+3),p=L===1?R(3,9):L===2?R(5,15):R(11,19),tot=n*c*p;
@@ -1250,14 +1252,14 @@ lines(L){
 },
 par(L){
   const m=L===1?R(2,4):R(3,6),k=L===1?R(2,4):R(3,6);
-  if(L===1)return{html:`Narysowano ${m} proste poziome i ${k} proste pionowe (poziome i pionowe są wzajemnie prostopadłe). Ile jest par prostych prostopadłych?`,fields:[{label:'Par',ans:m*k}],
-    path:[{label:'Ile jest par z jedną ustaloną prostą poziomą?',ans:k}],hint:'Każdą poziomą możesz połączyć w parę z każdą pionową.',expl:`Jedna pozioma tworzy ${k} par z pionowymi. ${m} poziomych: ${m} · ${k} = ${m*k}.`};
-  if(L===2)return{html:`Narysowano ${m} proste poziome i ${k} proste pionowe. Ile jest par prostych równoległych?`,fields:[{label:'Par równoległych',ans:CC(m)+CC(k)}],
+  if(L===1)return{html:`Narysowano ${HZ(m)} i ${VT(k)} (poziome i pionowe są wzajemnie prostopadłe). Ile jest par prostych prostopadłych?`,fields:[{label:'Par',ans:m*k}],
+    path:[{label:'Ile jest par z jedną ustaloną prostą poziomą?',ans:k}],hint:'Każdą poziomą możesz połączyć w parę z każdą pionową.',expl:`Jedna pozioma tworzy ${k} ${plural(k,'parę','pary','par')} z pionowymi. ${m} poziomych: ${m} · ${k} = ${m*k}.`};
+  if(L===2)return{html:`Narysowano ${HZ(m)} i ${VT(k)}. Ile jest par prostych równoległych?`,fields:[{label:'Par równoległych',ans:CC(m)+CC(k)}],
     path:[{label:'Ile par równoległych tworzą proste poziome?',ans:CC(m)}],hint:'Równoległe są proste poziome między sobą i pionowe między sobą.',
     expl:`Poziome: ${m} · ${m-1} : 2 = ${CC(m)}. Pionowe: ${k} · ${k-1} : 2 = ${CC(k)}. Razem ${CC(m)+CC(k)}.`};
-  return{html:`Narysowano ${m} proste poziome i ${k} proste pionowe. Ile par prostych można wybrać spośród wszystkich prostych razem i ile z nich to pary prostopadłe?`,fields:[{label:'Wszystkich par',ans:CC(m+k)},{label:'Prostopadłych',ans:m*k}],
+  return{html:`Narysowano ${HZ(m)} i ${VT(k)}. Ile par prostych można wybrać spośród wszystkich prostych razem i ile z nich to pary prostopadłe?`,fields:[{label:'Wszystkich par',ans:CC(m+k)},{label:'Prostopadłych',ans:m*k}],
     path:[{label:'Ile prostych jest razem?',ans:m+k}],hint:'Wszystkich par: n prostych daje n · (n − 1) : 2 par. Prostopadłe to poziome z pionowymi.',
-    expl:`Razem ${m+k} proste. Par: ${m+k} · ${m+k-1} : 2 = ${CC(m+k)}. Prostopadłych: ${m} · ${k} = ${m*k}.`};
+    expl:`Razem ${m+k} ${plural(m+k,'prosta','proste','prostych')}. Par: ${m+k} · ${m+k-1} : 2 = ${CC(m+k)}. Prostopadłych: ${m} · ${k} = ${m*k}.`};
 },
 ang(L){
   if(L===1){
@@ -1283,7 +1285,7 @@ polyg(L){
   }
   const n=R(5,10);
   return{html:`Ile przekątnych ma ${n}-kąt wypukły?`,fields:[{label:'Przekątnych',ans:n*(n-3)/2}],path:[{label:'Ile przekątnych wychodzi z jednego wierzchołka?',ans:n-3}],hint:'Z jednego wierzchołka nie rysujemy do siebie samego ani do dwóch sąsiednich. Potem pamiętaj, że każdą przekątną policzyłeś dwa razy.',
-    expl:`Z jednego wierzchołka wychodzi ${n} − 3 = ${n-3} przekątnych. ${n} · ${n-3} = ${n*(n-3)}, a każdą policzyliśmy dwa razy: ${n*(n-3)} : 2 = ${n*(n-3)/2}.`};
+    expl:`Z jednego wierzchołka wychodzi ${n} − 3 = ${n-3} ${plural(n-3,'przekątna','przekątne','przekątnych')}. ${n} · ${n-3} = ${n*(n-3)}, a każdą policzyliśmy dwa razy: ${n*(n-3)} : 2 = ${n*(n-3)/2}.`};
 },
 rect(L){
   if(L===1){
@@ -1311,7 +1313,7 @@ circle(L){
       expl:`${W} : ${d} = ${n} r. ${W-d*n}, więc zmieści się ${n} kół.`};
   }
   const r=R(2,9),n=R(3,6);
-  return{html:`${n} jednakowych okręgów o promieniu ${r} cm leży w jednym rzędzie, a każde dwa sąsiednie się stykają. Ile centymetrów jest między środkami pierwszego i ostatniego okręgu?`,fields:[{label:'Odległość (cm)',ans:2*r*(n-1)}],
+  return{html:`Ułożono w jednym rzędzie ${n} ${plural(n,'jednakowy okrąg','jednakowe okręgi','jednakowych okręgów')} o promieniu ${r} cm tak, że każde dwa sąsiednie się stykają. Ile centymetrów jest między środkami pierwszego i ostatniego okręgu?`,fields:[{label:'Odległość (cm)',ans:2*r*(n-1)}],
     path:[{label:'Ile centymetrów jest między środkami dwóch sąsiednich okręgów?',ans:2*r},{label:'Ile jest takich odstępów?',ans:n-1}],hint:'Między środkami styku dwóch okręgów jest dokładnie średnica.',expl:`Odstęp: 2 · ${r} = ${2*r} cm. Odstępów: ${n} − 1 = ${n-1}. Razem ${n-1} · ${2*r} = ${2*r*(n-1)} cm.`};
 },
 scale(L){
@@ -1472,7 +1474,7 @@ function ansText(fd){
   if(fd.mark)return`liczba ${fd.show} (zielona kreska)`;
   const l=fd.label||'wynik';
   if(fd.kind==='sel')return`${l}: <b>${fd.show||selLabel(fd,fd.ans)}</b>`;
-  return /=$/.test(l)?`${l} <b>${f(fd.ans)}</b>`:`${l}: <b>${f(fd.ans)}</b>`;
+  return /[=?]$/.test(l)?`${l} <b>${f(fd.ans)}</b>`:`${l}: <b>${f(fd.ans)}</b>`;
 }
 
 function lineSVG(q,ns,vals,locked,show){
