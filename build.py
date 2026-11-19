@@ -69,7 +69,7 @@ body{background-image:none}
 .axis .right .mk{fill:var(--green);stroke:var(--green)}
 .axis .wrong .mk{fill:var(--red)}
 '''
-css=pal+css+extra
+css=pal+css+extra+'\n.nav[hidden],.back[hidden]{display:none}\nmain.wide{max-width:none;padding:0;gap:0}\n#math-frame{display:block;width:100%;border:0}\n'
 
 hdr='''<header class="top"><div class="top-in">
   <button class="back" id="back" data-go="hub" hidden>◀ Przedmioty</button>
@@ -98,7 +98,8 @@ mods=''
 mods+=mod('hist','hist4-v1','Historia','🏺','Historia kl. 4 · rozdział I, str. 8–34','Tematy z podręcznika','Źródła, czas, wieki, kalendarz','hist')
 mods+=mod('przyroda','prz4-v1','Przyroda','🌿','Przyroda kl. 4 · rozdziały 1–5','Tematy z podręcznika','Zmysły, obserwacje, kierunki świata','przyroda')
 mods+=mod('english','ang4-v1','Angielski','💬','Angielski kl. 4 · zestaw startowy','Tematy','Słówka, to be, can, have got','english')
-mods+=mod('math','lid4-v1','Matematyka','🔢','Matematyka kl. 4 · Liczby i działania','Tematy ze sprawdzianu','Działania, oś liczbowa, zadania tekstowe','math')
+mathsrc=open('src/math_app.html',encoding='utf-8').read().replace('</script','<%%/S').replace('<script','<%%S')
+mods+="SUBJECTS.math={id:'math',key:'lid4-v1',name:'Matematyka',icon:'🔢',eyebrow:'Matematyka kl. 4',topicsTitle:'',desc:'Rozdziały z książki, Kangur, ciekawostki',custom:true,TOPICS:[],T:{},CHAPTERS:{},B:{}};\n"
 
 # engine
 es=H.index('/* ---------- zapis')
@@ -138,6 +139,9 @@ rep("  CONFIRM_RESET=false;VIEW=v;render();scrollTo(0,0);\n}","  CONFIRM_RESET=f
 rep("case'quitok':{const t=RUN.pending;clearInterval(TIMER);RUN.done=true;RUN=null;VIEW=t;","case'quitok':{const t=RUN.pending;clearInterval(TIMER);RUN.done=true;RUN=null;VIEW=t;if(t==='hub')document.documentElement.removeAttribute('data-subj');")
 rep("case'tick':","case'subj':setSubject(el.dataset.id);break;\n    case'tick':") if False else None
 rep("    case'tick':","    case'subj':setSubject(el.dataset.id);break;\n    case'tick':")
+rep("$('#nav').hidden=VIEW==='hub';","$('#nav').hidden=VIEW==='hub'||VIEW==='embed';")
+rep("({hub:vHub,home:vHome,","({embed:vEmbed,hub:vHub,home:vHome,")
+rep("[VIEW]();","[VIEW]();\n  $('#main').classList.toggle('wide',VIEW==='embed');if(VIEW==='embed')mountEmbed();")
 # render() end: final 'render();' at the end
 assert eng.rstrip().endswith("render();")
 eng=eng.rstrip()[:-len("render();")]
@@ -181,6 +185,25 @@ function lineSVG(q,ns,vals,locked,show){
 $('#main').addEventListener('keydown',e=>{const el=e.target;if((e.key==='Enter'||e.key===' ')&&el.dataset&&el.dataset.act==='tick'){e.preventDefault();act('tick',el)}});
 render();
 '''
+hub=hub.replace("VIEW='home';render();scrollTo(0,0);","VIEW=SUBJ.custom?'embed':'home';render();scrollTo(0,0);")
+old_p="sub.TOPICS.flatMap(t=>(s.topics&&s.topics[t.id]||{recent:[]}).recent)"
+assert old_p in hub
+hub=hub.replace(old_p,"(sub.custom?Object.keys(s.topics||{}):sub.TOPICS.map(t=>t.id)).flatMap(id=>(s.topics&&s.topics[id]||{recent:[]}).recent)")
+hub=hub.replace("render();\n'''","")if False else hub
+emb='''
+/* matematyka: osobny moduł (rozdziały, ścieżka rozumowania, Kangur) osadzony w ramce */
+function vEmbed(){return'<div id="embed-wrap"></div>'}
+function mountEmbed(){
+  const w=$('#embed-wrap');if(!w)return;
+  const src=document.getElementById('math-src').textContent.replace(/<%%\\/S/g,'</scr'+'ipt').replace(/<%%S/g,'<scr'+'ipt');
+  const fr=document.createElement('iframe');fr.id='math-frame';fr.title='Matematyka';
+  fr.srcdoc=src.replace('</head>','<style>.top .brand{display:none}</style></head>');
+  w.appendChild(fr);fitEmbed();
+}
+function fitEmbed(){const fr=document.getElementById('math-frame');if(!fr)return;const h=document.querySelector('.top').getBoundingClientRect().bottom;fr.style.height=Math.max(320,innerHeight-h)+'px'}
+if(typeof window!=='undefined'&&window.addEventListener)window.addEventListener('resize',fitEmbed);
+'''
+hub=hub.replace("render();\n",emb+"render();\n") if hub.rstrip().endswith("render();") else hub+emb
 eng+=hub
 
 page=f'''<!DOCTYPE html>
@@ -196,6 +219,7 @@ page=f'''<!DOCTYPE html>
 <body>
 {hdr}
 
+<script type="text/plain" id="math-src">{mathsrc}</script>
 <script>
 {ch}
 {ct}

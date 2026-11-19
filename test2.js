@@ -9,6 +9,7 @@ global.scrollTo=()=>{};global.navigator={};
 const code=js+`
 ;let bad=0,tot=0;
 for(const sid of Object.keys(SUBJECTS)){
+ if(SUBJECTS[sid].custom)continue;
  setSubject(sid);
  // render all views
  for(const v of ['home','train','test','progress','hub']){VIEW=v;try{render()}catch(e){console.log('RENDER ERR',sid,v,e.message);bad++}}
@@ -33,7 +34,7 @@ for(const sid of Object.keys(SUBJECTS)){
 }
 console.log('total',tot,'bad',bad);
 // full run flows
-for(const sid of Object.keys(SUBJECTS)){setSubject(sid);startRun('test',{level:2,timer:false,long:false});for(let i=0;i<RUN.n;i++){}
+for(const sid of Object.keys(SUBJECTS)){if(SUBJECTS[sid].custom)continue;setSubject(sid);startRun('test',{level:2,timer:false,long:false});for(let i=0;i<RUN.n;i++){}
   VIEW='run';render();finishTest();VIEW='result';render();console.log(sid,'test ok',RUN.summary.pct)}
 `;
 eval(code);
