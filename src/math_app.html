@@ -1644,7 +1644,7 @@ function kpShow(inp){KP.hidden=false;KP.classList.toggle('sys',KBSYS);document.b
 function kpHide(){KP.hidden=true;document.body.classList.remove('kp-on');kpPad()}
 document.addEventListener('focusin',e=>{const t=e.target;if(t.tagName!=='INPUT'||!t.closest('#main'))return;LASTIN=t;if(t.dataset.k!=null&&!t.disabled)kpShow(t);else kpHide()});
 document.addEventListener('focusout',()=>setTimeout(()=>{const a=document.activeElement;if(!(a&&a.tagName==='INPUT'&&a.closest('#main')&&a.dataset.k!=null)&&!KP.contains(a))kpHide()},120));
-['mousedown','pointerdown','touchstart'].forEach(ev=>KP.addEventListener(ev,e=>e.preventDefault(),{passive:false}));
+KP.addEventListener('mousedown',e=>e.preventDefault());
 KP.addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b)return;
   let inp=LASTIN&&document.body.contains(LASTIN)&&!LASTIN.disabled?LASTIN:ansInputs()[0];if(!inp)return;
