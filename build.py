@@ -69,7 +69,7 @@ body{background-image:none}
 .axis .right .mk{fill:var(--green);stroke:var(--green)}
 .axis .wrong .mk{fill:var(--red)}
 '''
-css=pal+css+extra+'\n.nav[hidden],.back[hidden]{display:none}\nmain.wide{max-width:none;padding:0;gap:0}\n#math-frame{display:block;width:100%;border:0}\n'
+css=pal+css+extra+'\n.nav[hidden],.back[hidden]{display:none}\nmain.wide{max-width:none;padding:0;gap:0}\n.subjw{position:relative;display:flex}.subjw .subj{flex:1}\n.subjw .up{position:absolute;top:14px;right:12px;z-index:2;border:2px solid var(--line);background:var(--card);color:var(--fg);border-radius:10px;padding:4px 10px;font-size:1rem;font-weight:800}\n.subjw .up:hover{border-color:var(--ink)}\n#math-frame{display:block;width:100%;border:0}\n'
 
 hdr='''<header class="top"><div class="top-in">
   <button class="back" id="back" data-go="hub" hidden>◀ Przedmioty</button>
@@ -138,7 +138,7 @@ rep("document.querySelector('.nav').addEventListener('click',e=>{const b=e.targe
 rep("  CONFIRM_RESET=false;VIEW=v;render();scrollTo(0,0);\n}","  CONFIRM_RESET=false;VIEW=v;if(v==='hub')document.documentElement.removeAttribute('data-subj');render();scrollTo(0,0);\n}")
 rep("case'quitok':{const t=RUN.pending;clearInterval(TIMER);RUN.done=true;RUN=null;VIEW=t;","case'quitok':{const t=RUN.pending;clearInterval(TIMER);RUN.done=true;RUN=null;VIEW=t;if(t==='hub')document.documentElement.removeAttribute('data-subj');")
 rep("case'tick':","case'subj':setSubject(el.dataset.id);break;\n    case'tick':") if False else None
-rep("    case'tick':","    case'subj':setSubject(el.dataset.id);break;\n    case'tick':")
+rep("    case'tick':","    case'subj':setSubject(el.dataset.id);break;\n    case'subjup':{const o=subjOrder().map(x=>x.id).filter(x=>x!==el.dataset.id);o.unshift(el.dataset.id);try{localStorage.setItem('subj-order-v1',JSON.stringify(o))}catch(e){}render();scrollTo(0,0);break}\n    case'tick':")
 rep("$('#nav').hidden=VIEW==='hub';","$('#nav').hidden=VIEW==='hub'||VIEW==='embed';")
 rep("({hub:vHub,home:vHome,","({embed:vEmbed,hub:vHub,home:vHome,")
 rep("[VIEW]();","[VIEW]();\n  $('#main').classList.toggle('wide',VIEW==='embed');if(VIEW==='embed')mountEmbed();")
@@ -161,10 +161,10 @@ function vHub(){
   const dc={hist:['#E0B27E','#3A2A18'],przyroda:['#8BD1A4','#17301F'],english:['#9DB9EE','#1C2B47'],math:['#BBA6E8','#2C2347']};
   return`<section class="hello"><span class="eyebrow">Klasa 4</span><h1>Cześć! Czego dziś się uczymy?</h1>
     <p class="lead">Wybierz przedmiot. Każdy ma własne tematy, trening i sprawdzian z oceną.</p></section>
-  <section class="subjects">${Object.values(SUBJECTS).map(s=>{const p=peek(s),c=(dark?dc:col)[s.id];
-    return`<button class="subj" data-act="subj" data-id="${s.id}" style="--c:${c[0]};--cs:${c[1]}"><span class="big-ic" aria-hidden="true">${s.icon}</span><b>${s.name}</b><small>${s.desc}</small>
+  <section class="subjects">${subjOrder().map((s,ix)=>{const p=peek(s),c=(dark?dc:col)[s.id];
+    return`<div class="subjw">${ix?`<button class="up" data-act="subjup" data-id="${s.id}" aria-label="Przesuń ${s.name} na górę" title="Na górę">⬆</button>`:''}<button class="subj" data-act="subj" data-id="${s.id}" style="--c:${c[0]};--cs:${c[1]}"><span class="big-ic" aria-hidden="true">${s.icon}</span><b>${s.name}</b><small>${s.desc}</small>
       <span class="mbar" aria-hidden="true"><i style="width:${p&&p.avg!=null?Math.max(4,Math.round(p.avg*100)):0}%"></i></span>
-      <span class="meta">${p&&p.count?`${p.count} ${plural(p.count,'zadanie','zadania','zadań')} · skuteczność ${p.avg==null?'—':Math.round(p.avg*100)+'%'}`:'jeszcze nie ćwiczone'}</span></button>`}).join('')}</section>`;
+      <span class="meta">${p&&p.count?`${p.count} ${plural(p.count,'zadanie','zadania','zadań')} · skuteczność ${p.avg==null?'—':Math.round(p.avg*100)+'%'}`:'jeszcze nie ćwiczone'}</span></button></div>`}).join('')}</section>`;
 }
 /* oś liczbowa (matematyka) */
 function lineSVG(q,ns,vals,locked,show){
@@ -191,6 +191,9 @@ assert old_p in hub
 hub=hub.replace(old_p,"(sub.custom?Object.keys(s.topics||{}):sub.TOPICS.map(t=>t.id)).flatMap(id=>(s.topics&&s.topics[id]||{recent:[]}).recent)")
 hub=hub.replace("render();\n'''","")if False else hub
 emb='''
+function subjOrder(){let o=[];try{o=JSON.parse(localStorage.getItem('subj-order-v1'))||[]}catch(e){}
+  const all=Object.values(SUBJECTS);return[...o.map(id=>SUBJECTS[id]).filter(Boolean),...all.filter(s=>!o.includes(s.id))]}
+
 /* matematyka: osobny moduł (rozdziały, ścieżka rozumowania, Kangur) osadzony w ramce */
 function vEmbed(){return'<div id="embed-wrap"></div>'}
 function mountEmbed(){
