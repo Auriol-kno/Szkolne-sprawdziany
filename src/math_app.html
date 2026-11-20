@@ -333,11 +333,11 @@ a.primary,a.ghost{display:inline-block;text-decoration:none}
 
 #kp{position:fixed;left:0;right:0;bottom:0;z-index:50;background:#e9edf3;border-top:2px solid #b8c2d0;padding:5px 5px calc(5px + env(safe-area-inset-bottom));box-shadow:0 -4px 14px rgba(0,0,0,.12);-webkit-user-select:none;user-select:none;touch-action:manipulation}
 #kp[hidden]{display:none}
-#kp .kp-keys{display:grid;grid-template-columns:repeat(10,1fr);gap:4px}
-#kp button{font:700 1.15rem system-ui,sans-serif;height:36px;padding:0;border:0;border-radius:8px;background:#fff;color:#1d2733;box-shadow:0 1px 0 #aab4c3;-webkit-tap-highlight-color:transparent}
+#kp .kp-keys{display:grid;grid-template-columns:repeat(10,1fr);gap:6px}
+#kp button{font:700 1.6rem system-ui,sans-serif;height:50px;padding:0;border:0;border-radius:8px;background:#fff;color:#1d2733;box-shadow:0 1px 0 #aab4c3;-webkit-tap-highlight-color:transparent}
 #kp button:active{background:#d5dcea}
-#kp .kp-bar{display:grid;grid-template-columns:1fr 2.2fr 1fr 1fr;gap:4px;margin-top:4px}
-#kp .kp-go{background:#2f6fe4;color:#fff;box-shadow:0 1px 0 #1d4ba8;font-size:1rem}
+#kp .kp-bar{display:grid;grid-template-columns:1fr 2.2fr 1fr 1fr;gap:6px;margin-top:6px}
+#kp .kp-go{background:#2f6fe4;color:#fff;box-shadow:0 1px 0 #1d4ba8;font-size:1.4rem}
 #kp.sys .kp-keys,#kp.sys [data-kx=del],#kp.sys [data-kx=next]{display:none}
 #kp.sys .kp-bar{grid-template-columns:2fr 1fr}
 #kp.sys [data-kx=sys]{order:-1}
@@ -1194,9 +1194,10 @@ function weakTopics(){
 }
 
 /* ---------- questions ---------- */
+const PATHTOP=new Set(['word','neigh','age','diff','times','puzzle','wtext','rect','scale']);
 function makeQ(id,L,seen,wp){
   let q;for(let k=0;k<8;k++){q=G[id](L);if(!seen||!seen.has(q.html))break}
-  q.topic=id;q.level=L;q.path=q.path||[];q.hasPath=!!(wp&&q.path.length);
+  q.topic=id;q.level=L;q.path=q.path||[];q.hasPath=!!(wp&&q.path.length&&(PATHTOP.has(id)||L>=3||Math.random()<0.2));
   if(q.hasPath)q.fields=q.path.map(p=>Object.assign({},p,{path:true})).concat(q.fields);
   q.max=q.fields.length;seen&&seen.add(q.html);return q;
 }
