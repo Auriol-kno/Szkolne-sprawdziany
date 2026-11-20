@@ -647,7 +647,7 @@ a.primary,a.ghost{display:inline-block;text-decoration:none}
 #kp .kp-go{background:#2f6fe4;color:#fff;box-shadow:0 1px 0 #1d4ba8;font-size:1rem}
 #kp.sys .kp-keys,#kp.sys [data-kx=del],#kp.sys [data-kx=next]{display:none}
 #kp.sys .kp-bar{grid-template-columns:2fr 1fr}
-#kp.sys [data-kx=sys]{grid-column:1}
+#kp.sys [data-kx=sys]{order:-1}
 body.kp-on #main{padding-bottom:calc(var(--kph,0px) + 12px)}
 </style>
 
@@ -1942,7 +1942,7 @@ function act(a,el){
 
 const KEYS=['1','2','3','4','5','6','7','8','9','0','−','+','·',':','=','(',')',',','²','³'];
 const KP=document.createElement('div');KP.id='kp';KP.hidden=true;
-KP.innerHTML='<div class="kp-keys">'+KEYS.map(c=>`<button type="button" data-kc="${c}">${c}</button>`).join('')+'</div><div class="kp-bar"><button type="button" data-kx="del" class="kp-w" aria-label="Usuń">⌫</button><button type="button" data-kx="next" class="kp-w kp-go">Dalej ▶</button><button type="button" data-kx="sys" class="kp-w" aria-label="Pełna klawiatura">⌨</button><button type="button" data-kx="hide" class="kp-w" aria-label="Zwiń">▼</button></div>';
+KP.innerHTML='<div class="kp-keys">'+KEYS.map(c=>`<button type="button" data-kc="${c}">${c}</button>`).join('')+'</div><div class="kp-bar"><button type="button" data-kx="hide" class="kp-w" aria-label="Zwiń">▼</button><button type="button" data-kx="next" class="kp-w kp-go">Dalej ▶</button><button type="button" data-kx="sys" class="kp-w" aria-label="Pełna klawiatura">⌨</button><button type="button" data-kx="del" class="kp-w" aria-label="Usuń">⌫</button></div>';
 document.body.appendChild(KP);
 const ansInputs=()=>[...document.querySelectorAll('#main input[data-k]:not([disabled])')];
 function kpPad(){document.body.style.setProperty('--kph',KP.hidden?'0px':KP.offsetHeight+'px')}
