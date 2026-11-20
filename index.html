@@ -637,6 +637,18 @@ a.primary,a.ghost{display:inline-block;text-decoration:none}
  .dots button{width:28px;height:28px;font-size:.75rem}
  .chbtn{padding:8px}
 }
+
+#kp{position:fixed;left:0;right:0;bottom:0;z-index:50;background:#e9edf3;border-top:2px solid #b8c2d0;padding:5px 5px calc(5px + env(safe-area-inset-bottom));box-shadow:0 -4px 14px rgba(0,0,0,.12);-webkit-user-select:none;user-select:none;touch-action:manipulation}
+#kp[hidden]{display:none}
+#kp .kp-keys{display:grid;grid-template-columns:repeat(10,1fr);gap:4px}
+#kp button{font:700 1.15rem system-ui,sans-serif;height:36px;padding:0;border:0;border-radius:8px;background:#fff;color:#1d2733;box-shadow:0 1px 0 #aab4c3;-webkit-tap-highlight-color:transparent}
+#kp button:active{background:#d5dcea}
+#kp .kp-bar{display:grid;grid-template-columns:1fr 2.2fr 1fr 1fr;gap:4px;margin-top:4px}
+#kp .kp-go{background:#2f6fe4;color:#fff;box-shadow:0 1px 0 #1d4ba8;font-size:1rem}
+#kp.sys .kp-keys,#kp.sys [data-kx=del],#kp.sys [data-kx=next]{display:none}
+#kp.sys .kp-bar{grid-template-columns:2fr 1fr}
+#kp.sys [data-kx=sys]{grid-column:1}
+body.kp-on #main{padding-bottom:calc(var(--kph,0px) + 12px)}
 </style>
 
 <header class="top"><div class="top-in">
@@ -1528,9 +1540,9 @@ function fieldHTML(fd,k,ns,vals,res){
   if(fd.kind==='sel'){
     return`<label class="fld${fd.path?'':' '}" for="${ns}-${k}"><span>${fd.label||'Wybierz'}</span><select id="${ns}-${k}" data-ns="${ns}" data-k="${k}"${locked?` disabled class="${res.ok[k]?'ok':'bad'}"`:''}>${fd.opts.map(([v,l])=>`<option value="${v}"${vals[k]===v?' selected':''}>${l}</option>`).join('')}</select></label>`;
   }
-  return`<label class="fld${fd.path&&fd.label&&fd.label.length>34?' wide':''}" for="${ns}-${k}"><span>${fd.label||'Wynik'}</span><input id="${ns}-${k}" data-ns="${ns}" data-k="${k}" inputmode="numeric" autocomplete="off" value="${esc(vals[k]??'')}"${locked?` disabled class="${res.ok[k]?'ok':'bad'}"`:''}></label>`;
+  return`<label class="fld${fd.path&&fd.label&&fd.label.length>34?' wide':''}" for="${ns}-${k}"><span>${fd.label||'Wynik'}</span><input id="${ns}-${k}" data-ns="${ns}" data-k="${k}" inputmode="${KBSYS?'decimal':'none'}" enterkeyhint="next" autocomplete="off" autocorrect="off" spellcheck="false" value="${esc(vals[k]??'')}"${locked?` disabled class="${res.ok[k]?'ok':'bad'}"`:''}></label>`;
 }
-const SYMBAR='<div class="symbar" aria-label="Znaki dodatkowe"><span>Znaki:</span>'+['−','+','·',':','=','(',')',',','²','³'].map(c=>`<button type="button" data-sym="${c}" aria-label="wstaw ${c}">${c}</button>`).join('')+'</div>';
+let KBSYS=false;
 let LASTIN=null;
 function qBody(q,ns,vals,res){
   const locked=!!res;let h=q.kang?q.html:`<div class="q-text">${q.html}</div>`;
@@ -1539,7 +1551,6 @@ function qBody(q,ns,vals,res){
   if(pi.length)h+=`<div class="path"><span class="lbl">Droga do wyniku <small>(zapisz kolejne kroki, są oceniane)</small></span><div class="fields">${pi.map(([fd,k])=>fieldHTML(fd,k,ns,vals,res)).join('')}</div></div>`;
   const fin=fi.map(([fd,k])=>fieldHTML(fd,k,ns,vals,res)).join('');
   if(fin)h+=`${pi.length?'<span class="lbl final-l">Odpowiedź</span>':''}<div class="fields">${fin}</div>`;
-  if(!locked&&q.fields.some(fd=>!fd.mark&&fd.kind!=='sel'))h+=SYMBAR;
   return h;
 }
 function fbHTML(q,res){
@@ -1928,14 +1939,33 @@ function act(a,el){
     case'resetok':S=blank();save();CONFIRM_RESET=false;WARM=null;render();break;
   }
 }
-document.addEventListener('focusin',e=>{if(e.target.tagName==='INPUT'&&e.target.closest('#main'))LASTIN=e.target});
-$('#main').addEventListener('mousedown',e=>{if(e.target.closest('[data-sym]'))e.preventDefault()});
-$('#main').addEventListener('click',e=>{const sb=e.target.closest('[data-sym]');if(!sb)return;
-  let inp=LASTIN&&document.body.contains(LASTIN)&&!LASTIN.disabled?LASTIN:null;
-  if(!inp){const sc=sb.closest('.card,section,article')||document;inp=sc.querySelector('input:not([disabled])')}
-  if(!inp)return;const c=sb.dataset.sym,a=inp.selectionStart==null?inp.value.length:inp.selectionStart,b=inp.selectionEnd==null?a:inp.selectionEnd;
-  inp.value=inp.value.slice(0,a)+c+inp.value.slice(b);inp.focus();try{inp.setSelectionRange(a+1,a+1)}catch(_){}
-  inp.dispatchEvent(new Event('input',{bubbles:true}))});
+
+const KEYS=['1','2','3','4','5','6','7','8','9','0','−','+','·',':','=','(',')',',','²','³'];
+const KP=document.createElement('div');KP.id='kp';KP.hidden=true;
+KP.innerHTML='<div class="kp-keys">'+KEYS.map(c=>`<button type="button" data-kc="${c}">${c}</button>`).join('')+'</div><div class="kp-bar"><button type="button" data-kx="del" class="kp-w" aria-label="Usuń">⌫</button><button type="button" data-kx="next" class="kp-w kp-go">Dalej ▶</button><button type="button" data-kx="sys" class="kp-w" aria-label="Pełna klawiatura">⌨</button><button type="button" data-kx="hide" class="kp-w" aria-label="Zwiń">▼</button></div>';
+document.body.appendChild(KP);
+const ansInputs=()=>[...document.querySelectorAll('#main input[data-k]:not([disabled])')];
+function kpPad(){document.body.style.setProperty('--kph',KP.hidden?'0px':KP.offsetHeight+'px')}
+function kpShow(inp){KP.hidden=false;KP.classList.toggle('sys',KBSYS);document.body.classList.add('kp-on');kpPad();
+  setTimeout(()=>{try{inp.scrollIntoView({block:'center',behavior:'smooth'})}catch(_){}},60)}
+function kpHide(){KP.hidden=true;document.body.classList.remove('kp-on');kpPad()}
+document.addEventListener('focusin',e=>{const t=e.target;if(t.tagName!=='INPUT'||!t.closest('#main'))return;LASTIN=t;if(t.dataset.k!=null&&!t.disabled)kpShow(t);else kpHide()});
+document.addEventListener('focusout',()=>setTimeout(()=>{const a=document.activeElement;if(!(a&&a.tagName==='INPUT'&&a.closest('#main')&&a.dataset.k!=null)&&!KP.contains(a))kpHide()},120));
+['mousedown','pointerdown','touchstart'].forEach(ev=>KP.addEventListener(ev,e=>e.preventDefault(),{passive:false}));
+KP.addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  let inp=LASTIN&&document.body.contains(LASTIN)&&!LASTIN.disabled?LASTIN:ansInputs()[0];if(!inp)return;
+  const x=b.dataset.kx;
+  if(x==='hide'){inp.blur();kpHide();return}
+  if(x==='sys'){KBSYS=!KBSYS;ansInputs().forEach(i=>i.setAttribute('inputmode',KBSYS?'decimal':'none'));KP.classList.toggle('sys',KBSYS);kpPad();inp.blur();setTimeout(()=>inp.focus(),30);return}
+  if(x==='next'){const l=ansInputs(),i=l.indexOf(inp);if(i>=0&&i<l.length-1){l[i+1].focus()}else{inp.blur();kpHide()}return}
+  const a=inp.selectionStart==null?inp.value.length:inp.selectionStart,z=inp.selectionEnd==null?a:inp.selectionEnd;
+  let v=inp.value,pos;
+  if(x==='del'){if(a!==z){v=v.slice(0,a)+v.slice(z);pos=a}else if(a>0){v=v.slice(0,a-1)+v.slice(a);pos=a-1}else return}
+  else{const c=b.dataset.kc;v=v.slice(0,a)+c+v.slice(z);pos=a+c.length}
+  inp.value=v;inp.focus();try{inp.setSelectionRange(pos,pos)}catch(_){}
+  inp.dispatchEvent(new Event('input',{bubbles:true}));
+});
 $('#main').addEventListener('click',e=>{const el=e.target.closest('[data-act]');if(!el||el.tagName==='INPUT'||el.tagName==='SELECT')return;act(el.dataset.act,el)});
 $('#main').addEventListener('keydown',e=>{
   if(e.key!=='Enter'&&e.key!==' ')return;
@@ -1952,12 +1982,7 @@ $('#main').addEventListener('keydown',e=>{
 });
 
 render();
-
-<%%/S>
-
-</body>
-</html>
-</script>
+<%%/S></body></html></script>
 <script>
 const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
 const P=a=>a[Math.floor(Math.random()*a.length)];
