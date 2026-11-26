@@ -2,7 +2,7 @@
    Widoki: hub (przedmioty) → przedmiot (działy) → dział (lekcje, umiejętności, sprawdziany) → trening / sprawdzian / sprawdzian szkolny. */
 import { SUBJECTS } from '../content/index';
 import { P, chk, esc, gradeOf, LV, plural, shuffle } from './core/kit';
-import { S, acc, addSession, record, reset, stat, status, streakDays, save } from './core/store';
+import { S, acc, addSession, record, reset, stat, status, streakDays, save, migrateLegacy } from './core/store';
 import { VARIANTS, grade as gradeSchool, spts, taskHTML, variantName, type SResult, type Vals } from './core/school';
 import { LOOKS, MODES, looksCSS, getLook, getMode, setLook, setMode, applyLook, applyAll, FONTS, type Mode } from './themes';
 import { backupText, download, restore, undoRestore, hasPrev, lastBackup } from './core/backup';
@@ -260,6 +260,7 @@ function vSettings(): string {
       ${BKPASTE ? '<textarea id="bk-in" class="bk-in" rows="4" placeholder="Wklej tutaj tekst kopii"></textarea><div class="row"><button class="primary" data-act="bk-load">Wczytaj</button></div>' : ''}
       ${BKTXT ? `<textarea class="bk-in" rows="4" readonly>${esc(BKTXT)}</textarea>` : ''}
       ${BK ? `<p class="okmsg">${esc(BK)}</p>` : ''}</section>
+    <section class="stack"><h2>Stara wersja</h2><p class="note">Poprzedni wygląd aplikacji jest nadal dostępny (te same wyniki matematyki).</p><a class="soft" href="stara/">Otwórz starą wersję</a></section>
   </aside>`;
 }
 function renderSettings() {
@@ -362,6 +363,7 @@ document.addEventListener('keydown', e => {
 });
 
 const lookStyle = document.createElement('style'); lookStyle.id = 'looks'; lookStyle.textContent = looksCSS(); document.head.appendChild(lookStyle);
+migrateLegacy();
 applyAll();
 loadDraft();
 render();

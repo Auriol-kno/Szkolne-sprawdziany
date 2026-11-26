@@ -2,9 +2,16 @@
 
 Aplikacja do nauki dla klasy 4: Matematyka, Angielski, Historia, Przyroda.
 
+## Adresy
+
+- Aplikacja: https://auriol-kno.github.io/Szkolne-sprawdziany/ (źródła w `v2/`)
+- Stara wersja: https://auriol-kno.github.io/Szkolne-sprawdziany/stara/
+
+Szczegóły dla programistów i AI: [AGENTS.md](AGENTS.md).
+
 ## Dwie wersje (w trakcie przejścia)
 
-| | Obecna (`index.html`) | Nowa v2 (`v2/index.html`) |
+| | Stara (`stara/index.html`) | Aplikacja (`index.html`, źródła `v2/`) |
 |---|---|---|
 | Podział | przedmiot → tematy | **przedmiot → dział (sprawdzian) → lekcja (kartkówka) → umiejętność** |
 | Kod | HTML + JS sklejany przez `build.py` | TypeScript, jeden silnik, testy |
@@ -21,8 +28,8 @@ Obie wersje czytają te same dane z `v2/content/`, więc nowa treść trafia do 
 ## Budowanie i testy
 
 ```sh
-python3 build.py && node test2.js          # obecna wersja -> index.html
-cd v2 && bun run build.ts && bun test && tsc --noEmit   # v2 -> v2/index.html
+python3 build.py && node test2.js          # stara wersja -> stara/index.html
+cd v2 && bun run build.ts && bun test && tsc --noEmit   # aplikacja -> index.html
 ```
 
 `src/` – silnik obecnej wersji (`historia-engine.html`), moduł matematyki (`math_app.html`), wspólne funkcje.

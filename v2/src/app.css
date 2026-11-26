@@ -74,3 +74,13 @@ body.drawer-open{overflow:hidden}
 .okmsg{font-weight:700;color:var(--ink)}
 .draft{display:flex;flex-direction:column;gap:10px;border:2px solid var(--ink);background:var(--ink-soft)}
 .nav button:hover,.back:hover{color:var(--bar-fg);border-color:var(--bar-fg)}
+.lp[data-look="szklo"] .lp-prev{background-color:var(--paper);background-image:var(--aurora)}
+.lp[data-look="szklo"] .lp-card{background:var(--glass);border-color:var(--glass-edge);border-radius:12px}
+.lp[data-look="szklo"] .lp-bar{background:var(--glass-bar)}
+.lp[data-look="ekspresja"] .lp-card{border:0;border-radius:16px}
+.lp[data-look="ekspresja"] .lp-card em{border-radius:99px}
+/* dotyk: brak opóźnienia przy stuknięciu, widoczna reakcja na naciśnięcie */
+button,select,input,a,[data-act]{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+button{cursor:pointer}
+button:active:not(:disabled){filter:brightness(.92)}
+.nav button,.back,.soft{min-height:40px}

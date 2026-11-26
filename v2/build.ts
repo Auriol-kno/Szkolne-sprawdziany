@@ -8,14 +8,14 @@ const js = (await out.outputs[0].text()).replace(/<\/script/gi, '<\\/script');
 const css = readFileSync('./src/legacy.css', 'utf8') + '\n' + readFileSync('./src/app.css', 'utf8');
 const math = readFileSync('../src/math_app.html', 'utf8').replace(/<\/script/g, '<%%/S').replace(/<script/g, '<%%S');
 
-const html = `<!doctype html>
+const page = (base: string) => `<!doctype html>
 <html lang="pl">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Szkolne sprawdziany Franka</title>
-<link rel="icon" type="image/png" href="../icon-512.png?v=2">
-<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png?v=2">
+<link rel="icon" type="image/png" href="${base}icon-512.png?v=2">
+<link rel="apple-touch-icon" sizes="180x180" href="${base}apple-touch-icon.png?v=2">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Sprawdziany">
@@ -44,5 +44,8 @@ ${js}
 </body>
 </html>
 `;
-writeFileSync('./index.html', html);
-console.log('v2/index.html', html.length, 'B');
+/* główny adres (/) = nowa wersja; /v2/ przekierowuje na /, stara wersja jest w /stara/ (build.py) */
+writeFileSync('../index.html', page(''));
+writeFileSync('./index.html', `<!doctype html><html lang="pl"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=../"><link rel="canonical" href="../"><title>Szkolne sprawdziany</title></head><body><script>location.replace('../'+location.hash)</script><a href="../">Przejdź do aplikacji</a></body></html>\n`);
+console.log('index.html', page('').length, 'B');
+

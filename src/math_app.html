@@ -361,6 +361,10 @@ body.kp-on #main{padding-bottom:calc(var(--kph,0px) + 12px)}
 .sq-res{display:flex;flex-direction:column;gap:10px;border:2px solid var(--ink)}.sq-res>div{display:flex;flex-direction:column}
 .sq-big{font-family:var(--hand);font-size:2.6rem;color:var(--red);line-height:1.1}
 .task.sq .q-text{font-size:1.15rem}
+/* dotyk: większe przyciski w pasku na telefonie, natychmiastowa reakcja */
+button,select,input,[data-act],[data-go]{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+button:active:not(:disabled){filter:brightness(.9)}
+@media (max-width:620px){.nav{grid-template-columns:repeat(3,1fr)!important;gap:6px!important}.nav button{min-height:42px;padding:8px 4px!important;font-size:.9rem!important}}
 </style>
 
 <header class="top"><div class="top-in">

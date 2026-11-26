@@ -4,24 +4,27 @@ Aplikacja do nauki dla ucznia **klasy 4** (Franek). Przedmioty: **Matematyka, An
 Rodzic przysyła zdjęcia sprawdzianów i stron z podręczników, a na ich podstawie powstają zadania, działy i sprawdziany do ćwiczeń.
 Język interfejsu i treści: **polski** (angielski tylko w zadaniach z angielskiego). Kolorystyka ma być spokojna, przyjazna dziecku.
 
-Repo: `Auriol-kno/Szkolne-sprawdziany`, gałąź `main`, publikacja przez GitHub Pages:
-- obecna wersja: `/` → `index.html`
-- **nowa wersja v2: `/v2/` → `v2/index.html`** (tu idzie dalszy rozwój)
+Repo: `Auriol-kno/Szkolne-sprawdziany`, gałąź `main`, publikacja przez GitHub Pages (https://auriol-kno.github.io/Szkolne-sprawdziany/):
+- **`/` → `index.html` = aplikacja (nowa wersja, źródła w `v2/`)** – z tego adresu korzysta telefon ucznia (ikona na ekranie)
+- `/v2/` → przekierowanie na `/` (stary link)
+- `/stara/` → `stara/index.html` = poprzednia wersja (generuje `build.py`)
+Wszystkie adresy mają to samo origin, więc dzielą localStorage (wyniki).
 
 ## Struktura katalogów
 
 ```
-index.html              obecna (stara) wersja – plik WYGENEROWANY przez build.py, nie edytuj ręcznie
-build.py                skleja index.html z src/ i v2/content/ (łatki tekstowe na silniku – kruche, patrz niżej)
+index.html              APLIKACJA – plik WYGENEROWANY przez v2/build.ts, nie edytuj ręcznie
+stara/index.html        stara wersja – WYGENEROWANA przez build.py
+build.py                skleja stara/index.html z src/ i v2/content/ (łatki tekstowe na silniku – kruche, patrz niżej)
 test2.js                test starej wersji (node test2.js)
 src/historia-engine.html  silnik starej wersji (Historia/Przyroda/Angielski)
 src/math_app.html         moduł matematyki (osobna aplikacja, osadzana w <iframe srcdoc>), też zakładka „Szkolne”
 src/common_*.js           wspólne funkcje starej wersji
 v2/
-  index.html            WYGENEROWANY przez v2/build.ts
-  build.ts              bun run build.ts – bundluje TS, wkleja CSS i moduł matematyki do jednego pliku
+  index.html            przekierowanie na / (generuje build.ts)
+  build.ts              bun run build.ts – bundluje TS, wkleja CSS i moduł matematyki do ../index.html
   src/main.ts           widoki i logika v2 (hub → przedmiot → dział → trening/sprawdzian/sprawdzian szkolny, ustawienia)
-  src/themes.ts         6 wariantów wyglądu × tryb jasny/ciemny/systemowy
+  src/themes.ts         8 wariantów wyglądu × tryb jasny/ciemny/systemowy; resolved() poprawia kontrast automatycznie
   src/core/types.ts     SCHEMAT TREŚCI (czytaj najpierw)
   src/core/kit.ts       narzędzia do generatorów zadań (R, P, D, O, SQ, Ord, NM, F, chk, gradeOf, seeded…)
   src/core/store.ts     postępy (localStorage 'sprawdziany-v2'), poziomy trudności
@@ -32,7 +35,8 @@ v2/
   content/<przedmiot>/data.js   umiejętności (TOPICS), lekcje (CHAPTERS), generatory (B) – czyta je też stara wersja
   content/math/index.ts         działy matematyki (zadania wciąż w src/math_app.html)
   content/math/sprawdziany/*.ts sprawdziany z klasy (oryginał + warianty)
-  tests/content.test.ts bun test
+  tests/content.test.ts bun test – treść i klucze sprawdzianów
+  tests/contrast.test.ts bun test – kontrast (WCAG AA 4.5:1) każdego wariantu i trybu; nowy wariant musi przejść
 ```
 
 ## Model treści
@@ -55,8 +59,8 @@ v2/
 ## Budowanie i testy
 
 ```sh
-python3 build.py && node test2.js                       # stara wersja → index.html
-cd v2 && bun run build.ts && bun test && tsc --noEmit   # v2 → v2/index.html
+python3 build.py && node test2.js                       # stara wersja → stara/index.html
+cd v2 && bun run build.ts && bun test && tsc --noEmit   # aplikacja → index.html (i przekierowanie v2/index.html)
 ```
 Testy v2 uruchamiają każdy generator 150× (unikalne odpowiedzi, poprawny klucz, brak NaN/undefined) i sprawdzają, że klucz każdego wariantu sprawdzianu szkolnego daje maksimum punktów.
 W środowisku bez sieci nie da się instalować pakietów – projekt nie ma zależności npm (TypeScript + bun wystarczą).
@@ -67,6 +71,7 @@ W środowisku bez sieci nie da się instalować pakietów – projekt nie ma zal
 - `sprawdziany-draft` – rozpoczęte ćwiczenie / sprawdzian (wznawianie po odświeżeniu lub aktualizacji)
 - `sprawdziany-look`, `sprawdziany-mode` – wygląd i tryb
 - `sprawdziany-backup-prev` – stan sprzed ostatniego wczytania kopii (przycisk „Cofnij”)
+- `sprawdziany-migrated-legacy` – znacznik jednorazowego przeniesienia postępów ze starej wersji (`migrateLegacy()` w store.ts)
 - stara wersja: `lid4-v1` (matematyka), `hist4-v1`, `prz4-v1`, `ang4-v1`, `school-tests-v1`, `subj-order-v2`
 Kopia w Ustawieniach eksportuje/importuje te klucze (format `{app:'szkolne-sprawdziany', format:1, date, data}`). Zmieniając format danych, podnieś `FORMAT` i dodaj migrację w `store.ts`/`backup.ts` – nie kasuj starych kluczy.
 
@@ -85,9 +90,17 @@ Kopia w Ustawieniach eksportuje/importuje te klucze (format `{app:'szkolne-spraw
 - 2026-11-27: v2 – nowa struktura działów, wspólny silnik w TS, testy, sprawdziany szkolne jako dane.
 - 2026-11-27: v2 – panel ⚙️ Ustawienia (z prawej): 6 wariantów wyglądu (Obecny, Zeszyt, Pastele, Kosmos, Las, Komiks) × tryb jasny/ciemny/systemowy; lista materiałów i sprawdzianów z klasy; kopia zapasowa (plik/tekst) i wznawianie przerwanych ćwiczeń.
 
+- 2026-11-27: główny adres `/` = nowa wersja (stara w `/stara/`, `/v2/` przekierowuje). Jednorazowa migracja postępów Historii/Przyrody/Angielskiego ze starej wersji. Dwa nowe warianty: Płynne szkło (Liquid Glass) i Ekspresja (Material 3 Expressive). Test kontrastu + automatyczna korekta kolorów. Dotyk: `touch-action: manipulation`, reakcja na naciśnięcie, większy pasek w module matematyki na telefonie (przyciski miały 29 px wysokości).
+
+## Wygląd – zasady
+
+- Dodając wariant w `themes.ts` podaj paletę `light` i `dark` (zmienne + kolory przedmiotów); `tests/contrast.test.ts` sprawdzi czytelność.
+- Kolory, których tekst leży na przezroczystym tle (szkło), muszą mieć nieprzezroczysty odpowiednik w `--card`/`--bar` do testu kontrastu.
+- Minimalna wysokość przycisku na telefonie: 40 px.
+
 ## Plan (kolejne etapy)
 
-1. Przenieść generatory matematyki z `src/math_app.html` do `v2/content/math/` (bez iframe), potem wyłączyć starą wersję i przekierować `/` na v2.
+1. Przenieść generatory matematyki z `src/math_app.html` do `v2/content/math/` (bez iframe).
 2. Ustalić działy Historii i Przyrody ze spisów treści podręczników (czekamy na zdjęcia od rodzica); podmienić słownictwo angielskiego na to z książki.
 3. Kolejne sprawdziany z klasy we wszystkich przedmiotach.
 4. Postępy wg umiejętności i podsumowanie dla rodzica.

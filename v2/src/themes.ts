@@ -7,8 +7,8 @@ type Ink = [string, string, string?];
 interface Palette { vars: Record<string, string>; hub: Ink; subj: Record<Subj, Ink> }
 export interface Look { id: string; name: string; desc: string; light: Palette; dark: Palette; css?: string }
 
-const LIGHT_STATUS = { '--red': '#B8372D', '--red-soft': '#FBE8E5', '--green': '#1D7A4C', '--green-soft': '#E0F2E7', '--amber': '#97620F', '--amber-soft': '#FBF1DA', '--shadow': 'rgba(38,50,58,.10)', 'color-scheme': 'light' };
-const DARK_STATUS = { '--red': '#FF8B80', '--red-soft': '#3A1F22', '--green': '#6CD29A', '--green-soft': '#16321F', '--amber': '#F0BC5A', '--amber-soft': '#382B15', '--shadow': 'rgba(0,0,0,.45)', 'color-scheme': 'dark' };
+export const LIGHT_STATUS = { '--red': '#B8372D', '--red-soft': '#FBE8E5', '--green': '#1D7A4C', '--green-soft': '#E0F2E7', '--amber': '#97620F', '--amber-soft': '#FBF1DA', '--shadow': 'rgba(38,50,58,.10)', 'color-scheme': 'light' };
+export const DARK_STATUS = { '--red': '#FF8B80', '--red-soft': '#3A1F22', '--green': '#6CD29A', '--green-soft': '#16321F', '--amber': '#F0BC5A', '--amber-soft': '#382B15', '--shadow': 'rgba(0,0,0,.45)', 'color-scheme': 'dark' };
 const CARDS = '.card,.mode,.subj,.dz,.task,.tchip,.opt';
 
 export const LOOKS: Look[] = [
@@ -78,7 +78,67 @@ export const LOOKS: Look[] = [
       .brand,.brand small{color:#141414} .brand{font-family:'Bangers',var(--display);font-weight:400;letter-spacing:.06em;font-size:1.6rem}
       .top{border-bottom:3px solid #141414} .subj::before{height:12px;border-bottom:3px solid var(--ol)}`,
   },
+  {
+    id: 'szklo', name: 'Płynne szkło', desc: 'Trend 2026 (Liquid Glass): przezroczyste karty na kolorowej zorzy',
+    light: { vars: { '--paper': '#EEF1FA', '--grid': '#EEF1FA', '--card': '#F7F8FC', '--glass': 'rgba(255,255,255,.62)', '--glass-bar': 'rgba(255,255,255,.55)', '--glass-edge': 'rgba(255,255,255,.85)', '--fg': '#1A2033', '--muted': '#4D566E', '--line': '#D5DBEA', '--bar': '#EEF1F8', '--bar-fg': '#1A2033', '--bar-line': 'rgba(26,32,51,.18)', '--bar-on': '#1A2033', '--bar-on-fg': '#FFFFFF', '--hl': '#FFF1A6', '--on-ink': '#FFFFFF',
+        '--aurora': 'radial-gradient(40% 35% at 15% 10%,#B9D4FF 0,transparent 70%),radial-gradient(35% 30% at 85% 20%,#FFC7E6 0,transparent 70%),radial-gradient(45% 40% at 70% 85%,#BFF3E0 0,transparent 70%),radial-gradient(40% 35% at 10% 90%,#E3D2FF 0,transparent 70%)' },
+      hub: ['#5B3FE0', '#E9E4FF'], subj: { math: ['#5B3FE0', '#E9E4FF'], english: ['#0A62E0', '#DDEBFF'], hist: ['#C2410C', '#FFE6D5'], przyroda: ['#047857', '#D5F5E8'] } },
+    dark: { vars: { '--paper': '#0D1020', '--grid': '#0D1020', '--card': '#1B2036', '--glass': 'rgba(32,38,64,.55)', '--glass-bar': 'rgba(13,16,32,.6)', '--glass-edge': 'rgba(255,255,255,.14)', '--fg': '#EEF2FF', '--muted': '#AEB6D4', '--line': '#2E3554', '--bar': '#151A2D', '--bar-fg': '#E6EBFF', '--bar-line': 'rgba(230,235,255,.22)', '--bar-on': '#E6EBFF', '--bar-on-fg': '#151A2D', '--hl': '#4D4420', '--on-ink': '#0D1020',
+        '--aurora': 'radial-gradient(40% 35% at 15% 10%,#2B3E8F 0,transparent 70%),radial-gradient(35% 30% at 85% 20%,#6A2A6F 0,transparent 70%),radial-gradient(45% 40% at 70% 85%,#145C58 0,transparent 70%),radial-gradient(40% 35% at 10% 90%,#3B2A7A 0,transparent 70%)' },
+      hub: ['#B8A8FF', '#2C2758'], subj: { math: ['#B8A8FF', '#2C2758'], english: ['#8EC1FF', '#1B2E55'], hist: ['#FFB38A', '#40261C'], przyroda: ['#7EE0B8', '#143A33'] } },
+    css: `body{background-color:var(--paper);background-image:var(--aurora);background-attachment:fixed}
+      ${CARDS}{background:var(--glass);-webkit-backdrop-filter:blur(18px) saturate(1.6);backdrop-filter:blur(18px) saturate(1.6);border:1px solid var(--glass-edge);border-radius:22px;box-shadow:inset 0 1px 0 var(--glass-edge),0 10px 30px rgba(20,30,80,.12)}
+      .opt.sel,.opt.right,.opt.wrong{-webkit-backdrop-filter:none;backdrop-filter:none}
+      .opt.sel{background:var(--ink-soft)} .opt.right{background:var(--green-soft)} .opt.wrong{background:var(--red-soft)}
+      .top{background:var(--glass-bar);-webkit-backdrop-filter:blur(22px) saturate(1.8);backdrop-filter:blur(22px) saturate(1.8);border-bottom:1px solid var(--glass-edge)}
+      .brand,.brand small{color:var(--bar-fg)} .primary,.ghost,.soft,.nav button,.back,.chip{border-radius:999px}
+      .subj::before{height:0}`,
+  },
+  {
+    id: 'ekspresja', name: 'Ekspresja', desc: 'Trend 2026 (Material 3 Expressive): tonalne kolory, duże zaokrąglenia, sprężyste przyciski',
+    light: { vars: { '--paper': '#FEF7FF', '--grid': '#FEF7FF', '--card': '#F3EDF7', '--fg': '#1D1B20', '--muted': '#49454F', '--line': '#CAC4D0', '--bar': '#6750A4', '--bar-fg': '#FFFFFF', '--bar-line': 'rgba(255,255,255,.4)', '--bar-on': '#EADDFF', '--bar-on-fg': '#21005D', '--hl': '#FFE08A', '--on-ink': '#FFFFFF' },
+      hub: ['#6750A4', '#EADDFF'], subj: { math: ['#6750A4', '#EADDFF'], english: ['#00639B', '#CEE5FF'], hist: ['#8B5000', '#FFDCBE'], przyroda: ['#006D3B', '#C4F1D2'] } },
+    dark: { vars: { '--paper': '#141218', '--grid': '#141218', '--card': '#211F26', '--fg': '#E6E0E9', '--muted': '#CAC4D0', '--line': '#49454F', '--bar': '#2B2930', '--bar-fg': '#E6E0E9', '--bar-line': 'rgba(230,224,233,.25)', '--bar-on': '#D0BCFF', '--bar-on-fg': '#381E72', '--hl': '#5A4A12', '--on-ink': '#381E72' },
+      hub: ['#D0BCFF', '#4F378B'], subj: { math: ['#D0BCFF', '#4F378B'], english: ['#98CBFF', '#004A77'], hist: ['#FFB870', '#693C00'], przyroda: ['#7FDA9C', '#00522B'] } },
+    css: `body{background:var(--paper)}
+      ${CARDS}{border:0;border-radius:28px;box-shadow:none}
+      .mode,.dz{background:var(--ink-soft)} .task{border:0}
+      .task .opt,.task .srow,.task .slot,.task .num-in{background:var(--paper)} .opt.sel{background:var(--ink-soft)} .opt.right,.srow.ok{background:var(--green-soft)} .opt.wrong,.srow.bad{background:var(--red-soft)}
+      .primary,.ghost,.soft,.chip,.nav button,.back,.step{border-radius:999px}
+      .primary{padding:13px 26px;font-size:1.05rem}
+      h1{font-weight:800;letter-spacing:-.02em;font-size:2.7rem} .mode b,.dz-b b,.subj b{font-weight:800}
+      button{transition:transform .35s cubic-bezier(.34,1.56,.64,1)} button:active:not(:disabled){transform:scale(.94)}
+      .subj .big-ic,.dz-n{border-radius:42% 58% 55% 45%/52% 44% 56% 48%} .subj::before{height:0}`,
+  },
 ];
+
+
+/* ---------- czytelność: automatyczna korekta kontrastu (WCAG AA 4.5:1) ---------- */
+const hex = (c: string) => { const m = c.trim().match(/^#([0-9a-f]{6})$/i); if (!m) return null; const n = parseInt(m[1], 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; };
+const toHex = (r: number[]) => '#' + r.map(v => Math.round(Math.max(0, Math.min(255, v))).toString(16).padStart(2, '0')).join('').toUpperCase();
+const lum = (rgb: number[]) => { const [r, g, b] = rgb.map(v => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+export const ratio = (a: string, b: string) => { const x = hex(a), y = hex(b); if (!x || !y) return 99; const l1 = lum(x), l2 = lum(y); return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05); };
+/** przyciemnia (jasny tryb) albo rozjaśnia (ciemny) kolor, aż osiągnie kontrast min ze wszystkimi tłami */
+export function ensure(fg: string, bgs: string[], min: number, dark: boolean): string {
+  let c = hex(fg); if (!c) return fg; const target = dark ? 255 : 0;
+  for (let i = 0; i < 40 && bgs.some(b => ratio(toHex(c!), b) < min); i++) c = c.map(v => v + (target - v) * 0.06);
+  return toHex(c);
+}
+/** paleta po korekcie kontrastu – używana przez CSS i przez test czytelności */
+export function resolved(l: Look, sc: 'light' | 'dark'): Palette {
+  const p = l[sc], dark = sc === 'dark', v = { ...p.vars };
+  const paper = v['--paper'], card = v['--card'];
+  if (v['--muted']) v['--muted'] = ensure(v['--muted'], [paper, card], 4.6, dark);
+  if (v['--bar-fg'] && v['--bar']) v['--bar-fg'] = ensure(v['--bar-fg'], [v['--bar']], 4.6, !dark ? ratio('#FFFFFF', v['--bar']) > ratio('#000000', v['--bar']) : true);
+  const onInk = v['--on-ink'] || '#FFFFFF';
+  const fix = (i: Ink): Ink => {
+    // kolor przedmiotu musi być czytelny na tle, karcie, swoim jasnym tle i pod napisem na przycisku
+    let ink = ensure(i[0], [paper, card, i[1]], 4.6, dark);
+    if (ratio(onInk, ink) < 4.6) ink = ensure(ink, [onInk], 4.6, !dark);
+    return [ink, i[1], i[2]];
+  };
+  return { vars: v, hub: fix(p.hub), subj: Object.fromEntries(Object.entries(p.subj).map(([k, i]) => [k, fix(i)])) as Record<Subj, Ink> };
+}
 
 export const MODES = [['system', 'Jak w systemie'], ['light', 'Jasny'], ['dark', 'Ciemny']] as const;
 export type Mode = typeof MODES[number][0];
@@ -90,7 +150,7 @@ export function looksCSS(): string {
   let out = '';
   for (const l of LOOKS) {
     for (const sc of ['light', 'dark'] as const) {
-      const p = l[sc];
+      const p = resolved(l, sc);
       const R = sc === 'light' ? `html:root[data-look="${l.id}"]` : `html:root[data-look="${l.id}"][data-scheme="dark"]`;
       const L = sc === 'light' ? `.lp[data-look="${l.id}"]` : `html[data-scheme="dark"] .lp[data-look="${l.id}"]`;
       const cs = Object.entries(p.subj).map(([k, i]) => `--c-${k}:${i[0]};--cs-${k}:${i[1]}`).join(';');

@@ -45,3 +45,26 @@ export function streakDays(): number {
   for (;;) { const y = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; if (!set.has(y)) break; n++; d.setDate(d.getDate() - 1); }
   return n;
 }
+
+/** Jednorazowe przeniesienie postępów ze starej wersji (Historia, Przyroda, Angielski) – żeby po przejściu na nową wersję nic nie zginęło.
+    Wyniki matematyki zostają w module matematyki (klucz 'lid4-v1'), sprawdziany z klasy matematyki – w 'school-tests-v1'. */
+export function migrateLegacy() {
+  const FLAG = 'sprawdziany-migrated-legacy';
+  try {
+    if (localStorage.getItem(FLAG)) return;
+    const MAP: [string, string][] = [['hist4-v1', 'hist'], ['prz4-v1', 'przyroda'], ['ang4-v1', 'english']];
+    let n = 0;
+    for (const [key, subj] of MAP) {
+      const old = JSON.parse(localStorage.getItem(key) || 'null'); if (!old || !old.topics) continue;
+      for (const [id, t] of Object.entries<any>(old.topics)) {
+        const k = `${subj}/${id}`; if (S.skills[k] || !t?.recent?.length) continue;
+        const lv = Math.min(3, Math.max(1, +(old.levels?.[id] || 1))) as 1 | 2 | 3;
+        S.skills[k] = { recent: t.recent.slice(-10), level: lv, streak: 0, n: t.att || t.recent.length }; n++;
+      }
+      for (const d of old.days || []) if (!S.days.includes(d)) S.days.push(d);
+      if (!localStorage.getItem('sprawdziany-v2') && old.name) S.name = old.name;
+    }
+    if (n) save();
+    localStorage.setItem(FLAG, new Date().toISOString());
+  } catch { /* uszkodzone stare dane – pomijamy */ }
+}

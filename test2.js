@@ -1,5 +1,5 @@
 const fs=require('fs');
-const html=fs.readFileSync('index.html','utf8');
+const html=fs.readFileSync('stara/index.html','utf8');
 const js=html.match(/<script>([\s\S]*)<\/script>/)[1];
 const stubEl={addEventListener(){},querySelectorAll:()=>[],classList:{toggle(){}},set innerHTML(v){this._h=v},hidden:false};
 global.document={querySelector:()=>stubEl,querySelectorAll:()=>[],documentElement:{dataset:{},removeAttribute(){}}};
