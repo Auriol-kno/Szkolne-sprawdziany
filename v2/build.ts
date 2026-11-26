@@ -21,7 +21,7 @@ const html = `<!doctype html>
 <meta name="apple-mobile-web-app-title" content="Sprawdziany">
 <meta name="theme-color" content="#2F4F4F">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&family=Caveat:wght@600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&family=Caveat:wght@600;700&family=Fredoka:wght@500;600;700&family=Bangers&display=swap">
 <style>
 ${css}
 </style>
@@ -33,6 +33,7 @@ ${css}
   <nav class="nav" id="nav" aria-label="Widoki">
     <button data-act="go" data-v="hub">Przedmioty</button>
     <button data-act="go" data-v="progress">Postępy</button>
+    <button data-act="settings" class="gear" aria-label="Ustawienia">⚙️ Ustawienia</button>
   </nav>
 </div></header>
 <main id="main"></main>

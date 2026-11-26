@@ -4,6 +4,7 @@ import { SUBJECTS } from '../content/index';
 import { P, chk, esc, gradeOf, LV, plural, shuffle } from './core/kit';
 import { S, acc, addSession, record, reset, stat, status, streakDays, save } from './core/store';
 import { VARIANTS, grade as gradeSchool, spts, taskHTML, variantName, type SResult, type Vals } from './core/school';
+import { LOOKS, looksCSS, getLook, setLook, applyLook, FONTS } from './themes';
 import type { Dzial, Gen, Level, Question, SchoolTest, Skill, STask, Subject } from './core/types';
 
 const $ = (s: string) => document.querySelector(s) as HTMLElement;
@@ -23,6 +24,7 @@ let RUN: Run | null = null;
 interface School { test: SchoolTest; variant: string; tasks: STask[]; vals: Vals; res: SResult | null }
 let SCH: School | null = null;
 let CONFIRM = false;
+let SETTINGS = false;
 
 /* ---------- pomocnicze ---------- */
 const skillsOf = (d: Dzial) => d.lessons.flatMap(l => l.skills);
@@ -192,10 +194,36 @@ function mountMath() {
   const w = $('#embed-wrap'); const srcEl = document.getElementById('math-src'); if (!w || !srcEl) return;
   const src = srcEl.textContent!.replace(/<%%\/S/g, '</scr' + 'ipt').replace(/<%%S/g, '<scr' + 'ipt');
   const fr = document.createElement('iframe'); fr.id = 'math-frame'; fr.title = 'Matematyka';
-  fr.srcdoc = src.replace('</head>', '<style>.top .brand{display:none}</style></head>'); w.appendChild(fr); fitMath();
+  fr.srcdoc = src.replace('</head>', `<link rel="stylesheet" href="${FONTS}"><style>.top .brand{display:none}\n${looksCSS()}</style></head>`);
+  fr.addEventListener('load', () => { if (fr.contentDocument) applyLook(fr.contentDocument, getLook()); });
+  w.appendChild(fr); fitMath();
 }
 function fitMath() { const fr = document.getElementById('math-frame'); if (fr) fr.style.height = Math.max(320, innerHeight - $('.top').getBoundingClientRect().bottom) + 'px'; }
 addEventListener('resize', fitMath);
+
+/* ---------- ustawienia (panel z prawej) ---------- */
+function vSettings(): string {
+  const cur = getLook();
+  const tests = SUBJECTS.flatMap(s => s.dzialy.flatMap(d => (d.schoolTests || []).map(t => ({ s, d, t }))));
+  return `<div class="scrim" data-act="settings-close"></div>
+  <aside class="drawer" role="dialog" aria-label="Ustawienia">
+    <div class="drawer-h"><b>Ustawienia</b><button class="soft" data-act="settings-close" aria-label="Zamknij">✕</button></div>
+    <section class="stack"><h2>Wygląd</h2><p class="note">Wybierz wariant – zmienia się od razu. Dla wybranego zrobimy potem wersję jasną, ciemną i „jak w systemie”.</p>
+      <div class="lp-grid">${LOOKS.map(l => `<button class="lp${cur === l.id ? ' on' : ''}" data-look="${l.id === 'obecny' ? '' : l.id}" data-act="look" data-v="${l.id}" aria-pressed="${cur === l.id}">
+        <span class="lp-prev"><span class="lp-bar"></span><span class="lp-card"><i></i><i></i><em></em></span></span>
+        <b>${l.name}${cur === l.id ? ' ✓' : ''}</b><small>${l.desc}</small></button>`).join('')}</div></section>
+    <section class="stack"><h2>Materiały w aplikacji</h2><p class="note">Zakres książek i działów, które już są – zanim dodasz nowe zdjęcia, sprawdź tu, żeby się nie dublowały.</p>
+      ${SUBJECTS.map(s => `<div class="mat"><b>${s.icon} ${s.name}</b><ul>${s.dzialy.map(d => `<li><span>${d.name}${d.pages ? ` <small>(${d.pages})</small>` : ''}</span><small>${d.lessons.length > 1 ? d.lessons.length + ' lekcji · ' : ''}${skillsOf(d).length} umiej.${d.tentative ? ' · ⚠ wstępne' : ''}</small></li>`).join('')}</ul></div>`).join('')}</section>
+    <section class="stack"><h2>Sprawdziany z klasy</h2>
+      ${tests.length ? tests.map(({ s, d, t }) => `<button class="mat-t" data-act="settings-test" data-s="${s.id}" data-d="${d.id}"><span>${s.icon} <b>${t.title}</b><small>${new Date(t.date).toLocaleDateString('pl-PL')} · ${t.info}</small></span>${t.result ? `<em>${spts(t.result.pts)}/${t.max} p. · ocena ${t.result.grade}</em>` : ''}</button>`).join('') : '<p class="note">Jeszcze żadnego.</p>'}</section>
+  </aside>`;
+}
+function renderSettings() {
+  let el = document.getElementById('settings-root');
+  if (!el) { el = document.createElement('div'); el.id = 'settings-root'; document.body.appendChild(el); }
+  el.innerHTML = SETTINGS ? vSettings() : '';
+  document.body.classList.toggle('drawer-open', SETTINGS);
+}
 
 /* ---------- render i nawigacja ---------- */
 const PARENT: Record<View, View> = { hub: 'hub', subject: 'hub', dzial: 'subject', run: 'dzial', result: 'dzial', school: 'dzial', progress: 'hub', math: 'dzial' };
@@ -209,6 +237,7 @@ function render() {
   $('#main').innerHTML = V[VIEW]();
   $('#main').classList.toggle('wide', VIEW === 'math');
   if (VIEW === 'math') mountMath();
+  renderSettings();
 }
 function go(v: View) { CONFIRM = false; VIEW = v; render(); scrollTo(0, 0); }
 
@@ -217,6 +246,10 @@ function act(a: string, el: HTMLElement) {
   const vals = () => RUN!.vals[ns];
   switch (a) {
     case 'go': go(v as View); break;
+    case 'settings': SETTINGS = !SETTINGS; renderSettings(); break;
+    case 'settings-close': SETTINGS = false; renderSettings(); break;
+    case 'look': setLook(v); renderSettings(); break;
+    case 'settings-test': SETTINGS = false; SUBJ = SUBJECTS.find(s => s.id === el.dataset.s)!; DZ = SUBJ.dzialy.find(d => d.id === el.dataset.d)!; go('dzial'); break;
     case 'back': go(PARENT[VIEW]); break;
     case 'subj': SUBJ = SUBJECTS.find(s => s.id === v)!; go(SUBJ.dzialy.length === 1 ? (DZ = SUBJ.dzialy[0], 'dzial') : 'subject'); break;
     case 'dzial': DZ = SUBJ.dzialy.find(d => d.id === v) || DZ; RUN = null; SCH = null; go('dzial'); break;
@@ -260,6 +293,7 @@ document.addEventListener('input', e => {
 });
 document.addEventListener('change', e => { const el = e.target as HTMLSelectElement; if (el.dataset.sf != null && SCH) SCH.vals[el.dataset.sf] = el.value; });
 document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && SETTINGS) { SETTINGS = false; renderSettings(); return; }
   const el = e.target as HTMLInputElement; if (e.key !== 'Enter' || el.tagName !== 'INPUT') return;
   const all = [...document.querySelectorAll('#main input:not([disabled]),#main select:not([disabled])')] as HTMLElement[];
   const ix = all.indexOf(el); e.preventDefault();
@@ -267,4 +301,6 @@ document.addEventListener('keydown', e => {
   else if (VIEW === 'run' && RUN?.mode === 'train' && !RUN.res[RUN.i]) act('check', el);
 });
 
+const lookStyle = document.createElement('style'); lookStyle.id = 'looks'; lookStyle.textContent = looksCSS(); document.head.appendChild(lookStyle);
+applyLook(document, getLook());
 render();
