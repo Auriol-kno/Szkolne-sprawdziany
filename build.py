@@ -97,7 +97,7 @@ def mod(name,key,title,icon,eyebrow,topicsTitle,desc,short):
 mods=''
 mods+=mod('hist','hist4-v1','Historia','🏺','Historia kl. 4 · rozdział I, str. 8–34','Tematy z podręcznika','Źródła, czas, wieki, kalendarz','hist')
 mods+=mod('przyroda','prz4-v1','Przyroda','🌿','Przyroda kl. 4 · rozdziały 1–5','Tematy z podręcznika','Zmysły, obserwacje, kierunki świata','przyroda')
-mods+=mod('english','ang4-v1','Angielski','💬','Angielski kl. 4 · zestaw startowy','Tematy','Słówka, to be, can, have got','english')
+mods+=mod('english','ang4-v1','Angielski','💬','Angielski kl. 4','Tematy','Słówka, to be, can, have got','english')
 mathsrc=open('src/math_app.html',encoding='utf-8').read().replace('</script','<%%/S').replace('<script','<%%S')
 mods+="SUBJECTS.math={id:'math',key:'lid4-v1',name:'Matematyka',icon:'🔢',eyebrow:'Matematyka kl. 4',topicsTitle:'',desc:'Rozdziały z książki, Kangur, ciekawostki',custom:true,TOPICS:[],T:{},CHAPTERS:{},B:{}};\n"
 
