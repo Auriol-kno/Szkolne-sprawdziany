@@ -92,7 +92,8 @@ ct=ct.replace("return /^\\d+$/.test(s)&&+s===fd.ans;","s=s.replace(/ /g,'');retu
 assert "s=s.replace(/ /g,'')" in ct
 
 def mod(name,key,title,icon,eyebrow,topicsTitle,desc,short):
-    src=open(f'src/{name}_data.js',encoding='utf-8').read()
+    src=open(f'v2/content/{name}/data.js',encoding='utf-8').read()
+    src='\n'.join(l for l in src.split('\n') if not l.startswith('import ') and not l.startswith('export default'))
     return f"SUBJECTS.{short}=(()=>{{\n{src}\nreturn{{id:'{short}',key:'{key}',name:'{title}',icon:'{icon}',eyebrow:'{eyebrow}',topicsTitle:'{topicsTitle}',desc:'{desc}',TOPICS,T,CHAPTERS,B}};\n}})();\n"
 mods=''
 mods+=mod('hist','hist4-v1','Historia','🏺','Historia kl. 4 · rozdział I, str. 8–34','Tematy z podręcznika','Źródła, czas, wieki, kalendarz','hist')

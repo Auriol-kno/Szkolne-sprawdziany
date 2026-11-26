@@ -1,3 +1,5 @@
+import {R,P,plural,esc,shuffle,pickN,today,LV,CUR,toRoman,fromRoman,cent,rk,near,rnear,wnear,D,O,SQ,Ord,SQd,OrdD,NM,F,listExpl,chk} from '../../src/core/kit';
+/* Dane przedmiotu: TOPICS = umiejętności (ch = numer lekcji), CHAPTERS = lekcje, B = generatory zadań wg poziomu. */
 const TOPICS=[
  {id:'words',ch:1,name:'Słownictwo: szkoła i dom',hint:'Przypomnij sobie słówka z lekcji. Zgadnij z kontekstu.'},
  {id:'tobe',ch:1,name:'Czasownik to be',hint:'I am, you are, he/she/it is, we/you/they are.'},
@@ -91,3 +93,4 @@ favtext:[
  NM(3,()=>{const w=P(SING),col=P(COL);return{q:`Uzupełnij tekst (dwa słowa):<br><b>My favourite thing is my ${w[0]}. (1) ___ is ${col[0]}. (2) ___ love it!</b>`,fields:[F('(1)','It','t',{alts:['it']}),F('(2)','I','t',{alts:['i']})],expl:`It is ${col[0]}. I love it! Wzór tekstu: My favourite thing is my… It is… I play with it… I love it!`}})]
 };
 Object.assign(B,B2);
+export default {TOPICS,T,CHAPTERS,B};

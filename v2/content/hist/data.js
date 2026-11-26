@@ -1,3 +1,5 @@
+import {R,P,plural,esc,shuffle,pickN,today,LV,CUR,toRoman,fromRoman,cent,rk,near,rnear,wnear,D,O,SQ,Ord,SQd,OrdD,NM,F,listExpl,chk} from '../../src/core/kit';
+/* Dane przedmiotu: TOPICS = umiejętności (ch = numer lekcji), CHAPTERS = lekcje, B = generatory zadań wg poziomu. */
 const TOPICS=[
  {id:'hist',ch:1,name:'Co to jest historia',hint:'Historia to przeszłość, opowieść o niej i nauka o przeszłości. Historycy badają ludzi, którzy żyli naprawdę, i wydarzenia, do których naprawdę doszło, a najważniejsza jest dla nich prawda. W baśniach bohaterowie i zdarzenia są wymyślone, w legendach prawda miesza się z nieprawdą. Historia pomaga zrozumieć świat i przewidywać skutki działań.'},
  {id:'zrodla',ch:1,name:'Rodzaje źródeł historycznych',hint:'Źródłem jest każdy ślad działalności człowieka. Materialne pisane: książki, kroniki, dokumenty, listy, gazety, mapy. Materialne niepisane: budowle, obrazy, rzeźby, odzież, zdjęcia, przedmioty. Niematerialne: tradycja, obyczaje, przekazy ustne. Archeolodzy szukają materialnych śladów na wykopaliskach.'},
@@ -276,3 +278,4 @@ kal:[
  NM(3,()=>({q:'Kalendarz gregoriański „połknął” dni, by naprawić czas.',fields:[F('Ile dni pominięto w październiku 1582 roku? (od 5 do 14 października)',10,'n',{unit:'dni'}),F('Co ile lat w kalendarzu juliańskim dodawano jeden dzień?',4,'n',{unit:'lat'})],expl:'Pominięto 10 dni. W kalendarzu juliańskim co cztery lata dodawano 29 lutego, czyli rok przestępny ma 366 dni.'}))
 ]
 };
+export default {TOPICS,T,CHAPTERS,B};

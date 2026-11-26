@@ -2272,6 +2272,7 @@ function chk(fd,raw){
 
 const SUBJECTS={};
 SUBJECTS.hist=(()=>{
+/* Dane przedmiotu: TOPICS = umiejętności (ch = numer lekcji), CHAPTERS = lekcje, B = generatory zadań wg poziomu. */
 const TOPICS=[
  {id:'hist',ch:1,name:'Co to jest historia',hint:'Historia to przeszłość, opowieść o niej i nauka o przeszłości. Historycy badają ludzi, którzy żyli naprawdę, i wydarzenia, do których naprawdę doszło, a najważniejsza jest dla nich prawda. W baśniach bohaterowie i zdarzenia są wymyślone, w legendach prawda miesza się z nieprawdą. Historia pomaga zrozumieć świat i przewidywać skutki działań.'},
  {id:'zrodla',ch:1,name:'Rodzaje źródeł historycznych',hint:'Źródłem jest każdy ślad działalności człowieka. Materialne pisane: książki, kroniki, dokumenty, listy, gazety, mapy. Materialne niepisane: budowle, obrazy, rzeźby, odzież, zdjęcia, przedmioty. Niematerialne: tradycja, obyczaje, przekazy ustne. Archeolodzy szukają materialnych śladów na wykopaliskach.'},
@@ -2554,6 +2555,7 @@ kal:[
 return{id:'hist',key:'hist4-v1',name:'Historia',icon:'🏺',eyebrow:'Historia kl. 4 · rozdział I, str. 8–34',topicsTitle:'Tematy z podręcznika',desc:'Źródła, czas, wieki, kalendarz',TOPICS,T,CHAPTERS,B};
 })();
 SUBJECTS.przyroda=(()=>{
+/* Dane przedmiotu: TOPICS = umiejętności (ch = numer lekcji), CHAPTERS = lekcje, B = generatory zadań wg poziomu. */
 const TOPICS=[
  {id:'zywe',ch:1,name:'Ożywione i nieożywione',hint:'Organizm oddycha, odżywia się, wydala, rośnie, reaguje na bodźce, rusza się i rozmnaża. Rzeczy zrobione przez ludzi nie należą do przyrody.'},
  {id:'czynn',ch:1,name:'Czynności życiowe',hint:'7 czynności: oddychanie, odżywianie, wydalanie, wzrost i rozwój, reakcja na bodźce, ruch, rozmnażanie.'},
@@ -2812,6 +2814,7 @@ B.dosw.push(O(3,'Aura chce sprawdzić, jak słona woda wpływa na fasolę. Jak p
 return{id:'przyroda',key:'prz4-v1',name:'Przyroda',icon:'🌿',eyebrow:'Przyroda kl. 4 · rozdziały 1–5',topicsTitle:'Tematy z podręcznika',desc:'Zmysły, obserwacje, kierunki świata',TOPICS,T,CHAPTERS,B};
 })();
 SUBJECTS.english=(()=>{
+/* Dane przedmiotu: TOPICS = umiejętności (ch = numer lekcji), CHAPTERS = lekcje, B = generatory zadań wg poziomu. */
 const TOPICS=[
  {id:'words',ch:1,name:'Słownictwo: szkoła i dom',hint:'Przypomnij sobie słówka z lekcji. Zgadnij z kontekstu.'},
  {id:'tobe',ch:1,name:'Czasownik to be',hint:'I am, you are, he/she/it is, we/you/they are.'},

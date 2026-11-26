@@ -1,3 +1,5 @@
+import {R,P,plural,esc,shuffle,pickN,today,LV,CUR,toRoman,fromRoman,cent,rk,near,rnear,wnear,D,O,SQ,Ord,SQd,OrdD,NM,F,listExpl,chk} from '../../src/core/kit';
+/* Dane przedmiotu: TOPICS = umiejętności (ch = numer lekcji), CHAPTERS = lekcje, B = generatory zadań wg poziomu. */
 const TOPICS=[
  {id:'zywe',ch:1,name:'Ożywione i nieożywione',hint:'Organizm oddycha, odżywia się, wydala, rośnie, reaguje na bodźce, rusza się i rozmnaża. Rzeczy zrobione przez ludzi nie należą do przyrody.'},
  {id:'czynn',ch:1,name:'Czynności życiowe',hint:'7 czynności: oddychanie, odżywianie, wydalanie, wzrost i rozwój, reakcja na bodźce, ruch, rozmnażanie.'},
@@ -252,3 +254,4 @@ B.zywe.push(O(3,'Automatyczna kosiarka sama jeździ po ogrodzie, „reaguje” n
 B.zmysly.push(O(3,'Lumo widzi krzak z nieznanymi, apetycznymi czerwonymi jagodami. Co powinien zrobić?','Nie próbować ich ani nie dotykać, obejrzeć z bliska i zapytać opiekuna',['Spróbować jednej, żeby poznać smak','Zjeść, bo w lesie wszystko jest czyste','Zerwać całą garść na później'],'Nieznane rośliny mogą być trujące. Przy nieznanych obiektach nie używa się smaku, a dotyku tylko ostrożnie.'));
 B.metoda.push(O(3,'Aura sprawdza, czy fasola potrzebuje światła do wzrostu i jak działa na nią woda z solą. Na ile pytań badawczych szuka odpowiedzi?','2',['1','3','4'],'Pytanie 1: czy fasola potrzebuje światła? Pytanie 2: jak wpływa na nią słona woda?'));
 B.dosw.push(O(3,'Aura chce sprawdzić, jak słona woda wpływa na fasolę. Jak powinna ułożyć doświadczenie?','Dwie doniczki w tym samym świetle; jedną podlewa zwykłą wodą, drugą słoną',['Jedną doniczkę w ciemności ze słoną wodą, drugą na oknie ze zwykłą','Obie podlewa słoną wodą','Sadzi różne rośliny w różnej ziemi'],'Zmieniamy tylko jedną rzecz naraz. Ziemia, nasiona i światło muszą być takie same.'));
+export default {TOPICS,T,CHAPTERS,B};
