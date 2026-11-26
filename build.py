@@ -138,7 +138,7 @@ rep("document.querySelector('.nav').addEventListener('click',e=>{const b=e.targe
 rep("  CONFIRM_RESET=false;VIEW=v;render();scrollTo(0,0);\n}","  CONFIRM_RESET=false;VIEW=v;if(v==='hub')document.documentElement.removeAttribute('data-subj');render();scrollTo(0,0);\n}")
 rep("case'quitok':{const t=RUN.pending;clearInterval(TIMER);RUN.done=true;RUN=null;VIEW=t;","case'quitok':{const t=RUN.pending;clearInterval(TIMER);RUN.done=true;RUN=null;VIEW=t;if(t==='hub')document.documentElement.removeAttribute('data-subj');")
 rep("case'tick':","case'subj':setSubject(el.dataset.id);break;\n    case'tick':") if False else None
-rep("    case'tick':","    case'subj':setSubject(el.dataset.id);break;\n    case'subjup':{const o=subjOrder().map(x=>x.id).filter(x=>x!==el.dataset.id);o.unshift(el.dataset.id);try{localStorage.setItem('subj-order-v1',JSON.stringify(o))}catch(e){}render();scrollTo(0,0);break}\n    case'tick':")
+rep("    case'tick':","    case'subj':setSubject(el.dataset.id);break;\n    case'subjup':{const o=subjOrder().map(x=>x.id).filter(x=>x!==el.dataset.id);o.unshift(el.dataset.id);try{localStorage.setItem('subj-order-v2',JSON.stringify(o))}catch(e){}render();scrollTo(0,0);break}\n    case'tick':")
 rep("$('#nav').hidden=VIEW==='hub';","$('#nav').hidden=VIEW==='hub'||VIEW==='embed';")
 rep("({hub:vHub,home:vHome,","({embed:vEmbed,hub:vHub,home:vHome,")
 rep("[VIEW]();","[VIEW]();\n  $('#main').classList.toggle('wide',VIEW==='embed');if(VIEW==='embed')mountEmbed();")
@@ -191,8 +191,8 @@ assert old_p in hub
 hub=hub.replace(old_p,"(sub.custom?Object.keys(s.topics||{}):sub.TOPICS.map(t=>t.id)).flatMap(id=>(s.topics&&s.topics[id]||{recent:[]}).recent)")
 hub=hub.replace("render();\n'''","")if False else hub
 emb='''
-function subjOrder(){let o=[];try{o=JSON.parse(localStorage.getItem('subj-order-v1'))||[]}catch(e){}
-  const all=Object.values(SUBJECTS);return[...o.map(id=>SUBJECTS[id]).filter(Boolean),...all.filter(s=>!o.includes(s.id))]}
+function subjOrder(){let o=[];try{o=JSON.parse(localStorage.getItem('subj-order-v2'))||[]}catch(e){}
+  const all=[SUBJECTS.math,...Object.values(SUBJECTS).filter(s=>s.id!=='math')];return[...o.map(id=>SUBJECTS[id]).filter(Boolean),...all.filter(s=>!o.includes(s.id))]}
 
 /* matematyka: osobny moduł (rozdziały, ścieżka rozumowania, Kangur) osadzony w ramce */
 function vEmbed(){return'<div id="embed-wrap"></div>'}

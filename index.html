@@ -371,12 +371,12 @@ button{cursor:pointer}
   padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .brand{font-family:var(--display);font-weight:800;font-size:1.2rem;color:#FFFFFF;line-height:1;display:flex;align-items:baseline;gap:6px;margin-right:auto}
 .brand small{font-family:var(--body);font-weight:700;font-size:.72rem;color:var(--bar-fg);letter-spacing:.06em;text-transform:uppercase}
-.nav{display:grid;grid-template-columns:repeat(5,auto);gap:8px}
+.nav{display:grid;grid-template-columns:repeat(6,auto);gap:8px}
 .nav button{border:2px solid var(--bar-line);background:transparent;padding:9px 14px;border-radius:12px;font-family:var(--display);font-weight:700;font-size:1.02rem;line-height:1.2;color:var(--bar-fg)}
 .nav button:hover{border-color:var(--bar-fg);color:#FFFFFF}
 .nav button.on{background:var(--bar-on);border-color:var(--bar-on);color:var(--bar-on-fg);box-shadow:0 3px 0 rgba(0,0,0,.25)}
 .nav button:focus-visible{outline-color:var(--bar-on)}
-@media (max-width:620px){.nav{width:100%;grid-template-columns:repeat(5,1fr);gap:5px}.nav button{padding:10px 0;font-size:.72rem;border-radius:10px;letter-spacing:-.02em}}
+@media (max-width:620px){.nav{width:100%;grid-template-columns:repeat(6,1fr);gap:5px}.nav button{padding:10px 0;font-size:.72rem;border-radius:10px;letter-spacing:-.02em}}
 .top{box-shadow:0 2px 10px var(--shadow)}
 
 /* duże pole zadania */
@@ -656,12 +656,32 @@ a.primary,a.ghost{display:inline-block;text-decoration:none}
 #kp.sys .kp-bar{grid-template-columns:2fr 1fr}
 #kp.sys [data-kx=sys]{order:-1}
 body.kp-on #main{padding-bottom:calc(var(--kph,0px) + 12px)}
+/* szkolne sprawdziany */
+.sq-card .sq-head{display:flex;gap:14px;align-items:center}.sq-head .sym{width:56px;height:56px;border-radius:14px;background:var(--ink);color:var(--on-ink);display:flex;align-items:center;justify-content:center;font-size:1.6rem}
+.sq-head b{display:block;font-family:var(--display);font-size:1.3rem}.sq-head small{color:var(--muted);font-weight:700}
+.sq-was{background:var(--amber-soft);border-radius:10px;padding:10px 14px}
+.sq-vers{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}.sq-vers .mode small{font-weight:700}
+.sq-hist{display:flex;flex-direction:column;gap:6px}.sq-hist div{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:6px}
+.sq-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:0 24px}
+.sq-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin-top:12px;font-size:1.12rem}
+.sq-row .sq-l{font-weight:700}.sq-row .u{font-weight:800;color:var(--muted)}
+.sq-row input,.sq-row select{font-family:var(--display);font-weight:700;font-size:1.3rem;width:7ch;padding:3px 8px;border:0;border-bottom:3px solid var(--ink);background:var(--ink-soft);border-radius:6px 6px 0 0;color:var(--fg)}
+.sq-row input.s{width:4ch}.sq-row input.r{width:8ch;text-transform:uppercase}.sq-row select{width:auto;min-width:4ch}
+.sq-row.wide input.w{flex:1 1 100%;width:100%;font-size:1.1rem;font-family:var(--body)}
+.sq-row input:focus,.sq-row select:focus{outline:none;background:var(--hl)}
+.sq-row .ok{border-color:var(--green);background:var(--green-soft)}.sq-row .bad{border-color:var(--red);background:var(--red-soft)}
+.sq-row input:disabled,.sq-row select:disabled{opacity:1;-webkit-text-fill-color:var(--fg);color:var(--fg)}
+.sq-ok{color:var(--green)}.sq-bad{color:var(--red);font-family:var(--hand);font-size:1.35rem}
+.sq-res{display:flex;flex-direction:column;gap:10px;border:2px solid var(--ink)}.sq-res>div{display:flex;flex-direction:column}
+.sq-big{font-family:var(--hand);font-size:2.6rem;color:var(--red);line-height:1.1}
+.task.sq .q-text{font-size:1.15rem}
 </style>
 
 <header class="top"><div class="top-in">
   <div class="brand">Matma Franka <small>kl. 4</small></div>
   <nav class="nav" aria-label="Widoki">
     <button data-go="home">Start</button>
+    <button data-go="school">Szkolne</button>
     <button data-go="train">Trening</button>
     <button data-go="test">Sprawdzian</button>
     <button data-go="fun">Ciekawe</button>
@@ -1643,6 +1663,7 @@ function vHome(){
     <div class="acts">${r?`<button class="primary" data-act="wnext">Następne zadanie</button>`:`<button class="primary" data-act="wcheck">Sprawdź</button>${WARM.hint?'':'<button class="ghost" data-act="whint">Podpowiedź</button>'}${WARM.msg?`<span class="warn">${WARM.msg}</span>`:''}`}</div>
   </section>
   <section class="modes dim">
+    <button class="mode" data-act="go" data-v="school"><span class="eyebrow">Ze szkoły</span><b>Sprawdzian z klasy + 5 wariantów</b><small>Systemy zapisywania liczb – oryginalne pytania i wersje z innymi liczbami.</small></button>
     <button class="mode" data-act="go" data-v="train"><span class="eyebrow">Trening</span><b>Wybierz dział, tematy i poziom</b><small>Po każdym zadaniu od razu widać, czy dobrze, i jak to policzyć.</small></button>
     <button class="mode" data-act="go" data-v="test"><span class="eyebrow">Sprawdzian</span><b>Z wybranych działów, ocena 1–6</b><small>Wynik dopiero po oddaniu. Oceniana jest też droga do wyniku.</small></button>
     <button class="mode" data-act="weak"><span class="eyebrow">Słabe strony</span><b>10 zadań z tego, co sprawia kłopot</b><span class="ex">${w.map(id=>T[id].name).join(' · ')}</span></button>
@@ -1876,7 +1897,7 @@ function sendPanel(){
 function render(){
   const nav=VIEW==='run'||VIEW==='result'?(RUN&&RUN.mode==='test'?'test':RUN&&RUN.mode==='train'?'train':''):VIEW==='ch'?'home':VIEW;
   document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('on',b.dataset.go===nav));
-  $('#main').innerHTML=({home:vHome,ch:vCh,train:vTrain,test:vTest,fun:vFun,progress:vProgress,run:vRun,result:vResult})[VIEW]();
+  $('#main').innerHTML=({school:vSchool,home:vHome,ch:vCh,train:vTrain,test:vTest,fun:vFun,progress:vProgress,run:vRun,result:vResult})[VIEW]();
 }
 function go(v){
   if(VIEW==='run'&&RUN&&!RUN.done&&v!=='run'){RUN.pending=v;render();scrollTo(0,0);return}
@@ -1945,6 +1966,9 @@ function act(a,el){
     case'reset':CONFIRM_RESET=true;render();break;
     case'resetno':CONFIRM_RESET=false;render();break;
     case'resetok':S=blank();save();CONFIRM_RESET=false;WARM=null;render();break;
+    case'sopen':schOpen(v);break;
+    case'scheck':schGrade();break;
+    case'slist':SCH.view='list';SCH.res=null;render();scrollTo(0,0);break;
   }
 }
 
@@ -1988,6 +2012,214 @@ $('#main').addEventListener('keydown',e=>{
   const ins=[...document.querySelectorAll(sel)];const ix=ins.indexOf(el);
   if(ix>=0&&ix<ins.length-1)ins[ix+1].focus();else doCheck();
 });
+
+
+/* ---------- SZKOLNE SPRAWDZIANY (oryginały z klasy + warianty) ---------- */
+const SCH_KEY='school-tests-v1';
+function schLoad(){try{return JSON.parse(localStorage.getItem(SCH_KEY))||{best:{},hist:[]}}catch(e){return{best:{},hist:[]}}}
+function schSave(d){try{localStorage.setItem(SCH_KEY,JSON.stringify(d))}catch(e){}}
+let SCH={view:'list',test:null,vals:{},res:null};
+const sfmt=n=>Number(n).toLocaleString('pl-PL');
+const spts=x=>String(Math.round(x*10)/10).replace('.',',');
+function srng(seed){let a=seed>>>0;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+
+/* liczba słownie (do 999 999) */
+const W1=['','jeden','dwa','trzy','cztery','pięć','sześć','siedem','osiem','dziewięć'];
+const W11=['dziesięć','jedenaście','dwanaście','trzynaście','czternaście','piętnaście','szesnaście','siedemnaście','osiemnaście','dziewiętnaście'];
+const W10=['','','dwadzieścia','trzydzieści','czterdzieści','pięćdziesiąt','sześćdziesiąt','siedemdziesiąt','osiemdziesiąt','dziewięćdziesiąt'];
+const W100=['','sto','dwieście','trzysta','czterysta','pięćset','sześćset','siedemset','osiemset','dziewięćset'];
+function w3(n){const s=[],h=Math.floor(n/100),t=Math.floor(n%100/10),u=n%10;if(h)s.push(W100[h]);if(t===1)s.push(W11[u]);else{if(t)s.push(W10[t]);if(u)s.push(W1[u])}return s.join(' ')}
+function words(n){const k=Math.floor(n/1000),r=n%1000,s=[];if(k)s.push(k===1?'tysiąc':w3(k)+' '+plural(k,'tysiąc','tysiące','tysięcy'));if(r)s.push(w3(r));return s.join(' ')}
+const wnorm=s=>String(s==null?'':s).toLowerCase().replace(/[.,!?;]/g,' ').replace(/\s+/g,' ').trim();
+const dagTxt=d=>d>=100?`${Math.floor(d/100)} kg${d%100?` ${d%100} dag`:''}`:`${d} dag`;
+const zgTxt=g=>`${Math.floor(g/100)} zł${g%100?` ${g%100} gr`:''}`;
+const hm=m=>`${Math.floor(m/60)}:${String(m%60).padStart(2,'0')}`;
+const sign=(a,b)=>a<b?'<':a>b?'>':'=';
+
+/* ---- generatory zadań: v = wartości (oryginał) albo losowane przez r/p ---- */
+function schBuild(kind){
+  const orig=kind==='orig',seed=kind==='rand'?Date.now():{v1:4101,v2:4202,v3:4303,v4:4404,v5:4505}[kind]||1;
+  const rnd=srng(seed),r=(a,b)=>a+Math.floor(rnd()*(b-a+1)),p=a=>a[Math.floor(rnd()*a.length)];
+  const T=[];
+
+  /* 1. zapis cyframi i słowami */
+  {const a=orig?34108:r(11,99)*1000+r(1,9)*100+r(1,9),b=orig?209630:r(101,909)*1000+r(1,9)*100+r(1,9)*10;
+   T.push({pts:1,q:`a) Zapisz cyframi liczbę <i>${words(a)}</i>.<br>b) Zapisz słowami liczbę <b>${b}</b>.`,
+    f:[{l:'a)',k:'n',a},{l:'b)',k:'w',a:words(b)}],
+    ex:`a) ${words(a)} = <b>${sfmt(a)}</b> (pilnuj zer w pustych rzędach!).<br>b) Podziel na klasy: ${sfmt(Math.floor(b/1000))} | ${String(b%1000).padStart(3,'0')} → <b>${words(b)}</b>.`,
+    fr:0.5,err:'b) zabrakło słowa „trzydzieści” na końcu.'})}
+
+  /* 2. działania pamięciowe */
+  {let a,b,c,d,e,g;
+   if(orig){a=[400,600];b=[1300,2700];c=[2000,1600];d=[5,480];e=[900,2];g=[5800,100]}
+   else{a=[r(2,8)*100,r(2,8)*100];b=[r(11,29)*100,r(11,39)*100];const c1=r(2,9)*1000;c=[c1,r(11,c1/100-2)*100];d=[r(3,9),r(12,99)*10];const ed=p([2,3,4,5]);e=[ed*r(11,99)*10,ed];const gd=p([10,100,1000]);g=[r(12,99)*gd,gd]}
+   const L=[['a)',`${a[0]} + ${a[1]} =`,a[0]+a[1]],['b)',`${b[0]} + ${b[1]} =`,b[0]+b[1]],['c)',`${c[0]} − ${c[1]} =`,c[0]-c[1]],['d)',`${d[0]} · ${d[1]} =`,d[0]*d[1]],['e)',`${e[0]} : ${e[1]} =`,e[0]/e[1]],['f)',`${g[0]} : ${g[1]} =`,g[0]/g[1]]];
+   T.push({pts:3,q:'Oblicz.',grid:1,f:L.map(([l,pre,a])=>({l,pre,k:'n',a})),
+    ex:`Liczenie na pełnych setkach i tysiącach: ${b[0]} + ${b[1]} to ${b[0]/100} setek + ${b[1]/100} setek = ${(b[0]+b[1])/100} setek. Przy dzieleniu przez ${g[1]} skreślasz ${String(g[1]).length-1} ${plural(String(g[1]).length-1,'zero','zera','zer')} z końca.`,fr:3})}
+
+  /* 3. złote i grosze */
+  {let L;
+   if(orig)L=[[430,'+',1210],[1657,'+',2232],[4680,'−',2630],[1000,'−',520]];
+   else{const x1=r(2,19)*100+r(1,5)*10,y1=r(2,19)*100+r(1,4)*10,x2=r(10,30)*100+r(11,88),y2=r(10,30)*100+r(11,88),y3=r(5,25)*100+r(1,6)*10,x3=y3+r(5,30)*100+r(1,3)*10,x4=r(5,20)*100,y4=r(1,x4/100-1)*100+r(1,9)*10;
+     L=[[x1,'+',y1],[x2,'+',y2],[x3,'−',y3],[x4,'−',y4]]}
+   T.push({pts:2,q:'Oblicz, ile to złotych i ile groszy.',f:L.map(([x,o,y],i)=>{const a=o==='+'?x+y:x-y;return{l:'abcd'[i]+')',pre:`${zgTxt(x)} ${o} ${zgTxt(y)} =`,k:'pair',u:['zł','gr'],a:[Math.floor(a/100),a%100]}}),
+    ex:`Dodawaj osobno złote i osobno grosze. Gdy groszy zrobi się 100 lub więcej, zamień 100 gr na 1 zł. Przy odejmowaniu, gdy brakuje groszy, rozmień 1 zł na 100 gr (np. 10 zł − 5 zł 20 gr: 9 zł 100 gr − 5 zł 20 gr = 4 zł 80 gr).`,fr:2})}
+
+  /* 4. jednostki */
+  {const v=orig?{cm:600,km:3,m:45,dag:68,t:7,kg:250,h:2,mi:12,db:3,hh:7}:{cm:r(2,90)*100,km:r(2,9),m:p([r(11,99),r(1,9)]),dag:r(12,99),t:r(2,9),kg:r(2,19)*50,h:r(1,5),mi:r(5,55),db:r(2,6),hh:r(1,23)};
+   T.push({pts:3,q:'Uzupełnij.',grid:1,f:[
+    {l:'a)',pre:`${v.cm} cm =`,k:'n',a:v.cm/100,u:'m'},{l:'b)',pre:`${v.km} km ${v.m} m =`,k:'n',a:v.km*1000+v.m,u:'m'},{l:'c)',pre:`${v.dag} dag =`,k:'n',a:v.dag*10,u:'g'},
+    {l:'d)',pre:`${v.t} t ${v.kg} kg =`,k:'n',a:v.t*1000+v.kg,u:'kg'},{l:'e)',pre:`${v.h} h ${v.mi} min =`,k:'n',a:v.h*60+v.mi,u:'min'},{l:'f)',pre:`${v.db} ${plural(v.db,'doba','doby','dób')} ${v.hh} h =`,k:'n',a:v.db*24+v.hh,u:'h'}],
+    ex:`1 m = 100 cm · 1 km = 1000 m · 1 dag = 10 g · 1 t = 1000 kg · 1 h = 60 min · 1 doba = 24 h.<br>b) ${v.km} km = ${v.km*1000} m, więc ${v.km*1000} + ${v.m} = <b>${v.km*1000+v.m} m</b> (nie ${v.km}${v.m}!). c) ${v.dag} dag = ${v.dag} · 10 g = <b>${v.dag*10} g</b>.`,
+    fr:2,err:'b) napisane 345 zamiast 3045 m; c) napisane 6 zamiast 680 g.'})}
+
+  /* 5. tygodnie i miesiące */
+  {const w=orig?8:r(3,12),d=orig?4:r(1,6),y=orig?2:r(1,5),m=orig?11:r(1,11);
+   T.push({pts:2,q:'Zapisz działanie.',f:[{l:`a) ${w} ${plural(w,'tydzień','tygodnie','tygodni')} i ${d} ${plural(d,'dzień','dni','dni')} — ile to dni?`,k:'n',a:w*7+d,u:'dni',pts:1},{l:`b) ${y} ${plural(y,'rok','lata','lat')} i ${m} ${plural(m,'miesiąc','miesiące','miesięcy')} — ile to miesięcy?`,k:'n',a:y*12+m,u:'mies.',pts:1}],
+    ex:`a) 7 · ${w} = ${7*w}, ${7*w} + ${d} = <b>${w*7+d}</b> dni. b) 12 · ${y} = ${12*y}, ${12*y} + ${m} = <b>${y*12+m}</b> miesięcy.`,fr:2})}
+
+  /* 6. prawda / fałsz */
+  {const leap=y=>y%4===0&&(y%100!==0||y%400===0);let S;
+   if(orig)S=[['Rok 2020 miał 366 dni.',true,'2020 to rok przestępny (dzieli się przez 4), więc miał 366 dni.'],['II kwartał roku ma tyle samo dni co IV kwartał.',false,'II kwartał: 30 + 31 + 30 = 91 dni, IV kwartał: 31 + 30 + 31 = 92 dni.']];
+   else{const y=r(2013,2025),dn=p([365,366]);
+     const Q=[['I kwartał roku 2023 miał 90 dni.',true,'Styczeń 31 + luty 28 + marzec 31 = 90 dni.'],['III kwartał ma tyle samo dni co IV kwartał.',true,'III: 31 + 31 + 30 = 92, IV: 31 + 30 + 31 = 92.'],['II kwartał ma tyle samo dni co III kwartał.',false,'II: 91 dni, III: 92 dni.'],['II kwartał ma 91 dni.',true,'Kwiecień 30 + maj 31 + czerwiec 30 = 91.'],['Kwartał to 4 miesiące.',false,'Kwartał to 3 miesiące, a 4 kwartały to rok.'],['Półrocze to 6 miesięcy.',true,'Pół roku = 12 : 2 = 6 miesięcy.'],['I półrocze roku 2024 miało 182 dni.',true,'Rok 2024 był przestępny: 31+29+31+30+31+30 = 182.']];
+     S=[[`Rok ${y} miał ${dn} dni.`,(leap(y)?366:365)===dn,`${y} ${leap(y)?'to rok przestępny (366 dni)':'nie jest przestępny (365 dni)'} – przestępny dzieli się przez 4.`],p(Q)]}
+   T.push({pts:1,q:'Oceń prawdziwość zdań. Wybierz P, jeśli zdanie jest prawdziwe, albo F – jeśli jest fałszywe.',f:S.map(s=>({l:s[0],k:'sel',o:['P','F'],a:s[1]?'P':'F'})),ex:S.map(s=>s[2]).join('<br>'),fr:1})}
+
+  /* 7. słoik z miodem (ostatnie zdanie polecenia dopisane – na zdjęciu było ucięte) */
+  {const who=orig?'Jola':p(['Jola','Ola','Kasia','Zosia','Ania']),what=orig?'miodu':p(['miodu','dżemu','powideł']),
+     M=orig?['pół kilograma',500]:p([['pół kilograma',500],['ćwierć kilograma',250],['1 kilogram',1000],['półtora kilograma',1500],['30 dekagramów',300]]),jar=orig?380:r(15,45)*10;
+   T.push({pts:2,q:`${who} kupiła ${M[0]} ${what}. Pusty słoik waży ${jar} g. <b>Ile waży słoik z ${what==='miodu'?'miodem':what==='dżemu'?'dżemem':'powidłami'}?</b> Zapisz działanie.`,f:[{l:'Odpowiedź:',k:'n',a:M[1]+jar,u:'g'}],
+    ex:`${M[0]} = ${M[1]} g. ${M[1]} g + ${jar} g = <b>${M[1]+jar} g</b>.`,fr:2})}
+
+  /* 8. porównywanie dużych liczb */
+  {let L;
+   if(orig)L=[['1700 mln',1700e6,'17 mld',17e9],['8 mln',8e6,'8 564 tys.',8564e3],['2 473 000 000',2473e6,'2 743 mln',2743e6],['241 mln',241e6,'24 100 tys.',241e5]];
+   else{const y=r(2,30),x=p([y*100,y*1000,y*1000+r(1,9)*100,y*1000-r(1,9)*100]);
+     const m=r(3,9),t=p([m*1000+r(1,999),m*1000-r(1,999),m*1000]);
+     let d;do{d=r(1000,9999)}while(new Set(String(d)).size<4||String(d).includes('0'));const ds=String(d).split('');const sw=r(0,2);[ds[sw],ds[sw+1]]=[ds[sw+1],ds[sw]];const full=+ds.join('');const first=p([0,1]);
+     const q=r(110,990),qt=p([q*100,q*1000,q*1000+r(1,9)*10]);
+     L=[[`${sfmt(x)} mln`,x*1e6,`${y} mld`,y*1e9],[`${m} mln`,m*1e6,`${sfmt(t)} tys.`,t*1e3],
+       first?[sfmt(full*1e6),full*1e6,`${sfmt(d)} mln`,d*1e6]:[`${sfmt(d)} mln`,d*1e6,sfmt(full*1e6),full*1e6],[`${q} mln`,q*1e6,`${sfmt(qt)} tys.`,qt*1e3]]}
+   T.push({pts:2,q:'Porównaj podane liczby, wpisując jeden ze znaków: =, &lt; lub &gt;.',grid:1,f:L.map((z,i)=>({l:'abcd'[i]+')',pre:z[0],post:z[2],k:'sel',o:['<','=','>'],a:sign(z[1],z[3])})),
+    ex:'Zamień obie liczby na ten sam zapis (1 tys. = 1000, 1 mln = 1000 tys., 1 mld = 1000 mln):<br>'+L.map((z,i)=>`${'abcd'[i]}) ${sfmt(z[1])} ${sign(z[1],z[3])} ${sfmt(z[3])}`).join('<br>'),
+    fr:1.5,err:'c) 2 473 000 000 to 2 473 mln, a to mniej niż 2 743 mln (porównaj setki milionów: 4 < 7).'})}
+
+  /* 9. kroki */
+  {const K=orig?['Adeli','Adela',1]:p([['Adeli','Adela',1],['Tomka','Tomek',0],['Mai','Maja',1],['Kuby','Kuba',0]]),[who,nm,girl]=K;
+   const bb=orig?'babci':p(['babci','szkoły','sklepu','boiska']),dist=orig?200:r(2,12)*50,st=orig?50:p([20,25,40,50]);
+   const place=bb==='babci'?`domem ${who} a domem ${girl?'jej':'jego'} babci`:`domem ${who} a ${{szkoły:'szkołą',sklepu:'sklepem',boiska:'boiskiem'}[bb]}`;
+   T.push({pts:2,q:`Odległość pomiędzy ${place} wynosi ${dist} m. <b>Ile kroków musiał${girl?'aby':'by'} wykonać ${nm}, przemierzając tę trasę, jeśli każdy krok ${girl?'dziewczyny':'chłopca'} ma ${st} cm?</b>`,f:[{l:'Odpowiedź:',k:'n',a:dist*100/st,u:'kroków'}],
+    ex:`Zamień na te same jednostki: ${dist} m = ${sfmt(dist*100)} cm. ${sfmt(dist*100)} cm : ${st} cm = <b>${dist*100/st} kroków</b>. (Albo: 1 m = 100 cm to ${100/st} ${plural(100/st,'krok','kroki','kroków')}, więc ${dist} · ${100/st} = ${dist*100/st}.)`,
+    fr:0,err:'brak rozwiązania – trzeba zamienić metry na centymetry.'})}
+
+  /* 10. liczby rzymskie */
+  {const RZ=['','','dwa','trzy','cztery','pięć'];let a,m,b,dd,c,k;
+   if(orig){a=21;m=3;b=494;dd=12;c=44;k=4}else{m=p([2,3,4]);a=r(11,Math.floor(160/m));b=r(150,900);dd=r(5,49);k=p([2,3,4,5]);c=k*r(6,30)}
+   T.push({pts:3,q:'Uzupełnij zdania liczbami zapisanymi w systemie rzymskim.',f:[
+    {l:`Liczba ${RZ[m]} razy większa od liczby ${toRoman(a)} to liczba`,k:'r',a:toRoman(a*m),pts:1},
+    {l:`Po zwiększeniu liczby ${toRoman(b)} o`,post:`otrzymamy liczbę ${toRoman(b+dd)}.`,k:'r',a:toRoman(dd),pts:1},
+    {l:`Gdy zmniejszymy liczbę ${toRoman(c)} ${RZ[k]} razy, otrzymamy liczbę`,k:'r',a:toRoman(c/k),pts:1}],
+    ex:`${toRoman(a)} = ${a}, ${a} · ${m} = ${a*m} = <b>${toRoman(a*m)}</b>.<br>${toRoman(b+dd)} − ${toRoman(b)} = ${b+dd} − ${b} = ${dd} = <b>${toRoman(dd)}</b>.<br>${toRoman(c)} = ${c}, ${c} : ${k} = ${c/k} = <b>${toRoman(c/k)}</b>.`,fr:3})}
+
+  /* 11. plan lekcji */
+  {const ORD=['pierwsza','druga','trzecia','czwarta','piąta','szósta'];const who=orig?'Jarka':p(['Jarka','Oli','Michała','Leny']),nm=orig?'Jarek':{Jarka:'Jarek',Oli:'Ola',Michała:'Michał',Leny:'Lena'}[who];
+   const st=orig?470:p([430,450,465,470,475,480]),n=orig?6:r(5,7),sp=orig?3:r(2,n-1),sl=orig?15:p([15,20]),br=10,len=45;
+   const breaks=(n-1)*br+(sl-br),end=st+n*len+breaks;
+   T.push({pts:2,q:`W szkole ${who} lekcje zaczynają się o godzinie ${hm(st)}. Przerwy trwają po ${br} minut, tylko ${ORD[sp-1]} przerwa — śniadaniowa — trwa ${sl} minut. Lekcje trwają po ${len} minut. ${nm} ma dzisiaj ${n} lekcji. <b>O której godzinie skończy lekcje?</b>`,
+    f:[{l:'Godzina:',k:'time',a:end,ph:'gg:mm'}],
+    ex:`${n} lekcji: ${n} · ${len} = ${n*len} min. Przerw jest o 1 mniej niż lekcji, czyli ${n-1}: ${n-2} · ${br} + ${sl} = ${breaks} min. Razem ${n*len+breaks} min = ${Math.floor((n*len+breaks)/60)} h ${(n*len+breaks)%60} min. ${hm(st)} + ${Math.floor((n*len+breaks)/60)} h ${(n*len+breaks)%60} min = <b>${hm(end)}</b>.`,
+    fr:1.5,err:'wynik 13:05 zamiast 13:15 – w liczeniu krok po kroku zgubiło się 10 minut. Szybciej: policz osobno czas lekcji i przerw.'})}
+
+  /* 12. owoce */
+  {const RZ=['','','dwa','trzy'];let P,m,d;
+   if(orig){P=40;m=2;d=130}else{P=r(3,12)*5;m=p([2,3]);d=r(4,16)*10;if((P*m+d)%2)d+=5}
+   const C=P*m,W=C+d,e=W/2,tot=W+C+P;
+   T.push({pts:2,q:`Tata przyniósł wiśnie, czereśnie i porzeczki. Wiśnie ważyły o ${dagTxt(d)} więcej od czereśni, a czereśnie ważyły ${RZ[m]} razy więcej niż porzeczki. Wiadomo, że wiśnie ważyły tyle, co połowa ich samych i jeszcze ${dagTxt(e)}. <b>Ile ważyły wszystkie owoce?</b>`,
+    f:[{l:'Razem:',k:'pair',u:['kg','dag'],a:[Math.floor(tot/100),tot%100]}],
+    ex:`Zacznij od wiśni: skoro wiśnie = połowa wiśni + ${dagTxt(e)}, to druga połowa wiśni to ${dagTxt(e)}, więc wiśnie = 2 · ${e} dag = ${W} dag.<br>Czereśnie: ${W} − ${d} = ${C} dag. Porzeczki: ${C} : ${m} = ${P} dag.<br>Razem: ${W} + ${C} + ${P} = ${tot} dag = <b>${dagTxt(tot)}</b>.`,
+    fr:0,err:'brak rozwiązania – klucz to zacząć od wiśni („połowa i jeszcze…”).'})}
+
+  T.forEach((t,i)=>{t.n=i+1;const each=t.pts/t.f.length;t.f.forEach(fd=>{if(fd.pts==null)fd.pts=each})});
+  return{kind,orig,tasks:T,max:T.reduce((s,t)=>s+t.pts,0),title:orig?'Oryginał (grupa A)':kind==='rand'?'Losowy zestaw':`Wariant ${kind.slice(1)}`};
+}
+
+function schCheckField(fd,key){
+  const v=k=>SCH.vals[k]==null?'':String(SCH.vals[k]);
+  const num=s=>{s=s.replace(/[\s .]/g,'');return /^\d+$/.test(s)?+s:NaN};
+  if(fd.k==='n')return num(v(key))===fd.a;
+  if(fd.k==='pair')return num(v(key+'a'))===fd.a[0]&&num(v(key+'b'))===fd.a[1];
+  if(fd.k==='sel')return v(key)===fd.a;
+  if(fd.k==='r')return v(key).toUpperCase().replace(/\s/g,'')===fd.a;
+  if(fd.k==='w')return[fd.a,...(fd.alt||[])].map(wnorm).includes(wnorm(v(key)));
+  if(fd.k==='time'){const m=v(key).match(/^\s*(\d{1,2})\D*(\d{2})\s*$/);return!!m&&+m[1]*60+ +m[2]===fd.a}
+  return false;
+}
+function schAnsTxt(fd){if(fd.k==='pair')return`${fd.a[0]} ${fd.u[0]} ${fd.a[1]} ${fd.u[1]}`;if(fd.k==='time')return hm(fd.a);if(fd.k==='n')return sfmt(fd.a)+(fd.u?' '+fd.u:'');return fd.a}
+
+function schInput(key,fd,cls,extra){
+  const res=SCH.res,v=SCH.vals[key]??'';
+  const st=res?` disabled class="${cls||''} ${res.ok[key.replace(/[ab]$/,'')]?'ok':'bad'}"`:(cls?` class="${cls}"`:'');
+  return`<input data-sf="${key}" value="${esc(v)}" autocomplete="off" ${extra||''}${st}>`;
+}
+function schField(fd,key){
+  const res=SCH.res;let c='';
+  if(fd.k==='n')c=schInput(key,fd,'',`inputmode="numeric" aria-label="${esc(fd.l)}"`)+(fd.u?`<span class="u">${fd.u}</span>`:'');
+  else if(fd.k==='pair')c=schInput(key+'a',fd,'s','inputmode="numeric"')+`<span class="u">${fd.u[0]}</span>`+schInput(key+'b',fd,'s','inputmode="numeric"')+`<span class="u">${fd.u[1]}</span>`;
+  else if(fd.k==='w')c=schInput(key,fd,'w','autocapitalize="off" spellcheck="false" placeholder="wpisz słowami"');
+  else if(fd.k==='r')c=schInput(key,fd,'r','autocapitalize="characters" spellcheck="false" placeholder="np. XIV"');
+  else if(fd.k==='time')c=schInput(key,fd,'','inputmode="decimal" placeholder="gg:mm"');
+  else if(fd.k==='sel'){const v=SCH.vals[key]??'';c=`<select data-sf="${key}"${res?` disabled class="${res.ok[key]?'ok':'bad'}"`:''}><option value="">?</option>${fd.o.map(o=>`<option${v===o?' selected':''}>${esc(o)}</option>`).join('')}</select>`}
+  const mark=res?(res.ok[key]?'<b class="sq-ok">✔</b>':`<b class="sq-bad">✘ ${esc(schAnsTxt(fd))}</b>`):'';
+  return`<div class="sq-row${fd.k==='w'?' wide':''}"><span class="sq-l">${fd.l}${fd.pre?' '+fd.pre:''}</span>${c}${fd.post?`<span class="sq-l">${fd.post}</span>`:''}${mark}</div>`;
+}
+
+function schOpen(kind){SCH={view:'test',test:schBuild(kind),vals:{},res:null};VIEW='school';render();scrollTo(0,0)}
+function schGrade(){
+  const t=SCH.test,ok={},per=[];let tot=0;
+  t.tasks.forEach((q,i)=>{let s=0;q.f.forEach((fd,j)=>{const k=`${i}-${j}`;ok[k]=schCheckField(fd,k);if(ok[k])s+=fd.pts});per.push(s);tot+=s});
+  const pct=Math.round(tot/t.max*100);SCH.res={ok,per,tot,pct};
+  const d=schLoad();d.best[t.kind]=Math.max(d.best[t.kind]||0,pct);d.hist.unshift({d:Date.now(),k:t.kind,p:tot,pct});d.hist=d.hist.slice(0,30);schSave(d);
+  render();scrollTo(0,0);
+}
+
+function vSchool(){
+  if(SCH.view==='test'&&SCH.test)return vSchoolTest();
+  const d=schLoad(),b=k=>d.best[k]!=null?`<small>najlepiej: ${d.best[k]}%</small>`:'<small>jeszcze nie</small>';
+  const V=['v1','v2','v3','v4','v5'];
+  return`<section class="hello"><span class="eyebrow">Sprawdziany ze szkoły</span><h1>Prawdziwe sprawdziany z klasy</h1>
+    <p class="lead">Najpierw oryginał z tymi samymi pytaniami, które były na sprawdzianie. Potem warianty: te same typy zadań, ale inne liczby – idealne do powtórki.</p></section>
+  <section class="card stack sq-card">
+    <div class="sq-head"><span class="sym">🔢</span><div><b>Systemy zapisywania liczb</b><small>GWO · kl. 4 · grupa A · 23.11.2026 · 12 zadań, 25 p.</small></div></div>
+    <p class="sq-was">Wynik w szkole: <b>18,5 / 25 p. (74%)</b> – ocena <b>3</b>. Do poprawy: zamiana jednostek (km→m, dag→g), porównywanie dużych liczb, zadania z treścią (kroki, plan lekcji, owoce).</p>
+    <div class="sq-vers">
+      <button class="mode" data-act="sopen" data-v="orig"><span class="eyebrow">Oryginał</span><b>Te same pytania</b>${b('orig')}</button>
+      ${V.map((k,i)=>`<button class="mode" data-act="sopen" data-v="${k}"><span class="eyebrow">Wariant ${i+1}</span><b>Inne liczby</b>${b(k)}</button>`).join('')}
+      <button class="mode" data-act="sopen" data-v="rand"><span class="eyebrow">Losowy 🎲</span><b>Za każdym razem nowy</b>${b('rand')}</button>
+    </div></section>
+  ${d.hist.length?`<section class="card stack"><h2>Ostatnie podejścia</h2><div class="sq-hist">${d.hist.slice(0,8).map(h=>`<div><span>${new Date(h.d).toLocaleDateString('pl-PL',{day:'2-digit',month:'2-digit'})} · ${h.k==='orig'?'Oryginał':h.k==='rand'?'Losowy':'Wariant '+h.k.slice(1)}</span><b>${spts(h.p)}/25 p. · ${h.pct}% · ocena ${gradeOf(h.pct)[0]}</b></div>`).join('')}</div></section>`:''}`;
+}
+function vSchoolTest(){
+  const t=SCH.test,res=SCH.res;
+  const top=res?(()=>{const[g,gl]=gradeOf(res.pct);const bad=t.tasks.filter((q,i)=>res.per[i]<q.pts).map(q=>q.n);
+    return`<section class="card sq-res"><div><span class="eyebrow">Wynik</span><b class="sq-big">${spts(res.tot)} / ${t.max} p.</b><span>${res.pct}% · ocena <b>${g}</b> (${gl})${t.orig?` · w szkole było 18,5 p.`:''}</span></div>
+      <p>${bad.length?`Popraw zadania: ${bad.join(', ')}. Pod każdym jest wyjaśnienie, jak to policzyć.`:'Wszystko dobrze – brawo!'}</p>
+      <div class="row"><button class="primary" data-act="sopen" data-v="rand">Nowy losowy zestaw</button><button class="ghost" data-act="sopen" data-v="${t.kind}">${t.kind==='rand'?'Nowe liczby':'Jeszcze raz ten sam'}</button><button class="ghost" data-act="slist">Lista sprawdzianów</button></div></section>`})():'';
+  return`<section class="hello"><span class="eyebrow">Systemy zapisywania liczb · ${t.title}</span><h1>${t.orig?'Sprawdzian z klasy':'Sprawdzian do ćwiczeń'}</h1>
+    <p class="lead">${res?'Zielone – dobrze, czerwone – popraw. Obok jest poprawna odpowiedź.':'Rozwiąż wszystkie zadania jak w szkole (obliczenia na kartce), a na końcu kliknij „Sprawdź sprawdzian”.'}</p>
+    <div class="row"><button class="soft" data-act="slist">◀ Wszystkie warianty</button></div></section>
+  ${top}
+  ${t.tasks.map((q,i)=>`<section class="card task sq">
+    <div class="task-h"><span class="tn">Zadanie ${q.n}.</span><span class="pts">(${res?`<span class="got">${spts(res.per[i])}</span>`:'.....'} / ${spts(q.pts)} p.)</span>${t.orig?`<span class="tag">w szkole: ${spts(q.fr)}/${spts(q.pts)}</span>`:''}</div>
+    <div class="q-text">${q.q}</div>
+    <div class="${q.grid?'sq-grid':''}">${q.f.map((fd,j)=>schField(fd,`${i}-${j}`)).join('')}</div>
+    ${res?`<div class="fb ${res.per[i]===q.pts?'ok':res.per[i]?'part':'bad'}"><p class="expl">${q.ex}</p>${t.orig&&q.err&&q.fr<q.pts?`<p class="pathmsg">Na sprawdzianie: ${q.err}</p>`:''}</div>`:''}
+  </section>`).join('')}
+  ${res?'':`<section class="acts"><button class="primary" data-act="scheck">Sprawdź sprawdzian</button><button class="ghost" data-act="slist">Wróć</button></section>`}`;
+}
+$('#main').addEventListener('input',e=>{const k=e.target.dataset&&e.target.dataset.sf;if(k!=null)SCH.vals[k]=e.target.value});
+$('#main').addEventListener('change',e=>{const k=e.target.dataset&&e.target.dataset.sf;if(k!=null)SCH.vals[k]=e.target.value});
+$('#main').addEventListener('keydown',e=>{if(e.key!=='Enter'||!e.target.dataset||e.target.dataset.sf==null)return;e.preventDefault();const ins=[...document.querySelectorAll('#main [data-sf]:not([disabled])')];const ix=ins.indexOf(e.target);if(ix<ins.length-1)ins[ix+1].focus()});
 
 render();
 <%%/S></body></html></script>
@@ -2979,7 +3211,7 @@ function act(a,el){
     case'weak':startRun('weak',{topics:weakTopics(),level:'auto',n:10});break;
     case'topic':startRun('train',{topics:[el.dataset.id],level:'auto',n:8});break;
     case'subj':setSubject(el.dataset.id);break;
-    case'subjup':{const o=subjOrder().map(x=>x.id).filter(x=>x!==el.dataset.id);o.unshift(el.dataset.id);try{localStorage.setItem('subj-order-v1',JSON.stringify(o))}catch(e){}render();scrollTo(0,0);break}
+    case'subjup':{const o=subjOrder().map(x=>x.id).filter(x=>x!==el.dataset.id);o.unshift(el.dataset.id);try{localStorage.setItem('subj-order-v2',JSON.stringify(o))}catch(e){}render();scrollTo(0,0);break}
     case'tick':{const k=+el.dataset.k,t=+el.dataset.t;valsOf(ns)[k]=t;clr();render();refocus(`[data-act="tick"][data-ns="${ns}"][data-t="${t}"]`);break}
     case'pick':valsOf(ns)[0]=+v;clr();render();refocus(`[data-act="pick"][data-ns="${ns}"][data-v="${v}"]`);break;
     case'sort':valsOf(ns)[+el.dataset.k]=+v;clr();render();refocus(`[data-act="sort"][data-ns="${ns}"][data-k="${el.dataset.k}"][data-v="${v}"]`);break;
@@ -3059,8 +3291,8 @@ function lineSVG(q,ns,vals,locked,show){
 }
 $('#main').addEventListener('keydown',e=>{const el=e.target;if((e.key==='Enter'||e.key===' ')&&el.dataset&&el.dataset.act==='tick'){e.preventDefault();act('tick',el)}});
 
-function subjOrder(){let o=[];try{o=JSON.parse(localStorage.getItem('subj-order-v1'))||[]}catch(e){}
-  const all=Object.values(SUBJECTS);return[...o.map(id=>SUBJECTS[id]).filter(Boolean),...all.filter(s=>!o.includes(s.id))]}
+function subjOrder(){let o=[];try{o=JSON.parse(localStorage.getItem('subj-order-v2'))||[]}catch(e){}
+  const all=[SUBJECTS.math,...Object.values(SUBJECTS).filter(s=>s.id!=='math')];return[...o.map(id=>SUBJECTS[id]).filter(Boolean),...all.filter(s=>!o.includes(s.id))]}
 
 /* matematyka: osobny moduł (rozdziały, ścieżka rozumowania, Kangur) osadzony w ramce */
 function vEmbed(){return'<div id="embed-wrap"></div>'}
