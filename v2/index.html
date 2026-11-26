@@ -366,6 +366,14 @@ body.drawer-open{overflow:hidden}
 .mat li small,.mat-t small{color:var(--muted)}
 .mat-t{display:flex;justify-content:space-between;gap:10px;align-items:center;text-align:left;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:10px 12px;color:var(--fg)}
 .mat-t span{display:flex;flex-direction:column}.mat-t em{font-style:normal;font-weight:800;color:var(--ink);white-space:nowrap}
+.seg{display:flex;border:2px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
+.seg button{flex:1;padding:9px 6px;font-weight:800;background:transparent;color:var(--fg);border:0}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button.on{background:var(--ink);color:var(--on-ink)}
+.bk-in{width:100%;font:inherit;font-size:.85rem;border:2px solid var(--line);border-radius:10px;padding:8px;background:var(--card);color:var(--fg)}
+.okmsg{font-weight:700;color:var(--ink)}
+.draft{display:flex;flex-direction:column;gap:10px;border:2px solid var(--ink);background:var(--ink-soft)}
+.nav button:hover,.back:hover{color:var(--bar-fg);border-color:var(--bar-fg)}
 
 </style>
 </head>
@@ -3997,62 +4005,102 @@ function taskHTML(q, i, vals, res, orig) {
 }
 
 // src/themes.ts
+var LIGHT_STATUS = { "--red": "#B8372D", "--red-soft": "#FBE8E5", "--green": "#1D7A4C", "--green-soft": "#E0F2E7", "--amber": "#97620F", "--amber-soft": "#FBF1DA", "--shadow": "rgba(38,50,58,.10)", "color-scheme": "light" };
+var DARK_STATUS = { "--red": "#FF8B80", "--red-soft": "#3A1F22", "--green": "#6CD29A", "--green-soft": "#16321F", "--amber": "#F0BC5A", "--amber-soft": "#382B15", "--shadow": "rgba(0,0,0,.45)", "color-scheme": "dark" };
 var CARDS = ".card,.mode,.subj,.dz,.task,.tchip,.opt";
 var LOOKS = [
-  { id: "obecny", name: "Obecny", desc: "Spokojne kolory przedmiotów (wygląd jak teraz)" },
+  {
+    id: "obecny",
+    name: "Obecny",
+    desc: "Spokojne kolory przedmiotów (pierwotny wygląd)",
+    light: {
+      vars: { "--paper": "#F5F8F6", "--grid": "#E4EBE6", "--card": "#FFFFFF", "--fg": "#26323A", "--muted": "#5B6870", "--line": "#D4DED8", "--hl": "#FFF0B3", "--bar-fg": "#E8F0EE", "--bar-line": "rgba(255,255,255,.35)", "--bar-on": "#FFFFFF", "--bar-on-fg": "#26323A", "--on-ink": "#FFFFFF" },
+      hub: ["#2F6F6B", "#E1F0EE", "#24504D"],
+      subj: { hist: ["#8A5A2B", "#F3E8DA", "#5E3E1E"], przyroda: ["#2E7549", "#E1F1E6", "#1F5233"], english: ["#3F65AE", "#E3EBF8", "#2C4A80"], math: ["#6F52A5", "#ECE6F6", "#4B3A78"] }
+    },
+    dark: {
+      vars: { "--paper": "#141A1E", "--grid": "#1B2328", "--card": "#1B2328", "--fg": "#E4EBEA", "--muted": "#9AA8AB", "--line": "#2D3A40", "--hl": "#5E5014", "--bar-fg": "#D4E2E0", "--bar-line": "rgba(255,255,255,.2)", "--bar-on": "#F2F6F5", "--bar-on-fg": "#141A1E", "--on-ink": "#101619" },
+      hub: ["#8FD0CA", "#1E3A38", "#1E3A38"],
+      subj: { hist: ["#E0B27E", "#3A2A18", "#3A2A18"], przyroda: ["#8BD1A4", "#17301F", "#17301F"], english: ["#9DB9EE", "#1C2B47", "#1C2B47"], math: ["#BBA6E8", "#2C2347", "#2C2347"] }
+    }
+  },
   {
     id: "zeszyt",
     name: "Zeszyt w kratkę",
-    desc: "Jak szkolny zeszyt: kratka, niebieska okładka, odręczne nagłówki",
-    vars: { "--paper": "#FBFCFF", "--grid": "#DCE7F7", "--card": "#FFFFFF", "--fg": "#1E2A44", "--muted": "#55627A", "--line": "#C9D6EC", "--bar": "#2A4D8F", "--bar-fg": "#E3ECFA", "--bar-line": "rgba(255,255,255,.35)", "--bar-on": "#FFFFFF", "--bar-on-fg": "#1E2A44", "--hl": "#FFF3A8", "color-scheme": "light" },
-    subj: { math: ["#3F51B5", "#E6E9F8"], english: ["#1E6FB8", "#E1EEFA"], hist: ["#A0522D", "#F6E7DD"], przyroda: ["#2E7D4F", "#E1F2E8"] },
+    desc: "Kratka, niebieska okładka, odręczne nagłówki",
+    light: {
+      vars: { "--paper": "#FBFCFF", "--grid": "#DCE7F7", "--card": "#FFFFFF", "--fg": "#1E2A44", "--muted": "#55627A", "--line": "#C9D6EC", "--bar": "#2A4D8F", "--bar-fg": "#E3ECFA", "--bar-line": "rgba(255,255,255,.35)", "--bar-on": "#FFFFFF", "--bar-on-fg": "#1E2A44", "--hl": "#FFF3A8", "--on-ink": "#FFFFFF", "--margin": "#F3A6A6" },
+      hub: ["#2A4D8F", "#E3EAF7"],
+      subj: { math: ["#3F51B5", "#E6E9F8"], english: ["#1E6FB8", "#E1EEFA"], hist: ["#A0522D", "#F6E7DD"], przyroda: ["#2E7D4F", "#E1F2E8"] }
+    },
+    dark: {
+      vars: { "--paper": "#121A2B", "--grid": "#1C2840", "--card": "#17223A", "--fg": "#E6ECF8", "--muted": "#9AA9C4", "--line": "#2A3A5C", "--bar": "#0F1F44", "--bar-fg": "#CFE0FF", "--bar-line": "rgba(207,224,255,.25)", "--bar-on": "#FFFFFF", "--bar-on-fg": "#121A2B", "--hl": "#4A4420", "--on-ink": "#0E1525", "--margin": "#7A3A44" },
+      hub: ["#9DB6F0", "#22305A"],
+      subj: { math: ["#9AA8FF", "#262E55"], english: ["#7FB8F0", "#1B3150"], hist: ["#E2A27A", "#3A2A22"], przyroda: ["#7FCF9F", "#1A3628"] }
+    },
     css: `body{background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px}
       h1,h2,.subj b,.dz-b b{font-family:var(--hand);font-weight:700;letter-spacing:.01em} h1{font-size:2.7rem} h2{font-size:1.7rem}
       .brand{font-family:var(--hand);font-size:1.7rem;font-weight:700}
-      ${CARDS}{border-color:var(--line);box-shadow:0 2px 0 var(--line)} main{border-left:2px solid #F3A6A6;padding-left:18px}`
+      ${CARDS}{border-color:var(--line);box-shadow:0 2px 0 var(--line)} main{border-left:2px solid var(--margin);padding-left:18px}`
   },
   {
     id: "pastel",
     name: "Pastele",
-    desc: "Miękkie, zaokrąglone, jasne kolory i okrągła czcionka",
-    vars: { "--paper": "#FFF6F1", "--grid": "#FFF6F1", "--card": "#FFFFFF", "--fg": "#3B3346", "--muted": "#7A6F86", "--line": "#F0E2EA", "--bar": "#F7DCEB", "--bar-fg": "#5A3E66", "--bar-line": "rgba(90,62,102,.25)", "--bar-on": "#5A3E66", "--bar-on-fg": "#FFFFFF", "--hl": "#FFE9A8", "--display": "'Fredoka','Baloo 2',system-ui,sans-serif", "color-scheme": "light" },
-    subj: { math: ["#8A6BD6", "#F1EBFC"], english: ["#4B8BD6", "#E8F1FC"], hist: ["#D0844A", "#FCEEE3"], przyroda: ["#45A577", "#E4F5EC"] },
+    desc: "Miękkie, zaokrąglone kolory i okrągła czcionka",
+    light: {
+      vars: { "--paper": "#FFF6F1", "--grid": "#FFF6F1", "--card": "#FFFFFF", "--fg": "#3B3346", "--muted": "#7A6F86", "--line": "#F0E2EA", "--bar": "#F7DCEB", "--bar-fg": "#5A3E66", "--bar-line": "rgba(90,62,102,.25)", "--bar-on": "#5A3E66", "--bar-on-fg": "#FFFFFF", "--hl": "#FFE9A8", "--on-ink": "#FFFFFF", "--soft-shadow": "rgba(150,110,140,.14)" },
+      hub: ["#8A6BD6", "#F1EBFC"],
+      subj: { math: ["#8A6BD6", "#F1EBFC"], english: ["#4B8BD6", "#E8F1FC"], hist: ["#D0844A", "#FCEEE3"], przyroda: ["#45A577", "#E4F5EC"] }
+    },
+    dark: {
+      vars: { "--paper": "#221D29", "--grid": "#221D29", "--card": "#2C2535", "--fg": "#F1E9F5", "--muted": "#B8A9C4", "--line": "#3A3145", "--bar": "#3A2D44", "--bar-fg": "#F3D9EA", "--bar-line": "rgba(243,217,234,.25)", "--bar-on": "#F3D9EA", "--bar-on-fg": "#2C2535", "--hl": "#5A4A2A", "--on-ink": "#221D29", "--soft-shadow": "rgba(0,0,0,.35)" },
+      hub: ["#C3AEFF", "#3A3158"],
+      subj: { math: ["#C3AEFF", "#3A3158"], english: ["#9CC6FF", "#24344F"], hist: ["#F2B88C", "#45322A"], przyroda: ["#95DDB7", "#21392F"] }
+    },
     css: `body{background:var(--paper)}
-      ${CARDS}{border-radius:24px;border-color:transparent;box-shadow:0 8px 24px rgba(150,110,140,.14)}
+      ${CARDS}{border-radius:24px;border-color:transparent;box-shadow:0 8px 24px var(--soft-shadow)}
       .task{border:2px solid var(--ink-soft)} .primary,.ghost,.soft,.nav button,.back,.chip{border-radius:999px}
-      .brand,.brand small{color:var(--bar-fg)} h1,h2,.subj b,.dz-b b,.mode b,.tn{font-family:var(--display);font-weight:600}
+      .brand,.brand small{color:var(--bar-fg)} h1,h2,.subj b,.dz-b b,.mode b,.tn{font-family:'Fredoka','Baloo 2',system-ui,sans-serif;font-weight:600}
       .subj::before{height:0} .subj .big-ic,.dz-n{border-radius:50%}`
   },
   {
     id: "kosmos",
     name: "Kosmos",
-    desc: "Ciemne niebo z gwiazdami i świecące kolory – dobre wieczorem",
-    vars: {
-      "--paper": "#0E1330",
-      "--grid": "#0E1330",
-      "--card": "#182049",
-      "--fg": "#EEF1FF",
-      "--muted": "#A9B2E2",
-      "--line": "#2D3974",
-      "--bar": "#090C24",
-      "--bar-fg": "#C9D1FF",
-      "--bar-line": "rgba(201,209,255,.25)",
-      "--bar-on": "#FFD86B",
-      "--bar-on-fg": "#0E1330",
-      "--on-ink": "#0E1330",
-      "--hl": "#4B3F8F",
-      "--shadow": "rgba(0,0,0,.5)",
-      "--red": "#FF8F8F",
-      "--red-soft": "#3B1F35",
-      "--green": "#7EE6A8",
-      "--green-soft": "#173A35",
-      "--amber": "#FFC46B",
-      "--amber-soft": "#3A2F24",
-      "color-scheme": "dark"
+    desc: "Gwiazdy i świecące kolory (jasny tryb – poranne niebo)",
+    light: {
+      vars: { "--paper": "#EEF0FF", "--grid": "#EEF0FF", "--card": "#FFFFFF", "--fg": "#1B2150", "--muted": "#545C8F", "--line": "#D4D9F5", "--bar": "#1B2150", "--bar-fg": "#DDE2FF", "--bar-line": "rgba(221,226,255,.3)", "--bar-on": "#FFD86B", "--bar-on-fg": "#1B2150", "--on-ink": "#FFFFFF", "--hl": "#FFF0A8", "--star": "#B8BFEA", "--glow": "rgba(0,0,0,.08)" },
+      hub: ["#6C4CE0", "#ECE7FF"],
+      subj: { math: ["#6C4CE0", "#ECE7FF"], english: ["#1F7AD6", "#E2EFFC"], hist: ["#C46A14", "#FBEBDB"], przyroda: ["#148A55", "#DFF3E9"] }
     },
-    subj: { math: ["#B9A0FF", "#2A2560"], english: ["#7CC4FF", "#1D2F5E"], hist: ["#FFC07A", "#3A2B30"], przyroda: ["#7EE6A8", "#173A3C"] },
-    css: `body{background-color:var(--paper);background-image:radial-gradient(1.2px 1.2px at 20px 30px,#fff 50%,transparent 52%),radial-gradient(1px 1px at 130px 90px,#cfd6ff 50%,transparent 52%),radial-gradient(1.6px 1.6px at 210px 170px,#fff 50%,transparent 52%),radial-gradient(1px 1px at 70px 200px,#9fb0ff 50%,transparent 52%);background-size:250px 230px}
-      ${CARDS}{border-color:var(--line);box-shadow:0 10px 30px rgba(0,0,0,.35)}
+    dark: {
+      vars: {
+        "--paper": "#0E1330",
+        "--grid": "#0E1330",
+        "--card": "#182049",
+        "--fg": "#EEF1FF",
+        "--muted": "#A9B2E2",
+        "--line": "#2D3974",
+        "--bar": "#090C24",
+        "--bar-fg": "#C9D1FF",
+        "--bar-line": "rgba(201,209,255,.25)",
+        "--bar-on": "#FFD86B",
+        "--bar-on-fg": "#0E1330",
+        "--on-ink": "#0E1330",
+        "--hl": "#4B3F8F",
+        "--star": "#FFFFFF",
+        "--glow": "rgba(0,0,0,.35)",
+        "--red": "#FF8F8F",
+        "--red-soft": "#3B1F35",
+        "--green": "#7EE6A8",
+        "--green-soft": "#173A35",
+        "--amber": "#FFC46B",
+        "--amber-soft": "#3A2F24"
+      },
+      hub: ["#B9A0FF", "#2A2560"],
+      subj: { math: ["#B9A0FF", "#2A2560"], english: ["#7CC4FF", "#1D2F5E"], hist: ["#FFC07A", "#3A2B30"], przyroda: ["#7EE6A8", "#173A3C"] }
+    },
+    css: `body{background-color:var(--paper);background-image:radial-gradient(1.2px 1.2px at 20px 30px,var(--star) 50%,transparent 52%),radial-gradient(1px 1px at 130px 90px,var(--star) 50%,transparent 52%),radial-gradient(1.6px 1.6px at 210px 170px,var(--star) 50%,transparent 52%),radial-gradient(1px 1px at 70px 200px,var(--star) 50%,transparent 52%);background-size:250px 230px}
+      ${CARDS}{border-color:var(--line);box-shadow:0 10px 30px var(--glow)}
       .subj:hover,.mode:hover,.dz:hover{box-shadow:0 0 22px color-mix(in srgb,var(--c,var(--ink)) 45%,transparent)}
       .top{border-bottom:1px solid var(--line)}`
   },
@@ -4060,73 +4108,224 @@ var LOOKS = [
     id: "natura",
     name: "Las",
     desc: "Ciepły beż, zielenie i drewno – spokojnie i naturalnie",
-    vars: { "--paper": "#F3EEE2", "--grid": "#F3EEE2", "--card": "#FFFDF7", "--fg": "#2F3A2C", "--muted": "#6A705E", "--line": "#DCD2BE", "--bar": "#3E5C3A", "--bar-fg": "#E8F0DF", "--bar-line": "rgba(232,240,223,.35)", "--bar-on": "#F2D58A", "--bar-on-fg": "#2F3A2C", "--hl": "#F5E3A3", "color-scheme": "light" },
-    subj: { math: ["#6B5B95", "#ECE8F3"], english: ["#3D6E8F", "#E3EDF3"], hist: ["#9A5B2E", "#F3E6D9"], przyroda: ["#4C7A3D", "#E5EFDD"] },
+    light: {
+      vars: { "--paper": "#F3EEE2", "--grid": "#F3EEE2", "--card": "#FFFDF7", "--fg": "#2F3A2C", "--muted": "#6A705E", "--line": "#DCD2BE", "--bar": "#3E5C3A", "--bar-fg": "#E8F0DF", "--bar-line": "rgba(232,240,223,.35)", "--bar-on": "#F2D58A", "--bar-on-fg": "#2F3A2C", "--hl": "#F5E3A3", "--on-ink": "#FFFFFF", "--accent2": "#8DB580", "--wood": "#E6DCC8" },
+      hub: ["#4C7A3D", "#E5EFDD"],
+      subj: { math: ["#6B5B95", "#ECE8F3"], english: ["#3D6E8F", "#E3EDF3"], hist: ["#9A5B2E", "#F3E6D9"], przyroda: ["#4C7A3D", "#E5EFDD"] }
+    },
+    dark: {
+      vars: { "--paper": "#1B1F17", "--grid": "#1B1F17", "--card": "#242A1F", "--fg": "#E9EEDF", "--muted": "#A9B19B", "--line": "#39412F", "--bar": "#22311F", "--bar-fg": "#D9E6CB", "--bar-line": "rgba(217,230,203,.25)", "--bar-on": "#E8C979", "--bar-on-fg": "#1B1F17", "--hl": "#4F4620", "--on-ink": "#1B1F17", "--accent2": "#4E6B44", "--wood": "#2E3427" },
+      hub: ["#9CCB86", "#243321"],
+      subj: { math: ["#B7A5DC", "#2E2A3A"], english: ["#8FB9D6", "#1F2E38"], hist: ["#DDA77A", "#3A2C20"], przyroda: ["#9CCB86", "#243321"] }
+    },
     css: `body{background:var(--paper)}
-      ${CARDS}{border-radius:10px;border-width:2px;border-color:var(--line);box-shadow:0 3px 0 #E6DCC8}
-      .top{border-bottom:5px solid #8DB580} .subj::before{height:12px}`
+      ${CARDS}{border-radius:10px;border-width:2px;border-color:var(--line);box-shadow:0 3px 0 var(--wood)}
+      .top{border-bottom:5px solid var(--accent2)} .subj::before{height:12px}`
   },
   {
     id: "komiks",
     name: "Komiks",
     desc: "Grube kontury, mocne kolory i cień jak w komiksie",
-    vars: { "--paper": "#FFF8D9", "--grid": "#FFF8D9", "--card": "#FFFFFF", "--fg": "#141414", "--muted": "#4A4A4A", "--line": "#141414", "--bar": "#FFD23F", "--bar-fg": "#141414", "--bar-line": "#141414", "--bar-on": "#141414", "--bar-on-fg": "#FFD23F", "--hl": "#FFE45E", "color-scheme": "light" },
-    subj: { math: ["#7B2FF7", "#EFE4FF"], english: ["#0068E6", "#DDEBFF"], hist: ["#E35D00", "#FFE6D2"], przyroda: ["#00995F", "#D9F5E8"] },
-    css: `body{background-color:var(--paper);background-image:radial-gradient(#EADB8E 1.2px,transparent 1.4px);background-size:14px 14px}
-      ${CARDS},.primary,.ghost,.soft,.nav button,.back,.chip,.slot,.step,.srow{border:3px solid #141414;box-shadow:4px 4px 0 #141414}
-      .primary:active,.mode:active,.subj:active{transform:translate(2px,2px);box-shadow:2px 2px 0 #141414}
+    light: {
+      vars: { "--paper": "#FFF8D9", "--grid": "#EADB8E", "--card": "#FFFFFF", "--fg": "#141414", "--muted": "#4A4A4A", "--line": "#141414", "--ol": "#141414", "--bar": "#FFD23F", "--bar-fg": "#141414", "--bar-line": "#141414", "--bar-on": "#141414", "--bar-on-fg": "#FFD23F", "--hl": "#FFE45E", "--on-ink": "#FFFFFF" },
+      hub: ["#7B2FF7", "#EFE4FF"],
+      subj: { math: ["#7B2FF7", "#EFE4FF"], english: ["#0068E6", "#DDEBFF"], hist: ["#E35D00", "#FFE6D2"], przyroda: ["#00995F", "#D9F5E8"] }
+    },
+    dark: {
+      vars: { "--paper": "#1A1A1A", "--grid": "#2C2C2C", "--card": "#262626", "--fg": "#F5F5F5", "--muted": "#BDBDBD", "--line": "#F5F5F5", "--ol": "#F5F5F5", "--bar": "#FFD23F", "--bar-fg": "#141414", "--bar-line": "#141414", "--bar-on": "#141414", "--bar-on-fg": "#FFD23F", "--hl": "#5C4F12", "--on-ink": "#141414" },
+      hub: ["#B98BFF", "#33264D"],
+      subj: { math: ["#B98BFF", "#33264D"], english: ["#5AA8FF", "#1B2D47"], hist: ["#FF9A4D", "#43291A"], przyroda: ["#3FD99A", "#173B2C"] }
+    },
+    css: `body{background-color:var(--paper);background-image:radial-gradient(var(--grid) 1.2px,transparent 1.4px);background-size:14px 14px}
+      ${CARDS},.primary,.ghost,.soft,.chip,.slot,.step,.srow{border:3px solid var(--ol);box-shadow:4px 4px 0 var(--ol)}
+      .top .nav button,.top .back{border:3px solid #141414;box-shadow:3px 3px 0 #141414}
+      .primary:active,.mode:active,.subj:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ol)}
       h1{font-family:'Bangers',var(--display);font-weight:400;letter-spacing:.04em;font-size:2.9rem}
       .brand,.brand small{color:#141414} .brand{font-family:'Bangers',var(--display);font-weight:400;letter-spacing:.06em;font-size:1.6rem}
-      .top{border-bottom:3px solid #141414} .subj::before{height:12px;border-bottom:3px solid #141414}`
+      .top{border-bottom:3px solid #141414} .subj::before{height:12px;border-bottom:3px solid var(--ol)}`
   }
 ];
+var MODES = [["system", "Jak w systemie"], ["light", "Jasny"], ["dark", "Ciemny"]];
 function looksCSS() {
   const decl = (v) => Object.entries(v).map(([k, x]) => `${k}:${x}`).join(";");
-  return LOOKS.filter((l) => l.vars).map((l) => {
-    const root = `html:root[data-look="${l.id}"]`;
-    const cs = l.subj ? Object.entries(l.subj).map(([k, [ink, soft]]) => `--c-${k}:${ink};--cs-${k}:${soft}`).join(";") : "";
-    let s = `${root},.lp[data-look="${l.id}"]{${decl(l.vars)};${cs}}
+  const inkDecl = (i) => `--ink:${i[0]};--ink-soft:${i[1]}${i[2] ? `;--bar:${i[2]}` : ""}`;
+  let out = "";
+  for (const l of LOOKS) {
+    for (const sc of ["light", "dark"]) {
+      const p = l[sc];
+      const R = sc === "light" ? `html:root[data-look="${l.id}"]` : `html:root[data-look="${l.id}"][data-scheme="dark"]`;
+      const L = sc === "light" ? `.lp[data-look="${l.id}"]` : `html[data-scheme="dark"] .lp[data-look="${l.id}"]`;
+      const cs = Object.entries(p.subj).map(([k, i]) => `--c-${k}:${i[0]};--cs-${k}:${i[1]}`).join(";");
+      out += `${R},${L}{${decl({ ...sc === "light" ? LIGHT_STATUS : DARK_STATUS, ...p.vars })};${cs}}
 `;
-    if (l.subj)
-      for (const [k, [ink, soft]] of Object.entries(l.subj))
-        s += `${root}[data-subj="${k}"],.lp[data-look="${l.id}"][data-subj="${k}"]{--ink:${ink};--ink-soft:${soft}}
+      out += `${R}:not([data-subj]),${L}{${inkDecl(p.hub)}}
 `;
-    s += `${root}:not([data-subj]),.lp[data-look="${l.id}"]{--ink:${l.subj.math[0]};--ink-soft:${l.subj.math[1]}}
+      for (const [k, i] of Object.entries(p.subj))
+        out += `${R}[data-subj="${k}"]{${inkDecl(i)}}
 `;
+    }
     if (l.css)
-      s += l.css.split("}").map((r) => r.trim()).filter(Boolean).map((r) => {
+      out += l.css.split("}").map((r) => r.trim()).filter(Boolean).map((r) => {
         const [sel, body] = r.split("{");
         return sel.split(",").map((x) => `html[data-look="${l.id}"] ${x.trim()}`).join(",") + "{" + body + "}";
       }).join(`
 `) + `
 `;
-    return s;
-  }).join("");
+  }
+  return out;
 }
 var KEY2 = "sprawdziany-look";
-var getLook = () => {
+var MKEY = "sprawdziany-mode";
+var get = (k, d) => {
   try {
-    return localStorage.getItem(KEY2) || "obecny";
+    return localStorage.getItem(k) || d;
   } catch {
-    return "obecny";
+    return d;
   }
 };
+var getLook = () => {
+  const v = get(KEY2, "obecny");
+  return LOOKS.some((l) => l.id === v) ? v : "obecny";
+};
+var getMode = () => {
+  const v = get(MKEY, "system");
+  return MODES.some((m) => m[0] === v) ? v : "system";
+};
+var mq = typeof matchMedia === "function" ? matchMedia("(prefers-color-scheme: dark)") : null;
+var scheme = () => {
+  const m = getMode();
+  return m === "system" ? mq?.matches ? "dark" : "light" : m;
+};
+function applyLook(doc, frame = false) {
+  const h = doc.documentElement;
+  const l = getLook();
+  if (frame && l === "obecny")
+    delete h.dataset.look;
+  else
+    h.dataset.look = l;
+  h.dataset.scheme = scheme();
+  h.dataset.theme = scheme();
+}
+function applyAll() {
+  applyLook(document);
+  const fr = document.getElementById("math-frame");
+  if (fr?.contentDocument)
+    applyLook(fr.contentDocument, true);
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta)
+    meta.setAttribute("content", getComputedStyle(document.documentElement).getPropertyValue("--bar").trim() || "#2F4F4F");
+}
 function setLook(id) {
   try {
     localStorage.setItem(KEY2, id);
   } catch {}
-  applyLook(document, id);
-  const fr = document.getElementById("math-frame");
-  if (fr?.contentDocument)
-    applyLook(fr.contentDocument, id);
+  applyAll();
 }
-function applyLook(doc, id) {
-  if (id === "obecny")
-    doc.documentElement.removeAttribute("data-look");
-  else
-    doc.documentElement.dataset.look = id;
+function setMode(m) {
+  try {
+    localStorage.setItem(MKEY, m);
+  } catch {}
+  applyAll();
 }
+mq?.addEventListener?.("change", () => {
+  if (getMode() === "system")
+    applyAll();
+});
 var FONTS = "https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&family=Caveat:wght@600;700&family=Fredoka:wght@500;600;700&family=Bangers&display=swap";
+
+// src/core/backup.ts
+var APP_ID = "szkolne-sprawdziany";
+var FORMAT = 1;
+var LEGACY_KEYS = ["lid4-v1", "hist4-v1", "prz4-v1", "ang4-v1", "school-tests-v1", "subj-order-v1", "subj-order-v2"];
+var PREFIX = "sprawdziany-";
+var PREV = "sprawdziany-backup-prev";
+function ourKeys() {
+  const out = [];
+  try {
+    for (let i = 0;i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k.startsWith(PREFIX) && k !== PREV || LEGACY_KEYS.includes(k))
+        out.push(k);
+    }
+  } catch {}
+  return out.sort();
+}
+function makeBackup() {
+  const data = {};
+  for (const k of ourKeys()) {
+    const v = localStorage.getItem(k);
+    if (v != null)
+      data[k] = v;
+  }
+  return { app: APP_ID, format: FORMAT, date: new Date().toISOString(), data };
+}
+var backupText = () => JSON.stringify(makeBackup());
+function restore(text) {
+  let b;
+  try {
+    b = JSON.parse(text.trim());
+  } catch {
+    return { ok: false, error: "To nie jest plik kopii (zły format)." };
+  }
+  if (!b || b.app !== APP_ID || typeof b.data !== "object")
+    return { ok: false, error: "To nie jest kopia tej aplikacji." };
+  if (b.format > FORMAT)
+    return { ok: false, error: "Kopia pochodzi z nowszej wersji aplikacji – najpierw odśwież aplikację." };
+  const keys = Object.keys(b.data).filter((k) => k.startsWith(PREFIX) && k !== PREV || LEGACY_KEYS.includes(k));
+  try {
+    localStorage.setItem(PREV, backupText());
+    for (const k of keys)
+      localStorage.setItem(k, b.data[k]);
+  } catch {
+    return { ok: false, error: "Nie udało się zapisać (brak miejsca albo tryb prywatny)." };
+  }
+  return { ok: true, keys: keys.length, date: b.date };
+}
+var hasPrev = () => {
+  try {
+    return !!localStorage.getItem(PREV);
+  } catch {
+    return false;
+  }
+};
+function undoRestore() {
+  try {
+    const t = localStorage.getItem(PREV);
+    if (!t)
+      return false;
+    const b = JSON.parse(t);
+    for (const k of ourKeys())
+      localStorage.removeItem(k);
+    for (const [k, v] of Object.entries(b.data))
+      localStorage.setItem(k, v);
+    localStorage.removeItem(PREV);
+    return true;
+  } catch {
+    return false;
+  }
+}
+function download() {
+  const blob = new Blob([JSON.stringify(makeBackup(), null, 1)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `sprawdziany-kopia-${new Date().toISOString().slice(0, 10)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => {
+    URL.revokeObjectURL(a.href);
+    a.remove();
+  }, 1000);
+  try {
+    localStorage.setItem("sprawdziany-last-backup", new Date().toISOString());
+  } catch {}
+}
+var lastBackup = () => {
+  try {
+    return localStorage.getItem("sprawdziany-last-backup");
+  } catch {
+    return null;
+  }
+};
 
 // src/main.ts
 var $ = (s) => document.querySelector(s);
@@ -4137,6 +4336,9 @@ var RUN = null;
 var SCH = null;
 var CONFIRM = false;
 var SETTINGS = false;
+var BK = "";
+var BKTXT = "";
+var BKPASTE = false;
 var skillsOf = (d) => d.lessons.flatMap((l) => l.skills);
 var playable = (sk) => sk.filter((s) => s.gens.length);
 function mastery(subj, sk) {
@@ -4229,6 +4431,7 @@ function vHub() {
   const st = streakDays();
   return `<section class="hello"><span class="eyebrow">Szkolne sprawdziany · kl. 4</span><h1>Cześć, ${esc(S.name)}!</h1>
     <p class="lead">Wybierz przedmiot. Każdy jest podzielony na działy – tak jak sprawdziany w szkole.${st > 1 ? ` Seria nauki: <b>${st}</b> ${plural(st, "dzień", "dni", "dni")} z rzędu.` : ""}</p></section>
+  ${DRAFT_INFO ? `<section class="card draft"><span>⏸ Masz niedokończone ćwiczenie: <b>${esc(DRAFT_INFO.label)}</b></span><div class="row"><button class="primary" data-act="draft">Wróć do niego</button><button class="soft" data-act="draft-del">Usuń</button></div></section>` : ""}
   <section class="subjects">${SUBJECTS.map((s) => {
     const m = mastery(s.id, s.dzialy.flatMap(skillsOf));
     const tests = s.dzialy.reduce((a, d) => a + (d.schoolTests?.length || 0), 0);
@@ -4401,7 +4604,7 @@ function mountMath() {
 ${looksCSS()}</style></head>`);
   fr.addEventListener("load", () => {
     if (fr.contentDocument)
-      applyLook(fr.contentDocument, getLook());
+      applyLook(fr.contentDocument, true);
   });
   w.appendChild(fr);
   fitMath();
@@ -4412,20 +4615,98 @@ function fitMath() {
     fr.style.height = Math.max(320, innerHeight - $(".top").getBoundingClientRect().bottom) + "px";
 }
 addEventListener("resize", fitMath);
+var DRAFT = "sprawdziany-draft";
+var findSkill = (id) => SUBJ.dzialy.flatMap(skillsOf).find((s) => s.id === id);
+function saveDraft() {
+  try {
+    if (RUN && !RUN.done)
+      localStorage.setItem(DRAFT, JSON.stringify({ kind: "run", subj: SUBJ.id, dz: DZ.id, d: Date.now(), run: { ...RUN, skills: RUN.skills.map((s) => s.id), order: (RUN.order || []).map((s) => s.id), items: RUN.items.map((it) => it && { skill: it.skill.id, q: it.q, level: it.level }), seen: [...RUN.seen] } }));
+    else if (SCH && !SCH.res)
+      localStorage.setItem(DRAFT, JSON.stringify({ kind: "school", subj: SUBJ.id, dz: DZ.id, d: Date.now(), sch: { test: SCH.test.id, variant: SCH.variant, tasks: SCH.tasks, vals: SCH.vals } }));
+    else if (VIEW === "result" || VIEW === "school" && SCH?.res)
+      localStorage.removeItem(DRAFT);
+  } catch {}
+}
+var DRAFT_INFO = null;
+function loadDraft() {
+  try {
+    const d = JSON.parse(localStorage.getItem(DRAFT) || "null");
+    if (!d)
+      return;
+    const s = SUBJECTS.find((x) => x.id === d.subj);
+    if (!s)
+      return;
+    const label = d.kind === "run" ? `${s.name}: ${d.run.label} (${d.run.mode === "test" ? "sprawdzian" : `zadanie ${d.run.i + 1}/${d.run.n}`})` : `${s.name}: sprawdzian z klasy`;
+    DRAFT_INFO = { label, data: d };
+  } catch {
+    DRAFT_INFO = null;
+  }
+}
+function clearDraft() {
+  DRAFT_INFO = null;
+  try {
+    localStorage.removeItem(DRAFT);
+  } catch {}
+}
+function resumeDraft() {
+  const d = DRAFT_INFO?.data;
+  if (!d)
+    return;
+  try {
+    SUBJ = SUBJECTS.find((x) => x.id === d.subj);
+    DZ = SUBJ.dzialy.find((x) => x.id === d.dz) || SUBJ.dzialy[0];
+    if (d.kind === "run") {
+      const r = d.run;
+      RUN = { ...r, skills: r.skills.map(findSkill), items: r.items.map((it) => it && { skill: findSkill(it.skill), q: it.q, level: it.level }), seen: new Set(r.seen) };
+      RUN.order = r.order.map(findSkill);
+      VIEW = "run";
+    } else {
+      const t = SUBJ.dzialy.flatMap((x) => x.schoolTests || []).find((x) => x.id === d.sch.test);
+      SCH = { test: t, variant: d.sch.variant, tasks: d.sch.tasks, vals: d.sch.vals, res: null };
+      VIEW = "school";
+    }
+    DRAFT_INFO = null;
+    render();
+    scrollTo(0, 0);
+  } catch {
+    clearDraft();
+    render();
+  }
+}
+function doRestore(text) {
+  const r = restore(text);
+  if (r.ok) {
+    BK = `Wczytano kopię z ${new Date(r.date).toLocaleString("pl-PL")}. Odświeżam…`;
+    renderSettings();
+    setTimeout(() => location.reload(), 900);
+  } else {
+    BK = r.error;
+    renderSettings();
+  }
+}
 function vSettings() {
   const cur = getLook();
   const tests = SUBJECTS.flatMap((s) => s.dzialy.flatMap((d) => (d.schoolTests || []).map((t) => ({ s, d, t }))));
   return `<div class="scrim" data-act="settings-close"></div>
   <aside class="drawer" role="dialog" aria-label="Ustawienia">
     <div class="drawer-h"><b>Ustawienia</b><button class="soft" data-act="settings-close" aria-label="Zamknij">✕</button></div>
-    <section class="stack"><h2>Wygląd</h2><p class="note">Wybierz wariant – zmienia się od razu. Dla wybranego zrobimy potem wersję jasną, ciemną i „jak w systemie”.</p>
-      <div class="lp-grid">${LOOKS.map((l) => `<button class="lp${cur === l.id ? " on" : ""}" data-look="${l.id === "obecny" ? "" : l.id}" data-act="look" data-v="${l.id}" aria-pressed="${cur === l.id}">
+    <section class="stack"><h2>Wygląd</h2><p class="note">Wybierz tryb i wariant kolorystyczny – zmiana działa od razu i zostaje zapamiętana.</p>
+      <div class="seg" role="group" aria-label="Tryb">${MODES.map(([m, n]) => `<button class="${getMode() === m ? "on" : ""}" data-act="mode" data-v="${m}" aria-pressed="${getMode() === m}">${n}</button>`).join("")}</div>
+      <div class="lp-grid">${LOOKS.map((l) => `<button class="lp${cur === l.id ? " on" : ""}" data-look="${l.id}" data-act="look" data-v="${l.id}" aria-pressed="${cur === l.id}">
         <span class="lp-prev"><span class="lp-bar"></span><span class="lp-card"><i></i><i></i><em></em></span></span>
         <b>${l.name}${cur === l.id ? " ✓" : ""}</b><small>${l.desc}</small></button>`).join("")}</div></section>
     <section class="stack"><h2>Materiały w aplikacji</h2><p class="note">Zakres książek i działów, które już są – zanim dodasz nowe zdjęcia, sprawdź tu, żeby się nie dublowały.</p>
       ${SUBJECTS.map((s) => `<div class="mat"><b>${s.icon} ${s.name}</b><ul>${s.dzialy.map((d) => `<li><span>${d.name}${d.pages ? ` <small>(${d.pages})</small>` : ""}</span><small>${d.lessons.length > 1 ? d.lessons.length + " lekcji · " : ""}${skillsOf(d).length} umiej.${d.tentative ? " · ⚠ wstępne" : ""}</small></li>`).join("")}</ul></div>`).join("")}</section>
     <section class="stack"><h2>Sprawdziany z klasy</h2>
       ${tests.length ? tests.map(({ s, d, t }) => `<button class="mat-t" data-act="settings-test" data-s="${s.id}" data-d="${d.id}"><span>${s.icon} <b>${t.title}</b><small>${new Date(t.date).toLocaleDateString("pl-PL")} · ${t.info}</small></span>${t.result ? `<em>${spts(t.result.pts)}/${t.max} p. · ocena ${t.result.grade}</em>` : ""}</button>`).join("") : '<p class="note">Jeszcze żadnego.</p>'}</section>
+    <section class="stack"><h2>Kopia i synchronizacja</h2>
+      <p class="note">Wyniki i rozpoczęte ćwiczenia zapisują się same na tym urządzeniu i zostają po aktualizacji aplikacji. Kopia służy do przeniesienia ich na inny telefon lub komputer albo do odtworzenia.${lastBackup() ? ` Ostatnia kopia: ${new Date(lastBackup()).toLocaleDateString("pl-PL")}.` : ""}</p>
+      <div class="row"><button class="primary" data-act="bk-file">⬇ Pobierz kopię (plik)</button><button class="ghost" data-act="bk-pick">⬆ Wczytaj z pliku</button></div>
+      <div class="row"><button class="soft" data-act="bk-copy">Kopiuj jako tekst</button><button class="soft" data-act="bk-paste">Wklej kopię (tekst)</button>${hasPrev() ? '<button class="soft" data-act="bk-undo">↶ Cofnij wczytanie</button>' : ""}</div>
+      <input type="file" id="bk-file" accept=".json,application/json,text/plain" hidden>
+      ${BKPASTE ? '<textarea id="bk-in" class="bk-in" rows="4" placeholder="Wklej tutaj tekst kopii"></textarea><div class="row"><button class="primary" data-act="bk-load">Wczytaj</button></div>' : ""}
+      ${BKTXT ? `<textarea class="bk-in" rows="4" readonly>${esc(BKTXT)}</textarea>` : ""}
+      ${BK ? `<p class="okmsg">${esc(BK)}</p>` : ""}</section>
   </aside>`;
 }
 function renderSettings() {
@@ -4454,6 +4735,7 @@ function render() {
   if (VIEW === "math")
     mountMath();
   renderSettings();
+  saveDraft();
 }
 function go(v) {
   CONFIRM = false;
@@ -4479,6 +4761,53 @@ function act(a, el) {
     case "look":
       setLook(v);
       renderSettings();
+      break;
+    case "mode":
+      setMode(v);
+      renderSettings();
+      break;
+    case "bk-file":
+      download();
+      BK = "Kopia pobrana. Zachowaj plik – możesz go wczytać na innym urządzeniu.";
+      renderSettings();
+      break;
+    case "bk-copy": {
+      const t = backupText();
+      const done = (ok) => {
+        BK = ok ? "Skopiowano. Wklej tekst np. w wiadomości do siebie, a na innym urządzeniu użyj „Wklej kopię”." : "Nie udało się skopiować – zaznacz tekst poniżej ręcznie.";
+        BKTXT = ok ? "" : t;
+        renderSettings();
+      };
+      try {
+        navigator.clipboard.writeText(t).then(() => done(true), () => done(false));
+      } catch {
+        done(false);
+      }
+      break;
+    }
+    case "bk-paste":
+      BKPASTE = !BKPASTE;
+      BK = "";
+      renderSettings();
+      break;
+    case "bk-load": {
+      const ta = document.getElementById("bk-in");
+      doRestore(ta?.value || "");
+      break;
+    }
+    case "bk-pick":
+      document.getElementById("bk-file").click();
+      break;
+    case "bk-undo":
+      if (undoRestore())
+        location.reload();
+      break;
+    case "draft":
+      resumeDraft();
+      break;
+    case "draft-del":
+      clearDraft();
+      render();
       break;
     case "settings-test":
       SETTINGS = false;
@@ -4631,11 +4960,20 @@ document.addEventListener("input", (e) => {
     SCH.vals[el.dataset.sf] = el.value;
   if (el.dataset.nk != null && RUN)
     RUN.vals[+el.dataset.ns][+el.dataset.nk] = el.value;
+  if (el.dataset.sf != null || el.dataset.nk != null)
+    saveDraft();
 });
 document.addEventListener("change", (e) => {
   const el = e.target;
-  if (el.dataset.sf != null && SCH)
+  if (el.dataset.sf != null && SCH) {
     SCH.vals[el.dataset.sf] = el.value;
+    saveDraft();
+  }
+  if (el.id === "bk-file" && el.files?.[0]) {
+    const f = el.files[0];
+    f.text().then(doRestore);
+    el.value = "";
+  }
 });
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && SETTINGS) {
@@ -4658,7 +4996,8 @@ var lookStyle = document.createElement("style");
 lookStyle.id = "looks";
 lookStyle.textContent = looksCSS();
 document.head.appendChild(lookStyle);
-applyLook(document, getLook());
+applyAll();
+loadDraft();
 render();
 
 </script>

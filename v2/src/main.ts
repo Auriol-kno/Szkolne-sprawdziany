@@ -4,7 +4,8 @@ import { SUBJECTS } from '../content/index';
 import { P, chk, esc, gradeOf, LV, plural, shuffle } from './core/kit';
 import { S, acc, addSession, record, reset, stat, status, streakDays, save } from './core/store';
 import { VARIANTS, grade as gradeSchool, spts, taskHTML, variantName, type SResult, type Vals } from './core/school';
-import { LOOKS, looksCSS, getLook, setLook, applyLook, FONTS } from './themes';
+import { LOOKS, MODES, looksCSS, getLook, getMode, setLook, setMode, applyLook, applyAll, FONTS, type Mode } from './themes';
+import { backupText, download, restore, undoRestore, hasPrev, lastBackup } from './core/backup';
 import type { Dzial, Gen, Level, Question, SchoolTest, Skill, STask, Subject } from './core/types';
 
 const $ = (s: string) => document.querySelector(s) as HTMLElement;
@@ -25,6 +26,7 @@ interface School { test: SchoolTest; variant: string; tasks: STask[]; vals: Vals
 let SCH: School | null = null;
 let CONFIRM = false;
 let SETTINGS = false;
+let BK = '', BKTXT = '', BKPASTE = false;
 
 /* ---------- pomocnicze ---------- */
 const skillsOf = (d: Dzial) => d.lessons.flatMap(l => l.skills);
@@ -80,6 +82,7 @@ function vHub(): string {
   const st = streakDays();
   return `<section class="hello"><span class="eyebrow">Szkolne sprawdziany · kl. 4</span><h1>Cześć, ${esc(S.name)}!</h1>
     <p class="lead">Wybierz przedmiot. Każdy jest podzielony na działy – tak jak sprawdziany w szkole.${st > 1 ? ` Seria nauki: <b>${st}</b> ${plural(st, 'dzień', 'dni', 'dni')} z rzędu.` : ''}</p></section>
+  ${DRAFT_INFO ? `<section class="card draft"><span>⏸ Masz niedokończone ćwiczenie: <b>${esc(DRAFT_INFO.label)}</b></span><div class="row"><button class="primary" data-act="draft">Wróć do niego</button><button class="soft" data-act="draft-del">Usuń</button></div></section>` : ''}
   <section class="subjects">${SUBJECTS.map(s => { const m = mastery(s.id, s.dzialy.flatMap(skillsOf)); const tests = s.dzialy.reduce((a, d) => a + (d.schoolTests?.length || 0), 0);
     return `<button class="subj" data-act="subj" data-v="${s.id}" style="--c:var(--c-${s.id});--cs:var(--cs-${s.id})"><span class="big-ic">${s.icon}</span><b>${s.name}</b><small>${s.desc}</small>
       <span class="meta">${s.dzialy.length} ${plural(s.dzialy.length, 'dział', 'działy', 'działów')}${tests ? ` · ${tests} ${plural(tests, 'sprawdzian', 'sprawdziany', 'sprawdzianów')} z klasy` : ''}${m.pct != null ? ` · ${m.pct}%` : ''}</span></button>`; }).join('')}</section>`;
@@ -195,11 +198,43 @@ function mountMath() {
   const src = srcEl.textContent!.replace(/<%%\/S/g, '</scr' + 'ipt').replace(/<%%S/g, '<scr' + 'ipt');
   const fr = document.createElement('iframe'); fr.id = 'math-frame'; fr.title = 'Matematyka';
   fr.srcdoc = src.replace('</head>', `<link rel="stylesheet" href="${FONTS}"><style>.top .brand{display:none}\n${looksCSS()}</style></head>`);
-  fr.addEventListener('load', () => { if (fr.contentDocument) applyLook(fr.contentDocument, getLook()); });
+  fr.addEventListener('load', () => { if (fr.contentDocument) applyLook(fr.contentDocument, true); });
   w.appendChild(fr); fitMath();
 }
 function fitMath() { const fr = document.getElementById('math-frame'); if (fr) fr.style.height = Math.max(320, innerHeight - $('.top').getBoundingClientRect().bottom) + 'px'; }
 addEventListener('resize', fitMath);
+
+/* ---------- zapis rozpoczętych ćwiczeń (zostają po odświeżeniu i aktualizacji) ---------- */
+const DRAFT = 'sprawdziany-draft';
+const findSkill = (id: string) => SUBJ.dzialy.flatMap(skillsOf).find(s => s.id === id)!;
+function saveDraft() {
+  try {
+    if (RUN && !RUN.done) localStorage.setItem(DRAFT, JSON.stringify({ kind: 'run', subj: SUBJ.id, dz: DZ.id, d: Date.now(), run: { ...RUN, skills: RUN.skills.map(s => s.id), order: ((RUN as any).order || []).map((s: Skill) => s.id), items: RUN.items.map(it => it && { skill: it.skill.id, q: it.q, level: it.level }), seen: [...RUN.seen] } }));
+    else if (SCH && !SCH.res) localStorage.setItem(DRAFT, JSON.stringify({ kind: 'school', subj: SUBJ.id, dz: DZ.id, d: Date.now(), sch: { test: SCH.test.id, variant: SCH.variant, tasks: SCH.tasks, vals: SCH.vals } }));
+    else if (VIEW === 'result' || (VIEW === 'school' && SCH?.res)) localStorage.removeItem(DRAFT);
+  } catch { /* */ }
+}
+let DRAFT_INFO: { label: string; data: any } | null = null;
+function loadDraft() {
+  try { const d = JSON.parse(localStorage.getItem(DRAFT) || 'null'); if (!d) return; const s = SUBJECTS.find(x => x.id === d.subj); if (!s) return;
+    const label = d.kind === 'run' ? `${s.name}: ${d.run.label} (${d.run.mode === 'test' ? 'sprawdzian' : `zadanie ${d.run.i + 1}/${d.run.n}`})` : `${s.name}: sprawdzian z klasy`;
+    DRAFT_INFO = { label, data: d }; } catch { DRAFT_INFO = null; }
+}
+function clearDraft() { DRAFT_INFO = null; try { localStorage.removeItem(DRAFT); } catch { /* */ } }
+function resumeDraft() {
+  const d = DRAFT_INFO?.data; if (!d) return;
+  try {
+    SUBJ = SUBJECTS.find(x => x.id === d.subj)!; DZ = SUBJ.dzialy.find(x => x.id === d.dz) || SUBJ.dzialy[0];
+    if (d.kind === 'run') { const r = d.run; RUN = { ...r, skills: r.skills.map(findSkill), items: r.items.map((it: any) => it && { skill: findSkill(it.skill), q: it.q, level: it.level }), seen: new Set(r.seen) }; (RUN as any).order = r.order.map(findSkill); VIEW = 'run'; }
+    else { const t = SUBJ.dzialy.flatMap(x => x.schoolTests || []).find(x => x.id === d.sch.test)!; SCH = { test: t, variant: d.sch.variant, tasks: d.sch.tasks, vals: d.sch.vals, res: null }; VIEW = 'school'; }
+    DRAFT_INFO = null; render(); scrollTo(0, 0);
+  } catch { clearDraft(); render(); }
+}
+function doRestore(text: string) {
+  const r = restore(text);
+  if (r.ok) { BK = `Wczytano kopię z ${new Date(r.date).toLocaleString('pl-PL')}. Odświeżam…`; renderSettings(); setTimeout(() => location.reload(), 900); }
+  else { BK = r.error; renderSettings(); }
+}
 
 /* ---------- ustawienia (panel z prawej) ---------- */
 function vSettings(): string {
@@ -208,14 +243,23 @@ function vSettings(): string {
   return `<div class="scrim" data-act="settings-close"></div>
   <aside class="drawer" role="dialog" aria-label="Ustawienia">
     <div class="drawer-h"><b>Ustawienia</b><button class="soft" data-act="settings-close" aria-label="Zamknij">✕</button></div>
-    <section class="stack"><h2>Wygląd</h2><p class="note">Wybierz wariant – zmienia się od razu. Dla wybranego zrobimy potem wersję jasną, ciemną i „jak w systemie”.</p>
-      <div class="lp-grid">${LOOKS.map(l => `<button class="lp${cur === l.id ? ' on' : ''}" data-look="${l.id === 'obecny' ? '' : l.id}" data-act="look" data-v="${l.id}" aria-pressed="${cur === l.id}">
+    <section class="stack"><h2>Wygląd</h2><p class="note">Wybierz tryb i wariant kolorystyczny – zmiana działa od razu i zostaje zapamiętana.</p>
+      <div class="seg" role="group" aria-label="Tryb">${MODES.map(([m, n]) => `<button class="${getMode() === m ? 'on' : ''}" data-act="mode" data-v="${m}" aria-pressed="${getMode() === m}">${n}</button>`).join('')}</div>
+      <div class="lp-grid">${LOOKS.map(l => `<button class="lp${cur === l.id ? ' on' : ''}" data-look="${l.id}" data-act="look" data-v="${l.id}" aria-pressed="${cur === l.id}">
         <span class="lp-prev"><span class="lp-bar"></span><span class="lp-card"><i></i><i></i><em></em></span></span>
         <b>${l.name}${cur === l.id ? ' ✓' : ''}</b><small>${l.desc}</small></button>`).join('')}</div></section>
     <section class="stack"><h2>Materiały w aplikacji</h2><p class="note">Zakres książek i działów, które już są – zanim dodasz nowe zdjęcia, sprawdź tu, żeby się nie dublowały.</p>
       ${SUBJECTS.map(s => `<div class="mat"><b>${s.icon} ${s.name}</b><ul>${s.dzialy.map(d => `<li><span>${d.name}${d.pages ? ` <small>(${d.pages})</small>` : ''}</span><small>${d.lessons.length > 1 ? d.lessons.length + ' lekcji · ' : ''}${skillsOf(d).length} umiej.${d.tentative ? ' · ⚠ wstępne' : ''}</small></li>`).join('')}</ul></div>`).join('')}</section>
     <section class="stack"><h2>Sprawdziany z klasy</h2>
       ${tests.length ? tests.map(({ s, d, t }) => `<button class="mat-t" data-act="settings-test" data-s="${s.id}" data-d="${d.id}"><span>${s.icon} <b>${t.title}</b><small>${new Date(t.date).toLocaleDateString('pl-PL')} · ${t.info}</small></span>${t.result ? `<em>${spts(t.result.pts)}/${t.max} p. · ocena ${t.result.grade}</em>` : ''}</button>`).join('') : '<p class="note">Jeszcze żadnego.</p>'}</section>
+    <section class="stack"><h2>Kopia i synchronizacja</h2>
+      <p class="note">Wyniki i rozpoczęte ćwiczenia zapisują się same na tym urządzeniu i zostają po aktualizacji aplikacji. Kopia służy do przeniesienia ich na inny telefon lub komputer albo do odtworzenia.${lastBackup() ? ` Ostatnia kopia: ${new Date(lastBackup()!).toLocaleDateString('pl-PL')}.` : ''}</p>
+      <div class="row"><button class="primary" data-act="bk-file">⬇ Pobierz kopię (plik)</button><button class="ghost" data-act="bk-pick">⬆ Wczytaj z pliku</button></div>
+      <div class="row"><button class="soft" data-act="bk-copy">Kopiuj jako tekst</button><button class="soft" data-act="bk-paste">Wklej kopię (tekst)</button>${hasPrev() ? '<button class="soft" data-act="bk-undo">↶ Cofnij wczytanie</button>' : ''}</div>
+      <input type="file" id="bk-file" accept=".json,application/json,text/plain" hidden>
+      ${BKPASTE ? '<textarea id="bk-in" class="bk-in" rows="4" placeholder="Wklej tutaj tekst kopii"></textarea><div class="row"><button class="primary" data-act="bk-load">Wczytaj</button></div>' : ''}
+      ${BKTXT ? `<textarea class="bk-in" rows="4" readonly>${esc(BKTXT)}</textarea>` : ''}
+      ${BK ? `<p class="okmsg">${esc(BK)}</p>` : ''}</section>
   </aside>`;
 }
 function renderSettings() {
@@ -238,6 +282,7 @@ function render() {
   $('#main').classList.toggle('wide', VIEW === 'math');
   if (VIEW === 'math') mountMath();
   renderSettings();
+  saveDraft();
 }
 function go(v: View) { CONFIRM = false; VIEW = v; render(); scrollTo(0, 0); }
 
@@ -249,6 +294,16 @@ function act(a: string, el: HTMLElement) {
     case 'settings': SETTINGS = !SETTINGS; renderSettings(); break;
     case 'settings-close': SETTINGS = false; renderSettings(); break;
     case 'look': setLook(v); renderSettings(); break;
+    case 'mode': setMode(v as Mode); renderSettings(); break;
+    case 'bk-file': download(); BK = 'Kopia pobrana. Zachowaj plik – możesz go wczytać na innym urządzeniu.'; renderSettings(); break;
+    case 'bk-copy': { const t = backupText(); const done = (ok: boolean) => { BK = ok ? 'Skopiowano. Wklej tekst np. w wiadomości do siebie, a na innym urządzeniu użyj „Wklej kopię”.' : 'Nie udało się skopiować – zaznacz tekst poniżej ręcznie.'; BKTXT = ok ? '' : t; renderSettings(); };
+      try { navigator.clipboard.writeText(t).then(() => done(true), () => done(false)); } catch { done(false); } break; }
+    case 'bk-paste': BKPASTE = !BKPASTE; BK = ''; renderSettings(); break;
+    case 'bk-load': { const ta = document.getElementById('bk-in') as HTMLTextAreaElement; doRestore(ta?.value || ''); break; }
+    case 'bk-pick': (document.getElementById('bk-file') as HTMLInputElement).click(); break;
+    case 'bk-undo': if (undoRestore()) location.reload(); break;
+    case 'draft': resumeDraft(); break;
+    case 'draft-del': clearDraft(); render(); break;
     case 'settings-test': SETTINGS = false; SUBJ = SUBJECTS.find(s => s.id === el.dataset.s)!; DZ = SUBJ.dzialy.find(d => d.id === el.dataset.d)!; go('dzial'); break;
     case 'back': go(PARENT[VIEW]); break;
     case 'subj': SUBJ = SUBJECTS.find(s => s.id === v)!; go(SUBJ.dzialy.length === 1 ? (DZ = SUBJ.dzialy[0], 'dzial') : 'subject'); break;
@@ -290,8 +345,13 @@ document.addEventListener('input', e => {
   if (el.id === 'name-in') { S.name = el.value.trim() || 'Franek'; save(); return; }
   if (el.dataset.sf != null && SCH) SCH.vals[el.dataset.sf] = el.value;
   if (el.dataset.nk != null && RUN) RUN.vals[+el.dataset.ns!][+el.dataset.nk] = el.value;
+  if (el.dataset.sf != null || el.dataset.nk != null) saveDraft();
 });
-document.addEventListener('change', e => { const el = e.target as HTMLSelectElement; if (el.dataset.sf != null && SCH) SCH.vals[el.dataset.sf] = el.value; });
+document.addEventListener('change', e => {
+  const el = e.target as HTMLInputElement;
+  if (el.dataset.sf != null && SCH) { SCH.vals[el.dataset.sf] = el.value; saveDraft(); }
+  if (el.id === 'bk-file' && el.files?.[0]) { const f = el.files[0]; f.text().then(doRestore); el.value = ''; }
+});
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && SETTINGS) { SETTINGS = false; renderSettings(); return; }
   const el = e.target as HTMLInputElement; if (e.key !== 'Enter' || el.tagName !== 'INPUT') return;
@@ -302,5 +362,6 @@ document.addEventListener('keydown', e => {
 });
 
 const lookStyle = document.createElement('style'); lookStyle.id = 'looks'; lookStyle.textContent = looksCSS(); document.head.appendChild(lookStyle);
-applyLook(document, getLook());
+applyAll();
+loadDraft();
 render();

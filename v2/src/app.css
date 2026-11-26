@@ -66,3 +66,11 @@ body.drawer-open{overflow:hidden}
 .mat li small,.mat-t small{color:var(--muted)}
 .mat-t{display:flex;justify-content:space-between;gap:10px;align-items:center;text-align:left;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:10px 12px;color:var(--fg)}
 .mat-t span{display:flex;flex-direction:column}.mat-t em{font-style:normal;font-weight:800;color:var(--ink);white-space:nowrap}
+.seg{display:flex;border:2px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
+.seg button{flex:1;padding:9px 6px;font-weight:800;background:transparent;color:var(--fg);border:0}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button.on{background:var(--ink);color:var(--on-ink)}
+.bk-in{width:100%;font:inherit;font-size:.85rem;border:2px solid var(--line);border-radius:10px;padding:8px;background:var(--card);color:var(--fg)}
+.okmsg{font-weight:700;color:var(--ink)}
+.draft{display:flex;flex-direction:column;gap:10px;border:2px solid var(--ink);background:var(--ink-soft)}
+.nav button:hover,.back:hover{color:var(--bar-fg);border-color:var(--bar-fg)}
