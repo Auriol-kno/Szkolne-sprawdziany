@@ -84,3 +84,10 @@ button,select,input,a,[data-act]{touch-action:manipulation;-webkit-tap-highlight
 button{cursor:pointer}
 button:active:not(:disabled){filter:brightness(.92)}
 .nav button,.back,.soft{min-height:40px}
+/* czytelność: na dotyku :hover „przykleja się” po stuknięciu – aktywny przycisk paska ma zawsze swoje kolory */
+.nav button:hover,.back:hover{color:var(--bar-fg);border-color:var(--bar-line)}
+html .top .nav button.on,html .top .nav button.on:hover{background:var(--bar-on);border-color:var(--bar-on);color:var(--bar-on-fg)}
+@media (hover:hover) and (pointer:fine){.nav button:not(.on):hover,.back:hover{border-color:var(--bar-fg)}}
+.tchip .st.new{color:var(--fg)}
+.slot .ph{color:var(--fg)}
+.fb .pathmsg{color:var(--fg)}

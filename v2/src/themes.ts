@@ -128,7 +128,7 @@ export function ensure(fg: string, bgs: string[], min: number, dark: boolean): s
 export function resolved(l: Look, sc: 'light' | 'dark'): Palette {
   const p = l[sc], dark = sc === 'dark', v = { ...p.vars };
   const paper = v['--paper'], card = v['--card'];
-  if (v['--muted']) v['--muted'] = ensure(v['--muted'], [paper, card], 4.6, dark);
+  if (v['--muted']) v['--muted'] = ensure(v['--muted'], [paper, card, p.hub[1], ...Object.values(p.subj).map(i => i[1])], 4.6, dark);
   if (v['--bar-fg'] && v['--bar']) v['--bar-fg'] = ensure(v['--bar-fg'], [v['--bar']], 4.6, !dark ? ratio('#FFFFFF', v['--bar']) > ratio('#000000', v['--bar']) : true);
   const onInk = v['--on-ink'] || '#FFFFFF';
   const fix = (i: Ink): Ink => {

@@ -107,7 +107,7 @@ function vDzial(): string {
     ${sk.some(s => (acc(SUBJ.id, s.id) ?? 1) < 0.8) ? `<button class="mode" data-act="dweak"><span class="eyebrow">Słabe strony</span><b>Zadania z tego, co sprawia kłopot</b><small>${sk.filter(s => (acc(SUBJ.id, s.id) ?? 1) < 0.8).slice(0, 3).map(s => s.name).join(' · ')}</small></button>` : ''}</section>` : ''}
   ${d.legacy ? `<section class="card stack"><p>Trening i sprawdziany z tego działu są na razie w module matematyki (przeniosę je tu w kolejnym etapie).</p><div class="row"><button class="primary" data-act="math">Otwórz moduł matematyki</button></div></section>` : ''}
   ${tests.map(t => `<section class="card stack sq-card"><div class="sq-head"><span class="sym">📝</span><div><b>Sprawdzian z klasy: ${t.title}</b><small>${t.info} · ${new Date(t.date).toLocaleDateString('pl-PL')}</small></div></div>
-    ${t.result ? `<p class="sq-was">Wynik w szkole: <b>${spts(t.result.pts)} / ${t.max} p. (${t.result.pct}%)</b> – ocena <b>${t.result.grade}</b>. ${t.result.notes}</p>` : ''}
+    ${t.result?.notes ? `<p class="sq-was">${t.result.notes}</p>` : ''}
     <div class="sq-vers">${VARIANTS.map(k => `<button class="mode" data-act="school" data-t="${t.id}" data-v="${k}"><span class="eyebrow">${variantName(k)}${k === 'rand' ? ' 🎲' : ''}</span><b>${k === 'orig' ? 'Te same pytania' : k === 'rand' ? 'Za każdym razem nowy' : 'Inne liczby'}</b><small>${best(t, k) != null ? `najlepiej: ${best(t, k)}%` : 'jeszcze nie'}</small></button>`).join('')}</div></section>`).join('')}
   ${d.lessons.map(l => `<section class="stack"><div class="row" style="justify-content:space-between"><h2>${l.name}</h2>${playable(l.skills).length && d.lessons.length > 1 ? `<button class="soft" data-act="quiz" data-v="${l.id}">Kartkówka z lekcji</button>` : ''}</div>
     <div class="tmap">${l.skills.map(s => skillChip(s, s.gens.length > 0)).join('')}</div></section>`).join('')}`;
@@ -167,7 +167,7 @@ function vSchool(): string {
   const s = SCH!, t = s.test, res = s.res, orig = s.variant === 'orig';
   const top = res ? (() => { const [g, gl] = gradeOf(res.pct); const bad = s.tasks.filter((q, i) => res.per[i] < q.pts).map(q => q.n);
     const weakNames = res.weak.map(id => skillsOf(DZ).find(x => x.id === id)?.name || id);
-    return `<section class="card sq-res"><div><span class="eyebrow">Wynik</span><b class="sq-big">${spts(res.tot)} / ${t.max} p.</b><span>${res.pct}% · ocena <b>${g}</b> (${gl})${orig && t.result ? ` · w szkole było ${spts(t.result.pts)} p.` : ''}</span></div>
+    return `<section class="card sq-res"><div><span class="eyebrow">Wynik</span><b class="sq-big">${spts(res.tot)} / ${t.max} p.</b><span>${res.pct}% · ocena <b>${g}</b> (${gl})</span></div>
       <p>${bad.length ? `Popraw zadania: ${bad.join(', ')}. Umiejętności do poćwiczenia: ${weakNames.join(', ')}.` : 'Wszystko dobrze – brawo!'}</p>
       <div class="row"><button class="primary" data-act="school" data-t="${t.id}" data-v="rand">Nowy losowy zestaw</button><button class="ghost" data-act="school" data-t="${t.id}" data-v="${s.variant}">${s.variant === 'rand' ? 'Nowe liczby' : 'Jeszcze raz'}</button><button class="ghost" data-act="dzial" data-v="${DZ.id}">Wróć do działu</button></div></section>`; })() : '';
   return `<section class="hello"><span class="eyebrow">${t.title} · ${variantName(s.variant)}</span><h1>${orig ? 'Sprawdzian z klasy' : 'Sprawdzian do ćwiczeń'}</h1>
@@ -251,7 +251,7 @@ function vSettings(): string {
     <section class="stack"><h2>Materiały w aplikacji</h2><p class="note">Zakres książek i działów, które już są – zanim dodasz nowe zdjęcia, sprawdź tu, żeby się nie dublowały.</p>
       ${SUBJECTS.map(s => `<div class="mat"><b>${s.icon} ${s.name}</b><ul>${s.dzialy.map(d => `<li><span>${d.name}${d.pages ? ` <small>(${d.pages})</small>` : ''}</span><small>${d.lessons.length > 1 ? d.lessons.length + ' lekcji · ' : ''}${skillsOf(d).length} umiej.${d.tentative ? ' · ⚠ wstępne' : ''}</small></li>`).join('')}</ul></div>`).join('')}</section>
     <section class="stack"><h2>Sprawdziany z klasy</h2>
-      ${tests.length ? tests.map(({ s, d, t }) => `<button class="mat-t" data-act="settings-test" data-s="${s.id}" data-d="${d.id}"><span>${s.icon} <b>${t.title}</b><small>${new Date(t.date).toLocaleDateString('pl-PL')} · ${t.info}</small></span>${t.result ? `<em>${spts(t.result.pts)}/${t.max} p. · ocena ${t.result.grade}</em>` : ''}</button>`).join('') : '<p class="note">Jeszcze żadnego.</p>'}</section>
+      ${tests.length ? tests.map(({ s, d, t }) => `<button class="mat-t" data-act="settings-test" data-s="${s.id}" data-d="${d.id}"><span>${s.icon} <b>${t.title}</b><small>${new Date(t.date).toLocaleDateString('pl-PL')} · ${t.info}</small></span></button>`).join('') : '<p class="note">Jeszcze żadnego.</p>'}</section>
     <section class="stack"><h2>Kopia i synchronizacja</h2>
       <p class="note">Wyniki i rozpoczęte ćwiczenia zapisują się same na tym urządzeniu i zostają po aktualizacji aplikacji. Kopia służy do przeniesienia ich na inny telefon lub komputer albo do odtworzenia.${lastBackup() ? ` Ostatnia kopia: ${new Date(lastBackup()!).toLocaleDateString('pl-PL')}.` : ''}</p>
       <div class="row"><button class="primary" data-act="bk-file">⬇ Pobierz kopię (plik)</button><button class="ghost" data-act="bk-pick">⬆ Wczytaj z pliku</button></div>

@@ -92,11 +92,20 @@ Kopia w Ustawieniach eksportuje/importuje te klucze (format `{app:'szkolne-spraw
 
 - 2026-11-27: główny adres `/` = nowa wersja (stara w `/stara/`, `/v2/` przekierowuje). Jednorazowa migracja postępów Historii/Przyrody/Angielskiego ze starej wersji. Dwa nowe warianty: Płynne szkło (Liquid Glass) i Ekspresja (Material 3 Expressive). Test kontrastu + automatyczna korekta kolorów. Dotyk: `touch-action: manipulation`, reakcja na naciśnięcie, większy pasek w module matematyki na telefonie (przyciski miały 29 px wysokości).
 
+## Zasady od rodzica (obowiązkowe)
+
+- **Na ekranach aplikacji nigdy nie pokazujemy oceny, którą uczeń dostał w szkole** (ani punktów/procentu ze szkolnego sprawdzianu). Dane `result` w sprawdzianach szkolnych są tylko do zapisu – nie wyświetlaj ich. Można pokazać „Do poprawy: …” (bez oceny).
+- Na ekranach przeglądowych (start, działy, postępy, ustawienia, podsumowanie dla rodzica) nie pokazujemy też ocen z próbnych sprawdzianów – tylko punkty/procenty. Ocena 1–6 pojawia się wyłącznie na ekranie wyniku zaraz po oddaniu próbnego sprawdzianu.
+- Każdy napis musi być czytelny w każdym wariancie wyglądu i trybie (WCAG AA). Na telefonie `:hover` „przykleja się” po stuknięciu – nie zmieniaj w nim koloru tekstu; aktywny przycisk paska ma zawsze `--bar-on`/`--bar-on-fg`.
+
 ## Wygląd – zasady
 
 - Dodając wariant w `themes.ts` podaj paletę `light` i `dark` (zmienne + kolory przedmiotów); `tests/contrast.test.ts` sprawdzi czytelność.
 - Kolory, których tekst leży na przezroczystym tle (szkło), muszą mieć nieprzezroczysty odpowiednik w `--card`/`--bar` do testu kontrastu.
 - Minimalna wysokość przycisku na telefonie: 40 px.
+- Sprawdzenie na żywo: skrypt Playwright, który dla każdego wariantu × trybu przechodzi ekrany i liczy kontrast każdego napisu do rzeczywistego tła (także po stuknięciu w przyciski). Ostatni wynik: 0 problemów w aplikacji i module matematyki.
+
+- 2026-11-27: czytelność – naprawiony niewidoczny aktywny przycisk paska po stuknięciu (sticky hover na iOS, wszystkie motywy); poprawki kontrastu drobnych napisów. Usunięte oceny ze szkoły i oceny z ekranów przeglądowych (aplikacja i moduł matematyki). Test składni skryptu modułu matematyki (`tests/syntax.test.ts`).
 
 ## Plan (kolejne etapy)
 

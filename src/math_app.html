@@ -364,6 +364,11 @@ body.kp-on #main{padding-bottom:calc(var(--kph,0px) + 12px)}
 /* dotyk: większe przyciski w pasku na telefonie, natychmiastowa reakcja */
 button,select,input,[data-act],[data-go]{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 button:active:not(:disabled){filter:brightness(.9)}
+.fb .pathmsg{color:var(--fg)}
+/* bez „przyklejonego” hovera na dotyku: aktywny przycisk paska zawsze czytelny */
+.nav button:hover,.back:hover{color:var(--bar-fg)}
+html .top .nav button.on,html .top .nav button.on:hover{background:var(--bar-on);border-color:var(--bar-on);color:var(--bar-on-fg)}
+@media (hover:hover) and (pointer:fine){.nav button:not(.on):hover,.back:hover{border-color:var(--bar-fg)}}
 @media (max-width:620px){.nav{grid-template-columns:repeat(3,1fr)!important;gap:6px!important}.nav button{min-height:42px;padding:8px 4px!important;font-size:.9rem!important}}
 </style>
 
@@ -1501,7 +1506,7 @@ function vProgress(){
     <div class="tile"><b>${S.count}</b><span>rozwiązanych zadań</span></div>
     <div class="tile"><b>${overall==null?'—':overall+'%'}</b><span>średnia skuteczność</span></div>
     <div class="tile"><b>${streak()}</b><span>${plural(streak(),'dzień','dni','dni')} nauki z rzędu</span></div>
-    <div class="tile"><b>${grades.length?Math.max(...grades):'—'}</b><span>najlepsza ocena ze sprawdzianu</span></div>
+    <div class="tile"><b>${S.sessions.filter(s=>s.mode==='test').length?Math.max(...S.sessions.filter(s=>s.mode==='test').map(s=>s.pct))+'%':'—'}</b><span>najlepszy wynik sprawdzianu</span></div>
   </section>
   <section class="stack"><h2>Ostatnie sesje</h2>
     ${last.length?`<div class="card chart">${chartSVG(last)}<div class="legend"><span><i style="background:var(--ink)"></i>trening (% poprawnych)</span><span><i style="background:var(--red)"></i>sprawdzian (ocena)</span></div></div>`:'<div class="empty">Tu pojawi się wykres po pierwszym treningu lub sprawdzianie.</div>'}
@@ -1526,7 +1531,7 @@ function vProgress(){
 /* ---------- wysyłanie wyników ---------- */
 let SEND={copied:false,show:false,msg:''};
 const MODE_N={train:'Trening',test:'Sprawdzian',weak:'Słabe strony'};
-function sessLine(s){const d=new Date(s.d);return`${d.toLocaleDateString('pl-PL',{day:'2-digit',month:'2-digit'})} ${d.toLocaleTimeString('pl-PL',{hour:'2-digit',minute:'2-digit'})} · ${MODE_N[s.mode]||s.mode}${s.chs?' ['+s.chs.map(id=>C[id]?C[id].name:id).join(', ')+']':''}${s.level&&s.level!=='auto'?' ('+LV[s.level]+')':''} · ${s.pts}/${s.max} p. · ${s.pct}%${s.grade?' · ocena '+s.grade:''}`}
+function sessLine(s){const d=new Date(s.d);return`${d.toLocaleDateString('pl-PL',{day:'2-digit',month:'2-digit'})} ${d.toLocaleTimeString('pl-PL',{hour:'2-digit',minute:'2-digit'})} · ${MODE_N[s.mode]||s.mode}${s.chs?' ['+s.chs.map(id=>C[id]?C[id].name:id).join(', ')+']':''}${s.level&&s.level!=='auto'?' ('+LV[s.level]+')':''} · ${s.pts}/${s.max} p. · ${s.pct}%`}
 function summaryText(){
   const all=TOPICS.flatMap(t=>(S.topics[t.id]||{recent:[]}).recent);
   const overall=all.length?Math.round(all.reduce((a,b)=>a+b,0)/all.length*100)+'%':'brak danych';
@@ -1556,9 +1561,6 @@ function smsText(){
   const overall=all.length?Math.round(all.reduce((a,b)=>a+b,0)/all.length*100)+'%':'-';
   let t=`${S.name} - matma: dziś ${n} ${plural(n,'zadanie','zadania','zadań')}`;
   if(tds.length){const p=tds.reduce((a,s)=>a+s.pts,0),m=tds.reduce((a,s)=>a+s.max,0);t+=`, ${p}/${m} p. (${Math.round(p/m*100)}%)`}
-  const g=tds.filter(s=>s.grade).map(s=>s.grade);
-  if(g.length)t+=`, ${g.length>1?'oceny':'ocena'} ze sprawdzianu: ${g.join(', ')}`;
-  else{const lt=S.sessions.filter(s=>s.grade).pop();if(lt)t+=`. Ostatni sprawdzian: ${lt.grade} (${new Date(lt.d).toLocaleDateString('pl-PL',{day:'2-digit',month:'2-digit'})})`}
   t+=`. Razem ${S.count} zadań, skuteczność ${overall}, ${streak()} ${plural(streak(),'dzień','dni','dni')} z rzędu.`;
   const wk=TOPICS.filter(x=>{const a=acc(x.id);return a!=null&&a<.5}).map(x=>x.name);
   if(wk.length)t+=` Do poprawy: ${wk.slice(0,6).join(', ')}.`;
@@ -1881,18 +1883,18 @@ function vSchool(){
     <p class="lead">Najpierw oryginał z tymi samymi pytaniami, które były na sprawdzianie. Potem warianty: te same typy zadań, ale inne liczby – idealne do powtórki.</p></section>
   <section class="card stack sq-card">
     <div class="sq-head"><span class="sym">🔢</span><div><b>Systemy zapisywania liczb</b><small>GWO · kl. 4 · grupa A · 23.11.2026 · 12 zadań, 25 p.</small></div></div>
-    <p class="sq-was">Wynik w szkole: <b>18,5 / 25 p. (74%)</b> – ocena <b>3</b>. Do poprawy: zamiana jednostek (km→m, dag→g), porównywanie dużych liczb, zadania z treścią (kroki, plan lekcji, owoce).</p>
+    <p class="sq-was">Do poprawy: zamiana jednostek (km→m, dag→g), porównywanie dużych liczb, zadania z treścią (kroki, plan lekcji, owoce).</p>
     <div class="sq-vers">
       <button class="mode" data-act="sopen" data-v="orig"><span class="eyebrow">Oryginał</span><b>Te same pytania</b>${b('orig')}</button>
       ${V.map((k,i)=>`<button class="mode" data-act="sopen" data-v="${k}"><span class="eyebrow">Wariant ${i+1}</span><b>Inne liczby</b>${b(k)}</button>`).join('')}
       <button class="mode" data-act="sopen" data-v="rand"><span class="eyebrow">Losowy 🎲</span><b>Za każdym razem nowy</b>${b('rand')}</button>
     </div></section>
-  ${d.hist.length?`<section class="card stack"><h2>Ostatnie podejścia</h2><div class="sq-hist">${d.hist.slice(0,8).map(h=>`<div><span>${new Date(h.d).toLocaleDateString('pl-PL',{day:'2-digit',month:'2-digit'})} · ${h.k==='orig'?'Oryginał':h.k==='rand'?'Losowy':'Wariant '+h.k.slice(1)}</span><b>${spts(h.p)}/25 p. · ${h.pct}% · ocena ${gradeOf(h.pct)[0]}</b></div>`).join('')}</div></section>`:''}`;
+  ${d.hist.length?`<section class="card stack"><h2>Ostatnie podejścia</h2><div class="sq-hist">${d.hist.slice(0,8).map(h=>`<div><span>${new Date(h.d).toLocaleDateString('pl-PL',{day:'2-digit',month:'2-digit'})} · ${h.k==='orig'?'Oryginał':h.k==='rand'?'Losowy':'Wariant '+h.k.slice(1)}</span><b>${spts(h.p)}/25 p. · ${h.pct}%</b></div>`).join('')}</div></section>`:''}`;
 }
 function vSchoolTest(){
   const t=SCH.test,res=SCH.res;
   const top=res?(()=>{const[g,gl]=gradeOf(res.pct);const bad=t.tasks.filter((q,i)=>res.per[i]<q.pts).map(q=>q.n);
-    return`<section class="card sq-res"><div><span class="eyebrow">Wynik</span><b class="sq-big">${spts(res.tot)} / ${t.max} p.</b><span>${res.pct}% · ocena <b>${g}</b> (${gl})${t.orig?` · w szkole było 18,5 p.`:''}</span></div>
+    return`<section class="card sq-res"><div><span class="eyebrow">Wynik</span><b class="sq-big">${spts(res.tot)} / ${t.max} p.</b><span>${res.pct}% · ocena <b>${g}</b> (${gl})</span></div>
       <p>${bad.length?`Popraw zadania: ${bad.join(', ')}. Pod każdym jest wyjaśnienie, jak to policzyć.`:'Wszystko dobrze – brawo!'}</p>
       <div class="row"><button class="primary" data-act="sopen" data-v="rand">Nowy losowy zestaw</button><button class="ghost" data-act="sopen" data-v="${t.kind}">${t.kind==='rand'?'Nowe liczby':'Jeszcze raz ten sam'}</button><button class="ghost" data-act="slist">Lista sprawdzianów</button></div></section>`})():'';
   return`<section class="hello"><span class="eyebrow">Systemy zapisywania liczb · ${t.title}</span><h1>${t.orig?'Sprawdzian z klasy':'Sprawdzian do ćwiczeń'}</h1>
@@ -1900,7 +1902,7 @@ function vSchoolTest(){
     <div class="row"><button class="soft" data-act="slist">◀ Wszystkie warianty</button></div></section>
   ${top}
   ${t.tasks.map((q,i)=>`<section class="card task sq">
-    <div class="task-h"><span class="tn">Zadanie ${q.n}.</span><span class="pts">(${res?`<span class="got">${spts(res.per[i])}</span>`:'.....'} / ${spts(q.pts)} p.)</span>${t.orig?`<span class="tag">w szkole: ${spts(q.fr)}/${spts(q.pts)}</span>`:''}</div>
+    <div class="task-h"><span class="tn">Zadanie ${q.n}.</span><span class="pts">(${res?`<span class="got">${spts(res.per[i])}</span>`:'.....'} / ${spts(q.pts)} p.)</span></div>
     <div class="q-text">${q.q}</div>
     <div class="${q.grid?'sq-grid':''}">${q.f.map((fd,j)=>schField(fd,`${i}-${j}`)).join('')}</div>
     ${res?`<div class="fb ${res.per[i]===q.pts?'ok':res.per[i]?'part':'bad'}"><p class="expl">${q.ex}</p>${t.orig&&q.err&&q.fr<q.pts?`<p class="pathmsg">Na sprawdzianie: ${q.err}</p>`:''}</div>`:''}

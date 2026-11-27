@@ -60,7 +60,7 @@ export function fieldHTML(fd: SField, key: string, vals: Vals, res: SResult | nu
 }
 export function taskHTML(q: STask, i: number, vals: Vals, res: SResult | null, orig: boolean): string {
   return `<section class="card task sq">
-    <div class="task-h"><span class="tn">Zadanie ${q.n}.</span><span class="pts">(${res ? `<span class="got">${spts(res.per[i])}</span>` : '.....'} / ${spts(q.pts)} p.)</span>${orig && q.fr != null ? `<span class="tag">w szkole: ${spts(q.fr)}/${spts(q.pts)}</span>` : ''}</div>
+    <div class="task-h"><span class="tn">Zadanie ${q.n}.</span><span class="pts">(${res ? `<span class="got">${spts(res.per[i])}</span>` : '.....'} / ${spts(q.pts)} p.)</span></div>
     <div class="q-text">${q.q}</div>
     <div class="${q.grid ? 'sq-grid' : ''}">${q.f.map((fd, j) => fieldHTML(fd, `${i}-${j}`, vals, res)).join('')}</div>
     ${res ? `<div class="fb ${res.per[i] === q.pts ? 'ok' : res.per[i] ? 'part' : 'bad'}"><p class="expl">${q.ex}</p>${orig && q.err && q.fr! < q.pts ? `<p class="pathmsg">Na sprawdzianie: ${q.err}</p>` : ''}</div>` : ''}
