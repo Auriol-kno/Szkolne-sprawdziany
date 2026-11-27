@@ -711,6 +711,34 @@ a.primary,a.ghost{display:inline-block;text-decoration:none}
 .fcard p{font-size:.95rem}
 .fcard .ex2{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.88rem;background:var(--ink-soft);border-radius:8px;padding:6px 10px;white-space:pre-wrap}
 
+/* ułamki, rysunki (działy 5–8) */
+.frc{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.05;font-size:.9em;margin:0 .12em}
+.frc>span:first-child{border-bottom:.09em solid currentColor;padding:0 .15em}.frc>span{padding:0 .15em}
+.q-text .frc{font-size:.95em}
+.fracin{display:inline-flex;align-items:center;gap:6px}.fst{display:inline-flex;flex-direction:column;align-items:center;gap:3px}
+.fst i{display:block;width:100%;min-width:4.2ch;border-top:3px solid var(--fg)}
+.fld.frf .fracin input{width:4.2ch;text-align:center;font-family:var(--display);font-weight:700;font-size:1.3rem;padding:1px 4px;border:0;border-bottom:3px solid var(--ink);background:var(--ink-soft);border-radius:6px 6px 0 0;color:var(--fg)}
+.fld.frf .fw input{font-size:1.6rem;width:3.4ch}
+.fld.frf input:focus{outline:none;background:var(--hl)}
+.fld.frf input.ok{border-color:var(--green);background:var(--green-soft)}.fld.frf input.bad{border-color:var(--red);background:var(--red-soft)}
+.fld.frf input:disabled{opacity:1;-webkit-text-fill-color:var(--fg)}
+.figs{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin:12px 0 4px}
+.fig{max-width:100%;height:auto}
+.fig .sh{fill:var(--ink);fill-opacity:.55;stroke:var(--fg);stroke-width:2}
+.fig .un{fill:var(--card);stroke:var(--fg);stroke-width:2}
+.fig .gl{stroke:var(--line);stroke-width:1}
+.fig .cl{fill:var(--ink);fill-opacity:.28;stroke:var(--fg);stroke-width:2;stroke-linejoin:round}
+.fig .dl{stroke:var(--fg);stroke-width:1.5;stroke-dasharray:5 4}
+.fig .bf{fill:var(--ink);fill-opacity:.14;stroke:var(--fg);stroke-width:2;stroke-linejoin:round}
+.fig .bt{fill:var(--ink);fill-opacity:.26;stroke:var(--fg);stroke-width:2;stroke-linejoin:round}
+.fig .br{fill:var(--ink);fill-opacity:.38;stroke:var(--fg);stroke-width:2;stroke-linejoin:round}
+.fig .hd{stroke:var(--fg);stroke-width:1.5;stroke-dasharray:5 4}
+.fig .cg{stroke:var(--fg);stroke-width:1;opacity:.55}
+.fig text{fill:var(--fg);font:700 15px var(--body)}
+.axis .tks{stroke-width:1.5}
+.axis.ax2 svg{min-width:0;max-width:520px}
+.fst input:first-child{border-bottom:0!important;border-radius:6px 6px 0 0}.fst input:last-child{border-radius:0 0 6px 6px}
+@media (max-width:620px){.fld.frf .fracin input{font-size:1.1rem}.fld.frf .fw input{font-size:1.35rem}.fig .un,.fig .sh{stroke-width:1.5}}
 @media (prefers-reduced-motion: reduce){ *{transition:none!important;animation:none!important} }
 /* kompaktowy układ na telefonie (klawiatura zasłania pół ekranu) */
 @media (max-width:620px){
@@ -826,6 +854,11 @@ const CH=[
  {id:'c2',sym:'XIV',name:'Systemy zapisywania liczb',pages:'s. 58–97'},
  {id:'c3',sym:'×',name:'Działania pisemne',pages:'s. 98–123'},
  {id:'c4',sym:'△',name:'Figury geometryczne',pages:'s. 123–164'},
+ {id:'c5',sym:'½',name:'Ułamki zwykłe',pages:'s. 165–192'},
+ {id:'c6',sym:'0,5',name:'Ułamki dziesiętne',pages:'s. 193–222'},
+ {id:'c7',sym:'cm²',name:'Pola figur',pages:'s. 223–236'},
+ {id:'c8',sym:'▣',name:'Prostopadłościany i sześciany',pages:'s. 237–264'},
+ {id:'u',sym:'∑',name:'Powtórka – zadania uzupełniające',pages:'s. 265–274'},
  {id:'k',sym:'🦘',name:'Kangur matematyczny',pages:'konkurs'}
 ];
 const C=Object.fromEntries(CH.map(c=>[c.id,c]));
@@ -867,6 +900,37 @@ const TOPICS=[
  {id:'rect',ch:'c4',name:'Prostokąty, kwadraty i obwody'},
  {id:'circle',ch:'c4',name:'Koła i okręgi'},
  {id:'scale',ch:'c4',name:'Skala i plan'},
+ {id:'frpart',ch:'c5',name:'Ułamek jako część całości'},
+ {id:'frunit',ch:'c5',name:'Ułamki w jednostkach i liczbach'},
+ {id:'frline',ch:'c5',name:'Ułamki na osi liczbowej'},
+ {id:'frcmp',ch:'c5',name:'Porównywanie ułamków'},
+ {id:'frext',ch:'c5',name:'Rozszerzanie i skracanie ułamków'},
+ {id:'frimp',ch:'c5',name:'Ułamki niewłaściwe i liczby mieszane'},
+ {id:'fradd',ch:'c5',name:'Dodawanie ułamków'},
+ {id:'frsub',ch:'c5',name:'Odejmowanie ułamków'},
+ {id:'frword',ch:'c5',name:'Zadania tekstowe z ułamkami'},
+ {id:'dcread',ch:'c6',name:'Zapisywanie ułamków dziesiętnych'},
+ {id:'dcunits',ch:'c6',name:'Wyrażenia dwumianowane – długość'},
+ {id:'dcmass',ch:'c6',name:'Wyrażenia dwumianowane – masa'},
+ {id:'dccmp',ch:'c6',name:'Porównywanie ułamków dziesiętnych'},
+ {id:'dcline',ch:'c6',name:'Ułamki dziesiętne na osi'},
+ {id:'dcadd',ch:'c6',name:'Dodawanie ułamków dziesiętnych'},
+ {id:'dcsub',ch:'c6',name:'Odejmowanie ułamków dziesiętnych'},
+ {id:'dcword',ch:'c6',name:'Zadania tekstowe z ułamkami dziesiętnymi'},
+ {id:'arunit',ch:'c7',name:'Jednostki pola'},
+ {id:'argrid',ch:'c7',name:'Pole figury z kratek'},
+ {id:'arrect',ch:'c7',name:'Pole prostokąta i kwadratu'},
+ {id:'arcomp',ch:'c7',name:'Pole figury złożonej'},
+ {id:'arword',ch:'c7',name:'Zadania tekstowe – pola'},
+ {id:'cbdesc',ch:'c8',name:'Ściany, krawędzie, wierzchołki'},
+ {id:'cbedge',ch:'c8',name:'Suma długości krawędzi'},
+ {id:'cbnet',ch:'c8',name:'Siatki prostopadłościanów'},
+ {id:'cbsurf',ch:'c8',name:'Pole powierzchni prostopadłościanu'},
+ {id:'cbvunit',ch:'c8',name:'Jednostki objętości'},
+ {id:'cbvol',ch:'c8',name:'Objętość prostopadłościanu'},
+ {id:'cbliter',ch:'c8',name:'Litry i mililitry'},
+ {id:'cbword',ch:'c8',name:'Zadania tekstowe – bryły'},
+ {id:'mix',ch:'u',name:'Zadania z całego roku'},
  {id:'kang',ch:'k',name:'Zadania z Kangura'}
 ];
 const T=Object.fromEntries(TOPICS.map(t=>[t.id,t]));
@@ -1583,6 +1647,514 @@ const KANG=[
 ];
 function permute(a){if(a.length<=1)return[a];const r=[];a.forEach((x,i)=>{permute(a.slice(0,i).concat(a.slice(i+1))).forEach(p=>r.push([x].concat(p)))});return r}
 G.kang=function(L){return P(KANG.filter(k=>k.l<=L)).g()};
+/* ====== DZIAŁY 5–8: UŁAMKI ZWYKŁE, UŁAMKI DZIESIĘTNE, POLA FIGUR, PROSTOPADŁOŚCIANY (podręcznik s. 164–264) ====== */
+/* Nowe pola odpowiedzi: kind:'frac' (całości / licznik / mianownik; ans=[całości,licznik,mianownik], form: mixed|improper|simple, den, num, nowhole)
+   oraz kind:'dec' (ułamek dziesiętny z przecinkiem; ans = liczba). */
+const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);
+const lcm=(a,b)=>a/gcd(a,b)*b;
+const rng=n=>[...Array(n).keys()];
+const FR=(n,d)=>`<span class="frc"><span>${n}</span><span>${d}</span></span>`;
+const MX=(w,n,d)=>!n?`${w}`:(w?`${w}${FR(n,d)}`:FR(n,d));
+const MXa=a=>MX(a[0],a[1],a[2]);
+const MXt=a=>!a[1]?`${a[0]}`:(a[0]?`${a[0]} ${a[1]}/${a[2]}`:`${a[1]}/${a[2]}`);
+const toMx=(N,d)=>[Math.floor(N/d),N%d,d];
+const simp=(N,d)=>{const g=gcd(N,d);return toMx(N/g,d/g)};
+const FQ=(label,ans,o)=>Object.assign({label,kind:'frac',ans},o||{});
+const DQ=(label,ans,dp)=>({label,kind:'dec',ans:Math.round(ans*1e6)/1e6,dp});
+const DF=(x,dp)=>(dp==null?String(Math.round(x*1e6)/1e6):Number(x).toFixed(dp)).replace('.',',');
+const CMPO=[['','—'],['<','&lt;'],['>','&gt;'],['=','=']];
+const CMP=(label,ans)=>SEL(label,ans,CMPO);
+const CMPT={'<':'&lt;','>':'&gt;','=':'='};
+const cmpA=(a,b)=>{const l=(a[0]*a[2]+a[1])*b[2],r=(b[0]*b[2]+b[1])*a[2];return l<r?'<':l>r?'>':'='};
+const YN=(label,ans)=>SEL(label,ans,[['','— wybierz —'],['t','tak'],['n','nie']]);
+const figs=(...s)=>`<div class="figs">${s.join('')}</div>`;
+const UB=t=>`<span class="unitbox">${t}</span>`;
+const sqU=u=>u+'²',cuU=u=>u+'³';
+const isIn=(v,a)=>a.includes(v);
+
+/* ---- rysunki ---- */
+const pickSh=(d,k,rand)=>new Set(rand?shuffle(rng(d)).slice(0,k):rng(k));
+function pieSVG(d,sh,sz){sz=sz||92;const c=sz/2,r=c-3;let s=`<svg class="fig" viewBox="0 0 ${sz} ${sz}" width="${sz}" height="${sz}" aria-hidden="true">`;
+  if(d===1)return s+`<circle cx="${c}" cy="${c}" r="${r}" class="${sh.has(0)?'sh':'un'}"/></svg>`;
+  const pt=a=>[(c+r*Math.cos(a)).toFixed(1),(c+r*Math.sin(a)).toFixed(1)];
+  for(let i=0;i<d;i++){const[x0,y0]=pt(-Math.PI/2+2*Math.PI*i/d),[x1,y1]=pt(-Math.PI/2+2*Math.PI*(i+1)/d);
+    s+=`<path d="M${c} ${c}L${x0} ${y0}A${r} ${r} 0 0 1 ${x1} ${y1}Z" class="${sh.has(i)?'sh':'un'}"/>`}
+  return s+'</svg>'}
+function barSVG(d,sh){const w=Math.max(120,Math.min(230,d*26)),h=58,sw=w/d;let s=`<svg class="fig" viewBox="-2 -2 ${w+4} ${h+4}" width="${w+4}" height="${h+4}" aria-hidden="true">`;
+  for(let i=0;i<d;i++)s+=`<rect x="${(i*sw).toFixed(1)}" y="0" width="${sw.toFixed(1)}" height="${h}" class="${sh.has(i)?'sh':'un'}"/>`;return s+'</svg>'}
+function gridSVG(r,c,sh){const cs=30;let s=`<svg class="fig" viewBox="-2 -2 ${c*cs+4} ${r*cs+4}" width="${c*cs+4}" height="${r*cs+4}" aria-hidden="true">`;
+  for(let i=0;i<r*c;i++)s+=`<rect x="${(i%c)*cs}" y="${Math.floor(i/c)*cs}" width="${cs}" height="${cs}" class="${sh.has(i)?'sh':'un'}"/>`;return s+'</svg>'}
+function partFig(d,k,rand){
+  const opts=['pie'];if(d<=10)opts.push('bar');
+  const rc=[[2,2],[2,3],[2,4],[3,3],[2,5],[3,4],[4,4],[3,5],[2,6],[4,5]].filter(([a,b])=>a*b===d);if(rc.length)opts.push('grid');
+  const kind=P(opts),sh=pickSh(d,k,rand||kind==='grid');
+  if(kind==='pie')return pieSVG(d,sh);if(kind==='bar')return barSVG(d,sh);const[r,c]=P(rc);return gridSVG(r,c,sh)}
+/* oś liczbowa: n działek, co 'major' dłuższa kreska; labels [[i,tekst]], pts [[i,litera]] */
+function axSVG(n,major,labels,pts){
+  const W=460,x0=24,x1=W-30,g=(x1-x0)/n,y=44;
+  let s=`<svg viewBox="0 0 ${W} 92" role="img" aria-label="Oś liczbowa"><line x1="6" y1="${y}" x2="${W-16}" y2="${y}" class="ax"/><path d="M${W-16} ${y-7} L${W-4} ${y} L${W-16} ${y+7} Z" class="axh"/>`;
+  for(let i=0;i<=n;i++){const x=(x0+i*g).toFixed(1),b=major&&i%major===0;s+=`<line x1="${x}" y1="${y-(b?12:7)}" x2="${x}" y2="${y+(b?12:7)}" class="tk${b?'':' tks'}"/>`}
+  labels.forEach(([i,t])=>{s+=`<text x="${(x0+i*g).toFixed(1)}" y="${y+36}" class="lb">${t}</text>`});
+  pts.forEach(([i,t])=>{const x=(x0+i*g).toFixed(1);s+=`<circle cx="${x}" cy="${y}" r="7" class="pt"/><text x="${x}" y="${y-19}" class="pl">${t}</text>`});
+  return`<div class="axis ax2">${s}</svg></div>`}
+/* figura z kratek (pole): cells [[x,y]], tris [[x,y,pominięty róg 0..3]] */
+function polyo(n,W,H){const cells=[[R(2,W-3),R(1,H-2)]],has=(x,y)=>cells.some(c=>c[0]===x&&c[1]===y);let g=0;
+  while(cells.length<n&&g++<800){const[cx,cy]=P(cells),[dx,dy]=P([[1,0],[-1,0],[0,1],[0,-1]]),x=cx+dx,y=cy+dy;if(x>=0&&y>=0&&x<W&&y<H&&!has(x,y))cells.push([x,y])}
+  return cells}
+function addTris(cells,t,W,H){const has=(x,y)=>cells.some(c=>c[0]===x&&c[1]===y),out=[],used=new Set();
+  const cand=shuffle(cells.flatMap(([x,y])=>[[1,0],[-1,0],[0,1],[0,-1]].map(([dx,dy])=>[x+dx,y+dy,dx,dy])));
+  for(const[x,y,dx,dy]of cand){if(out.length>=t)break;if(x<0||y<0||x>=W||y>=H||has(x,y)||used.has(x+','+y))continue;
+    const om=dx===1?P([1,2]):dx===-1?P([0,3]):dy===1?P([2,3]):P([0,1]);used.add(x+','+y);out.push([x,y,om])}
+  return out}
+function areaSVG(W,H,cells,tris,cs){cs=cs||26;const pw=W*cs,ph=H*cs;let s=`<svg class="fig" viewBox="-2 -2 ${pw+4} ${ph+4}" width="${pw+4}" height="${ph+4}" aria-hidden="true">`;
+  for(let x=0;x<=W;x++)s+=`<line x1="${x*cs}" y1="0" x2="${x*cs}" y2="${ph}" class="gl"/>`;
+  for(let y=0;y<=H;y++)s+=`<line x1="0" y1="${y*cs}" x2="${pw}" y2="${y*cs}" class="gl"/>`;
+  cells.forEach(([x,y])=>{s+=`<rect x="${x*cs}" y="${y*cs}" width="${cs}" height="${cs}" class="cl"/>`});
+  (tris||[]).forEach(([x,y,om])=>{const c=[[x,y],[x+1,y],[x+1,y+1],[x,y+1]].filter((_,i)=>i!==om).map(([a,b])=>`${a*cs},${b*cs}`).join(' ');s+=`<polygon points="${c}" class="cl"/>`});
+  return s+'</svg>'}
+/* wielokąt na kratkach (bok kratki = 1 cm) */
+function gridPolySVG(W,H,pts,dash,cs){cs=cs||26;const pw=W*cs,ph=H*cs;let s=`<svg class="fig" viewBox="-2 -2 ${pw+4} ${ph+4}" width="${pw+4}" height="${ph+4}" aria-hidden="true">`;
+  for(let x=0;x<=W;x++)s+=`<line x1="${x*cs}" y1="0" x2="${x*cs}" y2="${ph}" class="gl"/>`;
+  for(let y=0;y<=H;y++)s+=`<line x1="0" y1="${y*cs}" x2="${pw}" y2="${y*cs}" class="gl"/>`;
+  s+=`<polygon points="${pts.map(([a,b])=>`${a*cs},${b*cs}`).join(' ')}" class="cl"/>`;
+  (dash||[]).forEach(([a,b,c,d])=>{s+=`<line x1="${a*cs}" y1="${b*cs}" x2="${c*cs}" y2="${d*cs}" class="dl"/>`});
+  return s+'</svg>'}
+/* wielokąt z podpisanymi bokami: pts zgodnie z ruchem wskazówek zegara (oś y w dół), labs [[nr boku, tekst]] */
+function polySVG(pts,labs,dash){
+  const Wu=Math.max(...pts.map(p=>p[0])),Hu=Math.max(...pts.map(p=>p[1])),sc=Math.min(250/Wu,160/Hu),pad=48;
+  const m=([x,y])=>[pad+x*sc,pad*0.8+y*sc],pw=Wu*sc+2*pad,ph=Hu*sc+1.6*pad;
+  let s=`<svg class="fig" viewBox="0 0 ${pw.toFixed(0)} ${ph.toFixed(0)}" width="${pw.toFixed(0)}" height="${ph.toFixed(0)}" aria-hidden="true"><polygon points="${pts.map(p=>m(p).map(v=>v.toFixed(1)).join(',')).join(' ')}" class="cl"/>`;
+  (dash||[]).forEach(([a,b,c,d])=>{const[x1,y1]=m([a,b]),[x2,y2]=m([c,d]);s+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" class="dl"/>`});
+  labs.forEach(([i,t])=>{const p=m(pts[i]),q=m(pts[(i+1)%pts.length]),dx=q[0]-p[0],dy=q[1]-p[1],L=Math.hypot(dx,dy)||1,nx=dy/L,ny=-dx/L,off=Math.abs(nx)>0.5?30:16;
+    s+=`<text x="${((p[0]+q[0])/2+nx*off).toFixed(1)}" y="${((p[1]+q[1])/2+ny*off+5).toFixed(1)}" text-anchor="middle">${t}</text>`});
+  return s+'</svg>'}
+/* prostopadłościan w rzucie ukośnym: a szerokość, b głębokość, c wysokość */
+function boxSVG(a,b,c,la,lb,lc,cubes){
+  const k=Math.min(34,170/(a+b*0.45),120/(c+b*0.45)),A=a*k,C=c*k,dx=b*k*0.42,dy=b*k*0.42,pad=54;
+  const x0=pad,y0=pad*0.6+dy,F=[[x0,y0],[x0+A,y0],[x0+A,y0+C],[x0,y0+C]],B=F.map(([x,y])=>[x+dx,y-dy]);
+  const pg=(arr,cl)=>`<polygon points="${arr.map(p=>p.map(v=>v.toFixed(1)).join(',')).join(' ')}" class="${cl}"/>`;
+  const ln=(p,q,cl)=>`<line x1="${p[0].toFixed(1)}" y1="${p[1].toFixed(1)}" x2="${q[0].toFixed(1)}" y2="${q[1].toFixed(1)}" class="${cl}"/>`;
+  const pw=A+dx+2*pad,ph=C+dy+pad*1.6;
+  let s=`<svg class="fig" viewBox="0 0 ${pw.toFixed(0)} ${ph.toFixed(0)}" width="${pw.toFixed(0)}" height="${ph.toFixed(0)}" aria-hidden="true">`;
+  s+=ln(B[3],B[0],'hd')+ln(B[3],B[2],'hd')+ln(B[3],F[3],'hd');
+  s+=pg(F,'bf')+pg([F[0],F[1],B[1],B[0]],'bt')+pg([F[1],B[1],B[2],F[2]],'br');
+  if(cubes){for(let i=1;i<a;i++){s+=ln([x0+i*k,y0],[x0+i*k,y0+C],'cg')+ln([x0+i*k,y0],[x0+i*k+dx,y0-dy],'cg')}
+    for(let j=1;j<c;j++){s+=ln([x0,y0+j*k],[x0+A,y0+j*k],'cg')+ln([x0+A,y0+j*k],[x0+A+dx,y0+j*k-dy],'cg')}
+    for(let i=1;i<b;i++){const fx=i/b*dx,fy=i/b*dy;s+=ln([x0+fx,y0-fy],[x0+A+fx,y0-fy],'cg')+ln([x0+A+fx,y0-fy],[x0+A+fx,y0+C-fy],'cg')}}
+  if(la)s+=`<text x="${(x0+A/2).toFixed(1)}" y="${(y0+C+22).toFixed(1)}" text-anchor="middle">${la}</text>`;
+  if(lc)s+=`<text x="${(x0-8).toFixed(1)}" y="${(y0+C/2+5).toFixed(1)}" text-anchor="end">${lc}</text>`;
+  if(lb)s+=`<text x="${(x0+A+dx/2+10).toFixed(1)}" y="${(y0+C-dy/2+16).toFixed(1)}" text-anchor="start">${lb}</text>`;
+  return s+'</svg>'}
+/* siatka: prostokąty [x,y,w,h] w jednostkach, napisy [x,y,tekst] w jednostkach */
+function netSVG(rects,labs,maxW,maxH){
+  const Wu=Math.max(...rects.map(r=>r[0]+r[2])),Hu=Math.max(...rects.map(r=>r[1]+r[3])),k=Math.min((maxW||260)/Wu,(maxH||210)/Hu),pad=52;
+  let s=`<svg class="fig" viewBox="0 0 ${(Wu*k+2*pad).toFixed(0)} ${(Hu*k+2*pad).toFixed(0)}" width="${(Wu*k+2*pad).toFixed(0)}" height="${(Hu*k+2*pad).toFixed(0)}" aria-hidden="true">`;
+  rects.forEach(([x,y,w,h])=>{s+=`<rect x="${(pad+x*k).toFixed(1)}" y="${(pad+y*k).toFixed(1)}" width="${(w*k).toFixed(1)}" height="${(h*k).toFixed(1)}" class="cl"/>`});
+  (labs||[]).forEach(([x,y,t,an,dx,dy])=>{s+=`<text x="${(pad+x*k+(dx||0)).toFixed(1)}" y="${(pad+y*k+5+(dy||0)).toFixed(1)}" text-anchor="${an||'middle'}">${t}</text>`});
+  return s+'</svg>'}
+
+/* ---- DZIAŁ 5: UŁAMKI ZWYKŁE (s. 165–192) ---- */
+const UNITS_F=[
+ {u:'godziny',to:'minut',base:60,ds:[2,3,4,5,6,10,12,15,20,30]},
+ {u:'metra',to:'centymetrów',base:100,ds:[2,4,5,10,20,25,50]},
+ {u:'kilograma',to:'gramów',base:1000,ds:[2,4,5,8,10,20,25,50]},
+ {u:'złotego',to:'groszy',base:100,ds:[2,4,5,10,20,25,50]},
+ {u:'doby',to:'godzin',base:24,ds:[2,3,4,6,8,12]},
+ {u:'kilometra',to:'metrów',base:1000,ds:[2,4,5,8,10,20,100]}
+];
+Object.assign(G,{
+frpart(L){
+  const d=R(L===1?2:3,L===1?8:12),k=R(1,d-1),fig=partFig(d,k);
+  if(L===1)return{html:'Jaka część figury jest zamalowana?'+figs(fig),fields:[FQ('Ułamek',[0,k,d],{nowhole:true})],
+    path:[{label:'Na ile równych części podzielono figurę?',ans:d}],hint:'Mianownik mówi, na ile równych części podzielono całość, a licznik, ile części wzięto.',
+    expl:`Figurę podzielono na ${d} równych części, zamalowano ${k}. To ${FR(k,d)} figury.`};
+  if(L===2)return{html:'Jaka część figury <b>nie jest</b> zamalowana?'+figs(fig),fields:[FQ('Ułamek',[0,d-k,d],{nowhole:true})],
+    path:[{label:'Ile części jest zamalowanych?',ans:k}],hint:'Policz części niezamalowane.',
+    expl:`Wszystkich części jest ${d}, zamalowanych ${k}, więc niezamalowanych ${d} − ${k} = ${d-k}. To ${FR(d-k,d)} figury.`};
+  const w=R(1,2),sf=d<=10&&R(0,1)?(x=>barSVG(d,x)):(x=>pieSVG(d,x)),full=rng(w).map(()=>sf(new Set(rng(d))));
+  return{html:'Każda figura to jedna całość. Jaką liczbą mieszaną zapiszesz zamalowaną część wszystkich figur razem?'+figs(...full,sf(pickSh(d,k))),fields:[FQ('Liczba mieszana',[w,k,d])],
+    path:[{label:'Ile figur jest zamalowanych w całości?',ans:w}],hint:'Całe figury to całości, a zamalowana część ostatniej figury to ułamek.',
+    expl:`${w} ${plural(w,'figura zamalowana','figury zamalowane','figur zamalowanych')} w całości i ${FR(k,d)} ostatniej figury, czyli ${MX(w,k,d)}.`};
+},
+frunit(L){
+  const o=P(UNITS_F),d=P(o.ds),k=R(1,d-1),one=o.base/d;
+  if(L===1){const g=gcd(k,d),kk=k/g,dd=d/g;return{html:`Ile ${o.to} to ${FR(kk,dd)} ${o.u}?`,fields:[{label:o.to[0].toUpperCase()+o.to.slice(1),ans:o.base*kk/dd}],
+    path:[{label:`Ile ${o.to} to ${FR(1,dd)} ${o.u}?`,ans:o.base/dd}],hint:`Najpierw podziel ${f(o.base)} na ${dd} równych części, potem weź ${kk} takie części.`,
+    expl:`${FR(1,dd)} ${o.u} to ${f(o.base)} : ${dd} = ${f(o.base/dd)} ${o.to}, więc ${FR(kk,dd)} to ${kk} · ${f(o.base/dd)} = ${f(o.base*kk/dd)} ${o.to}.`}}
+  if(L===2){const dd=R(3,9),kk=R(2,dd-1),m=R(3,12)*dd,nm=P(['Oblicz','Ile wynosi']);
+    return{html:`${nm} ${FR(kk,dd)} liczby ${m}.`,fields:[{ans:m/dd*kk}],path:[{label:`${FR(1,dd)} liczby ${m} =`,ans:m/dd}],
+      hint:'Podziel liczbę przez mianownik, a wynik pomnóż przez licznik.',expl:`${m} : ${dd} = ${m/dd}, a ${m/dd} · ${kk} = ${m/dd*kk}.`}}
+  const w=R(1,3),g=gcd(k,d),kk=k/g,dd=d/g,on=o.base/dd;
+  return{html:`Ile ${o.to} to ${MX(w,kk,dd)} ${o.u}?`,fields:[{label:o.to[0].toUpperCase()+o.to.slice(1),ans:w*o.base+kk*on}],
+    path:[{label:`Ile ${o.to} to ${w} ${w===1?'całość':'całości'}?`,ans:w*o.base},{label:`Ile ${o.to} to ${FR(kk,dd)} ${o.u}?`,ans:kk*on}],
+    hint:'Policz osobno całości i ułamek, potem dodaj.',expl:`${w} · ${f(o.base)} = ${f(w*o.base)}, ${FR(kk,dd)} to ${kk} · ${f(on)} = ${f(kk*on)}. Razem ${f(w*o.base+kk*on)} ${o.to}.`};
+},
+frline(L){
+  const d=L===1?R(2,8):R(3,6),span=L===1?1:2,n=d*span,a=L===3?R(1,8):0;
+  let i;do{i=R(1,n-1)}while(i%d===0);
+  const labs=L===3?[[0,a],[d,a+1],[2*d,a+2]]:L===2?[[0,0],[d,1],[2*d,2]]:[[0,0],[d,1]];
+  const N=a*d+i,ans=toMx(N,d);
+  return{html:'Jaką liczbę oznacza punkt A?'+axSVG(n,d,labs.map(([x,t])=>[x,String(t)]),[[i,'A']]),fields:[FQ('A =',ans,L===1?{nowhole:true}:{})],
+    path:[{label:`Na ile równych części podzielono odcinek od ${a} do ${a+1}?`,ans:d}],hint:'Policz, na ile kresek podzielono jedną całość. Jedna działka to ułamek o tym mianowniku.',
+    expl:`Odcinek od ${a} do ${a+1} podzielono na ${d} części, więc jedna działka to ${FR(1,d)}. Punkt A leży ${i} ${plural(i,'działkę','działki','działek')} na prawo od ${labs[0][1]}: ${MXa(ans)}.`};
+},
+frcmp(L){
+  let A,B,expl,path=[];
+  if(L===1){const d=R(3,15);let a,b;do{a=R(1,d+3);b=R(1,d+3)}while(a===b);A=[0,a,d];B=[0,b,d];
+    expl=`Mianowniki są równe (${d}), więc większy jest ułamek o większym liczniku.`}
+  else if(L===2){const n=R(1,9);let p,q;do{p=R(n+1,15);q=R(n+1,15)}while(p===q);A=[0,n,p];B=[0,n,q];
+    expl=`Liczniki są równe (${n}). Większy jest ten ułamek, w którym całość podzielono na mniej części, czyli o mniejszym mianowniku.`}
+  else{let p,q,a,b;do{p=R(2,12);q=R(2,12);a=R(1,p-1);b=R(1,q-1)}while(p===q||lcm(p,q)>60);
+    if(R(0,2)===0){const w=R(1,4);A=[w,a,p];B=[w,b,q]}else{A=[0,a,p];B=[0,b,q]}
+    const m=lcm(p,q);path=[{label:'Wspólny mianownik (najmniejszy)',ans:m}];
+    expl=`Sprowadzamy do mianownika ${m}: ${FR(a,p)} = ${FR(a*m/p,m)}, ${FR(b,q)} = ${FR(b*m/q,m)}. Porównujemy liczniki: ${a*m/p} i ${b*m/q}.`}
+  const r=cmpA(A,B);
+  return{html:'Wstaw znak &lt;, &gt; lub =.'+ex(`${MXa(A)} ${BOX} ${MXa(B)}`),fields:[CMP('Znak',r)],path,
+    hint:L===1?'Przy równych mianownikach porównaj liczniki.':L===2?'Przy równych licznikach: im więcej części, tym każda mniejsza.':'Sprowadź oba ułamki do wspólnego mianownika.',expl:expl+` Zatem ${MXa(A)} ${CMPT[r]} ${MXa(B)}.`};
+},
+frext(L){
+  if(L===1){const b=R(2,9),a=R(1,b-1),k=R(2,6),B=b*k;
+    return{html:'Rozszerz ułamek. Jaka liczba jest w okienku?'+ex(`${FR(a,b)} = ${FR(BOX,B)}`),fields:[{label:'□ =',ans:a*k}],path:[{label:`Przez ile mnożysz mianownik ${b}, żeby dostać ${B}?`,ans:k}],
+      hint:'Licznik i mianownik mnożymy przez tę samą liczbę.',expl:`${b} · ${k} = ${B}, więc licznik też mnożymy przez ${k}: ${a} · ${k} = ${a*k}.`}}
+  if(L===2){const b=R(2,9),a=R(1,b-1),k=R(2,8),g=gcd(a,b),aa=a/g,bb=b/g;
+    return{html:'Skróć ułamek. Jaka liczba jest w okienku?'+ex(`${FR(aa*k,bb*k)} = ${FR(BOX,bb)}`),fields:[{label:'□ =',ans:aa}],path:[{label:`Przez ile dzielisz mianownik ${bb*k}, żeby dostać ${bb}?`,ans:k}],
+      hint:'Licznik i mianownik dzielimy przez tę samą liczbę.',expl:`${bb*k} : ${k} = ${bb}, więc ${aa*k} : ${k} = ${aa}.`}}
+  let a,b;do{b=R(3,12);a=R(1,b-1)}while(gcd(a,b)!==1);const k=R(2,6),A=a*k,Bm=b*k;
+  return{html:`Skróć ułamek ${FR(A,Bm)} tak bardzo, jak się da (do postaci nieskracalnej).`,fields:[FQ('Ułamek',[0,a,b],{nowhole:true,exact:true})],
+    path:[{label:`Największa liczba, przez którą dzielą się ${A} i ${Bm}`,ans:k}],hint:'Szukaj liczby, przez którą dzieli się i licznik, i mianownik. Dziel tak długo, aż się nie da.',
+    expl:`${A} : ${k} = ${a}, ${Bm} : ${k} = ${b}. ${FR(a,b)} nie da się już skrócić.`};
+},
+frimp(L){
+  if(L===1){const d=R(2,9),w=R(1,6),n=R(1,d-1),N=w*d+n;
+    return{html:`Zamień ułamek niewłaściwy ${FR(N,d)} na liczbę mieszaną.`,fields:[FQ('Liczba mieszana',[w,n,d],{exact:true})],path:[{label:`${N} : ${d} = ? (sam wynik bez reszty)`,ans:w}],
+      hint:'Podziel licznik przez mianownik z resztą. Wynik to całości, a reszta to nowy licznik.',expl:`${N} : ${d} = ${w} r. ${n}, więc ${FR(N,d)} = ${MX(w,n,d)}.`}}
+  if(L===2){const d=R(2,12),w=R(1,15),n=R(1,d-1),N=w*d+n;
+    return{html:`Zamień liczbę mieszaną ${MX(w,n,d)} na ułamek niewłaściwy.`,fields:[FQ('Ułamek niewłaściwy',[0,N,d],{nowhole:true,exact:true})],path:[{label:`Ile ${d===2?'połówek':'części'} ma ${w} ${w===1?'całość':'całości'} (${w} · ${d})?`,ans:w*d}],
+      hint:'Pomnóż całości przez mianownik i dodaj licznik.',expl:`${w} · ${d} + ${n} = ${N}, więc ${MX(w,n,d)} = ${FR(N,d)}.`}}
+  const d=P([2,3,4,5]),bags=rng(3).map(()=>[R(1,4),R(0,d-1)]),N=bags.reduce((s,[w,n])=>s+w*d+n,0);
+  return{html:`Zawartość trzech worków (${bags.map(([w,n])=>MX(w,n,d)+' kg').join(', ')}) dzielimy na porcje po ${FR(1,d)} kg. Ile porcji otrzymamy?`,fields:[{label:'Porcji',ans:N}],
+    path:[{label:`Ile porcji z pierwszego worka (${MX(bags[0][0],bags[0][1],d)} kg)?`,ans:bags[0][0]*d+bags[0][1]}],hint:'Zamień każdą liczbę mieszaną na ułamek niewłaściwy. Licznik to liczba porcji.',
+    expl:`${bags.map(([w,n])=>`${MX(w,n,d)} = ${FR(w*d+n,d)}`).join(', ')}. Porcji: ${bags.map(([w,n])=>w*d+n).join(' + ')} = ${N}.`};
+},
+fradd(L){
+  const d=R(3,13);
+  if(L===1){const a=R(1,d-2),b=R(1,d-1-a);const s=simp(a+b,d);
+    return{html:'Oblicz.'+ex(`${FR(a,d)} + ${FR(b,d)} =`),fields:[FQ('Suma',[0,a+b,d],{nowhole:true})],path:[{label:'Suma liczników',ans:a+b}],
+      hint:'Gdy mianowniki są równe, dodajemy liczniki, a mianownik zostaje.',expl:`${a} + ${b} = ${a+b}, więc wynik to ${FR(a+b,d)}${s[1]!==a+b?` (po skróceniu ${MXa(s)})`:''}.`}}
+  if(L===2){const a=R(2,d-1),b=R(d-a+1,d-1),S=a+b,m=toMx(S,d);
+    return{html:'Oblicz. Wynik zapisz jako liczbę mieszaną.'+ex(`${FR(a,d)} + ${FR(b,d)} =`),fields:[FQ('Suma',m,{form:'mixed'})],path:[{label:'Suma liczników',ans:S}],
+      hint:'Dodaj liczniki. Jeśli wyjdzie ułamek niewłaściwy, wyłącz całości.',expl:`${FR(a,d)} + ${FR(b,d)} = ${FR(S,d)} = ${MXa(m)}.`}}
+  const w1=R(1,9),w2=R(1,9),a=R(1,d-1),b=R(1,d-1),N=(w1+w2)*d+a+b,m=toMx(N,d);
+  return{html:'Oblicz.'+ex(`${MX(w1,a,d)} + ${MX(w2,b,d)} =`),fields:[FQ('Suma',m,{form:'mixed'})],path:[{label:'Suma całości',ans:w1+w2},{label:'Suma liczników ułamków',ans:a+b}],
+    hint:'Dodaj osobno całości i osobno ułamki. Jeśli ułamek wyjdzie niewłaściwy, zamień go.',expl:`Całości: ${w1} + ${w2} = ${w1+w2}. Ułamki: ${FR(a,d)} + ${FR(b,d)} = ${FR(a+b,d)}${a+b>=d?` = ${MXa(toMx(a+b,d))}`:''}. Razem ${MXa(m)}.`};
+},
+frsub(L){
+  const d=R(3,13);
+  if(L===1){const a=R(2,d-1),b=R(1,a-1);
+    return{html:'Oblicz.'+ex(`${FR(a,d)} − ${FR(b,d)} =`),fields:[FQ('Różnica',[0,a-b,d],{nowhole:true})],path:[{label:'Różnica liczników',ans:a-b}],
+      hint:'Gdy mianowniki są równe, odejmujemy liczniki.',expl:`${a} − ${b} = ${a-b}, więc wynik to ${FR(a-b,d)}.`}}
+  if(L===2){const w=R(1,10),b=R(1,d-1);
+    return{html:'Oblicz.'+ex(`${w} − ${FR(b,d)} =`),fields:[FQ('Różnica',[w-1,d-b,d],{form:'mixed'})],path:[{label:`1 całość to ile ${d}-tych części?`,ans:d}],
+      hint:`Zamień jedną całość na ${FR(d,d)}.`,expl:`${w} = ${w-1} i ${FR(d,d)}. ${FR(d,d)} − ${FR(b,d)} = ${FR(d-b,d)}. Wynik: ${MX(w-1,d-b,d)}.`}}
+  let w1,w2,a,b;do{w1=R(3,12);w2=R(1,w1-1);a=R(1,d-1);b=R(1,d-1)}while(a===b);const N=w1*d+a-(w2*d+b),m=toMx(N,d);
+  return{html:'Oblicz.'+ex(`${MX(w1,a,d)} − ${MX(w2,b,d)} =`),fields:[FQ('Różnica',m,{form:'mixed'})],
+    path:a<b?[{label:`Zamień ${MX(w1,a,d)}: ${w1-1} i ile ${d}-tych?`,ans:d+a}]:[{label:'Różnica całości',ans:w1-w2}],
+    hint:a<b?'Ułamek odjemnej jest za mały. Zamień jedną całość na ułamek.':'Odejmij osobno całości i ułamki.',
+    expl:a<b?`${MX(w1,a,d)} = ${w1-1} i ${FR(d+a,d)}. Całości: ${w1-1} − ${w2} = ${w1-1-w2}. Ułamki: ${FR(d+a,d)} − ${FR(b,d)} = ${FR(d+a-b,d)}. Wynik ${MXa(m)}.`
+      :`Całości: ${w1} − ${w2} = ${w1-w2}. Ułamki: ${FR(a,d)} − ${FR(b,d)} = ${FR(a-b,d)}. Wynik ${MXa(m)}.`};
+},
+frword(L){
+  if(L===1){const d=P([4,5,6,8,10,12]),a=R(1,d-2),b=R(1,d-1-a),x=P(NF),y=P(NF.filter(n=>n!==x));
+    return{html:`${x} zjadła ${FR(a,d)} pizzy, a ${y} ${FR(b,d)} tej samej pizzy. Jaką część pizzy zjadły razem?`,fields:[FQ('Część pizzy',[0,a+b,d],{nowhole:true})],path:[opSel('Które działanie?','a')],
+      hint:'Dodaj obie części.',expl:`${FR(a,d)} + ${FR(b,d)} = ${FR(a+b,d)}. Zostało ${FR(d-a-b,d)} pizzy.`}}
+  if(L===2){const d=R(3,9),k=R(1,d-1),n=d*R(3,6),kids=n;
+    return{html:`W klasie jest ${kids} uczniów. ${FR(k,d)} z nich to dziewczynki. Ilu jest chłopców?`,fields:[{label:'Chłopców',ans:kids-kids/d*k}],
+      path:[{label:`Ile to ${FR(1,d)} klasy?`,ans:kids/d},{label:'Ile jest dziewczynek?',ans:kids/d*k}],hint:'Najpierw policz dziewczynki: podziel przez mianownik, pomnóż przez licznik.',
+      expl:`${FR(1,d)} z ${kids} to ${kids/d}. Dziewczynek: ${k} · ${kids/d} = ${kids/d*k}. Chłopców: ${kids} − ${kids/d*k} = ${kids-kids/d*k}.`}}
+  const q=[R(1,3),R(1,3),R(2,6)],N=q[0]+2*q[1]+q[2],m=toMx(N,4);
+  return{html:`Pani Ewa kupiła ${['ćwierć','pół','trzy czwarte'][q[0]-1]} kilograma szynki, ${q[1]===1?'pół kilograma':q[1]+' razy po pół kilograma'} kiełbasy i ${MX(Math.floor(q[2]/4),q[2]%4,4)} kg schabu. Ile kilogramów ważyły razem zakupy?`,
+    fields:[FQ('Kilogramów',m)],path:[{label:'Ile to ćwierćkilogramów (części po 1/4 kg) razem?',ans:N}],hint:'Zamień wszystko na ćwierci kilograma: pół to 2/4, ćwierć to 1/4.',
+    expl:`Szynka ${FR(q[0],4)} kg, kiełbasa ${FR(2*q[1],4)} kg, schab ${FR(q[2],4)} kg. Razem ${FR(N,4)} kg = ${MXa(m)} kg.`};
+}
+});
+
+/* ---- DZIAŁ 6: UŁAMKI DZIESIĘTNE (s. 193–222) ---- */
+const r6=x=>Math.round(x*1e6)/1e6;
+const WORD_DEC={10:['dziesiąta','dziesiąte','dziesiątych'],100:['setna','setne','setnych'],1000:['tysięczna','tysięczne','tysięcznych']};
+Object.assign(G,{
+dcread(L){
+  if(L===1){const d=P([10,100]),n=R(1,d-1);
+    return{html:`Zapisz w postaci ułamka dziesiętnego: ${FR(n,d)}.`,fields:[DQ('Ułamek dziesiętny',n/d)],path:[{label:'Ile miejsc po przecinku będzie miał wynik?',ans:String(d).length-1}],
+      hint:'Mianownik 10 to jedno miejsce po przecinku, 100 to dwa miejsca.',expl:`${FR(n,d)} = ${DF(n/d)}.`}}
+  if(L===2){const d=P([100,1000]),w=R(1,30),n=R(1,d-1);
+    return{html:`Zapisz w postaci ułamka dziesiętnego: ${MX(w,n,d)}.`,fields:[DQ('Ułamek dziesiętny',w+n/d)],path:[{label:'Ile miejsc po przecinku?',ans:String(d).length-1}],
+      hint:'Całości przed przecinkiem, a licznik po przecinku. Uzupełnij zerami, żeby miejsc było tyle, ile zer w mianowniku.',expl:`${MX(w,n,d)} = ${DF(w+n/d,String(d).length-1)}.`}}
+  const d=P([10,100,1000]),w=R(0,20),n=R(1,d-1),wd=WORD_DEC[d];
+  return{html:`Zapisz cyframi liczbę: <b>${w} ${plural(w,'cała','całe','całych')} i ${n} ${plural(n,wd[0],wd[1],wd[2])}</b>.`,fields:[DQ('Liczba',w+n/d)],path:[],
+    hint:'Dziesiąte to pierwsze miejsce po przecinku, setne drugie, tysięczne trzecie.',expl:`${w} i ${FR(n,d)} = ${DF(w+n/d,String(d).length-1)}.`};
+},
+dcunits(L){
+  const sys=[['m','cm',100],['cm','mm',10],['km','m',1000],['dm','cm',10],['m','dm',10]];
+  const [B,S,k]=P(sys),dp=String(k).length-1;
+  if(L===1){const a=R(1,20),b=R(1,k-1);
+    return{html:`Wyraź w ${B==='km'?'kilometrach':B==='m'?'metrach':B==='cm'?'centymetrach':'decymetrach'}: <b>${a} ${B} ${b} ${S}</b>.`,fields:[DQ(B,a+b/k)],path:[{label:`Jaką częścią ${B} jest 1 ${S}? (1 : ?)`,ans:k}],
+      hint:`1 ${S} = ${FR(1,k)} ${B} = ${DF(1/k,dp)} ${B}.`,expl:`${b} ${S} = ${FR(b,k)} ${B} = ${DF(b/k,dp)} ${B}, więc ${a} ${B} ${b} ${S} = ${DF(a+b/k,dp)} ${B}.`}}
+  if(L===2){const x=r6(R(1,9999)/k);
+    return{html:`Ile ${S} to <b>${DF(x)} ${B}</b>?`,fields:[{label:S,ans:Math.round(x*k)}],path:[{label:`1 ${B} = ? ${S}`,ans:k}],
+      hint:`Pomnóż przez ${k}: przesuń przecinek o ${dp} ${plural(dp,'miejsce','miejsca','miejsc')} w prawo.`,expl:`${DF(x)} · ${k} = ${f(Math.round(x*k))} ${S}.`}}
+  const a=R(1,15),b=R(1,k-1),x=a+b/k;
+  return{html:`Zapisz <b>${DF(x,dp)} ${B}</b> jako wyrażenie dwumianowane (${B} i ${S}).`,fields:[{label:B,ans:a},{label:S,ans:b}],path:[],
+    hint:'Część całkowita to pełne jednostki, a to, co po przecinku, zamień na mniejszą jednostkę.',expl:`${DF(x,dp)} ${B} = ${a} ${B} i ${DF(b/k,dp)} ${B} = ${a} ${B} ${b} ${S}.`};
+},
+dcmass(L){
+  const sys=[['kg','g',1000],['kg','dag',100],['dag','g',10],['t','kg',1000]];
+  const [B,S,k]=P(sys),dp=String(k).length-1;
+  if(L===1){const a=R(1,12),b=R(1,k-1);
+    return{html:`Wyraź w ${B==='kg'?'kilogramach':B==='t'?'tonach':'dekagramach'}: <b>${a} ${B} ${b} ${S}</b>.`,fields:[DQ(B,a+b/k)],path:[{label:`1 ${B} = ? ${S}`,ans:k}],
+      hint:`1 ${S} = ${DF(1/k,dp)} ${B}.`,expl:`${b} ${S} = ${DF(b/k,dp)} ${B}, więc razem ${DF(a+b/k,dp)} ${B}.`}}
+  if(L===2){const x=r6(R(1,5000)/k);
+    return{html:`Ile ${S} to <b>${DF(x)} ${B}</b>?`,fields:[{label:S,ans:Math.round(x*k)}],path:[{label:`1 ${B} = ? ${S}`,ans:k}],
+      hint:`Pomnóż przez ${k}.`,expl:`${DF(x)} · ${k} = ${f(Math.round(x*k))} ${S}.`}}
+  const a=R(1,9),b=R(1,k-1);
+  return{html:`Zapisz <b>${DF(a+b/k,dp)} ${B}</b> jako wyrażenie dwumianowane.`,fields:[{label:B,ans:a},{label:S,ans:b}],path:[],
+    hint:'Część całkowita to pełne jednostki, część ułamkową zamień na mniejszą jednostkę.',expl:`${DF(a+b/k,dp)} ${B} = ${a} ${B} ${b} ${S}.`};
+},
+dccmp(L){
+  if(L<3){const dp=L===1?2:3,w=R(0,12);let a,b;do{a=r6(w+R(1,10**dp-1)/10**dp);b=r6(w+R(1,10**dp-1)/10**dp);if(R(0,1))b=r6(Math.round(b*10)/10)}while(a===b);
+    if(R(0,4)===0)b=a;const r=a<b?'<':a>b?'>':'=';const sa=DF(a),sb=DF(b);
+    return{html:'Wstaw znak &lt;, &gt; lub =.'+ex(`${sa} ${BOX} ${sb}`),fields:[CMP('Znak',r)],path:[],
+      hint:'Porównuj cyfry na kolejnych miejscach po przecinku: najpierw dziesiąte, potem setne… Możesz dopisać zera na końcu.',
+      expl:`Dopisujemy zera, żeby obie liczby miały tyle samo miejsc: ${DF(a,dp)} i ${DF(b,dp)}. Wtedy ${DF(a,dp)} ${CMPT[r]} ${DF(b,dp)}.`}}
+  const w=R(1,9),digs=shuffle([R(1,9),R(0,9),R(1,9)]);let xs=[r6(w+digs[0]/10),r6(w+digs[0]/10+digs[1]/100+digs[2]/1000),r6(w+digs[1]/10+digs[0]/100),r6(w+digs[2]/100+digs[0]/1000)];
+  xs=[...new Set(xs)];while(xs.length<4)xs.push(r6(w+R(1,999)/1000)),xs=[...new Set(xs)];xs=shuffle(xs);
+  const big=R(0,1),t=big?Math.max(...xs):Math.min(...xs);
+  return{html:`Która z liczb jest <b>${big?'największa':'najmniejsza'}</b>? ${xs.map(DF).join('; ')}`,fields:[SEL('Liczba',DF(t),[['','— wybierz —'],...xs.map(x=>[DF(x),DF(x)])])],path:[],
+    hint:'Wszystkie mają tę samą część całkowitą. Porównaj dziesiąte, potem setne, potem tysięczne.',expl:`Po dopisaniu zer: ${xs.map(x=>DF(x,3)).join('; ')}. ${big?'Największa':'Najmniejsza'} jest ${DF(t)}.`};
+},
+dcline(L){
+  if(L===1){const a=R(0,9),i=R(1,9);
+    return{html:'Jaką liczbę oznacza punkt A? Wpisz ułamek dziesiętny.'+axSVG(10,10,[[0,String(a)],[10,String(a+1)]],[[i,'A']]),fields:[DQ('A =',a+i/10)],path:[{label:'Ile wynosi jedna działka? (wpisz jako ułamek dziesiętny)',kind:'dec',ans:0.1}],
+      hint:'Od jednej całości do następnej jest 10 działek, więc działka to 0,1.',expl:`Działka to 0,1. Punkt A leży ${i} ${plural(i,'działkę','działki','działek')} od ${a}: ${DF(a+i/10)}.`}}
+  if(L===2){const a=r6(R(1,59)/10),i=R(1,9);
+    return{html:'Jaką liczbę oznacza punkt A?'+axSVG(10,10,[[0,DF(a)],[10,DF(r6(a+0.1))]],[[i,'A']]),fields:[DQ('A =',r6(a+i/100))],path:[{label:'Ile wynosi jedna działka?',kind:'dec',ans:0.01}],
+      hint:'Między podpisanymi liczbami jest 0,1, a działek 10. Jedna działka to 0,01.',expl:`Działka to 0,01. A = ${DF(a)} + ${i} · 0,01 = ${DF(r6(a+i/100))}.`}}
+  const a=R(1,9)*10+R(0,9),i=R(0,9);const x=r6(a/10+i/10+0.05);
+  return{html:'Punkt A leży dokładnie pośrodku między sąsiednimi kreseczkami. Jaką liczbę oznacza?'+axSVG(10,5,[[0,DF(a/10)],[5,DF(r6(a/10+0.5))],[10,DF(r6(a/10+1))]],[[i+0.5,'A']]),fields:[DQ('A =',x)],
+    path:[{label:'Ile wynosi jedna działka?',kind:'dec',ans:0.1}],hint:'Połowa działki 0,1 to 0,05.',expl:`Działka to 0,1, połowa działki to 0,05. A = ${DF(a/10)} + ${i} · 0,1 + 0,05 = ${DF(x)}.`};
+},
+dcadd(L){
+  if(L===1){const a=r6(R(1,99)/10),b=r6(R(1,99)/10);
+    return{html:'Oblicz w pamięci.'+ex(`${DF(a)} + ${DF(b)} =`),fields:[DQ('Suma',r6(a+b))],path:[{label:'Ile dziesiątych razem? (np. 3,6 to 36 dziesiątych)',ans:Math.round((a+b)*10)}],
+      hint:'Policz w dziesiątych częściach, jak w liczbach naturalnych.',expl:`${Math.round(a*10)} + ${Math.round(b*10)} = ${Math.round((a+b)*10)} dziesiątych, czyli ${DF(r6(a+b))}.`}}
+  if(L===2){const a=r6(R(100,9999)/P([100,1000])),b=r6(R(1,99)/P([10,100]));
+    return{html:'Oblicz (przecinek pod przecinkiem).'+ex(`${DF(a)} + ${DF(b)} =`),fields:[DQ('Suma',r6(a+b))],path:[],
+      hint:'Zapisz liczby jedna pod drugą tak, żeby przecinki były w jednej kolumnie. Brakujące miejsca uzupełnij zerami.',expl:`${DF(a)} + ${DF(b)} = ${DF(r6(a+b))}.`}}
+  if(R(0,1)){const w=R(3,10),a=r6(w-R(1,99)/100);
+    return{html:'Jaka liczba jest w okienku?'+ex(`${DF(a)} + ${BOX} = ${w}`),fields:[DQ('□ =',r6(w-a))],path:[opSel('Jakim działaniem znajdziesz □?','s')],
+      hint:'Brakujący składnik to suma minus znany składnik.',expl:`${w} − ${DF(a)} = ${DF(r6(w-a))}.`}}
+  const xs=[r6(R(10,999)/100),r6(R(1,99)/10),r6(R(100,9999)/1000)],s=r6(xs[0]+xs[1]+xs[2]);
+  return{html:'Oblicz.'+ex(xs.map(x=>DF(x)).join(' + ')+' ='),fields:[DQ('Suma',s)],path:[{label:`${DF(xs[0])} + ${DF(xs[1])} =`,kind:'dec',ans:r6(xs[0]+xs[1])}],
+    hint:'Dodawaj po kolei, pilnując przecinków.',expl:`${DF(xs[0])} + ${DF(xs[1])} = ${DF(r6(xs[0]+xs[1]))}, a ${DF(r6(xs[0]+xs[1]))} + ${DF(xs[2])} = ${DF(s)}.`};
+},
+dcsub(L){
+  if(L===1){let a,b;do{a=r6(R(11,99)/10);b=r6(R(1,98)/10)}while(b>=a);
+    return{html:'Oblicz w pamięci.'+ex(`${DF(a)} − ${DF(b)} =`),fields:[DQ('Różnica',r6(a-b))],path:[{label:'Ile dziesiątych zostaje?',ans:Math.round((a-b)*10)}],
+      hint:'Policz w dziesiątych.',expl:`${Math.round(a*10)} − ${Math.round(b*10)} = ${Math.round((a-b)*10)} dziesiątych = ${DF(r6(a-b))}.`}}
+  if(L===2){const a=R(2,20),b=r6(R(1,a*100-1)/P([100,1000]));
+    return{html:'Oblicz.'+ex(`${a} − ${DF(b)} =`),fields:[DQ('Różnica',r6(a-b))],path:[],hint:`Zapisz ${a} z zerami po przecinku (np. ${DF(a,3)}) i odejmuj pisemnie, przecinek pod przecinkiem.`,
+      expl:`${a} − ${DF(b)} = ${DF(r6(a-b))}. Sprawdzenie: ${DF(r6(a-b))} + ${DF(b)} = ${a}.`}}
+  let a,b;do{a=r6(R(200,9999)/100);b=r6(R(1,9999)/1000)}while(b>=a);
+  return{html:'Oblicz.'+ex(`${DF(a)} − ${DF(b)} =`),fields:[DQ('Różnica',r6(a-b))],path:[],hint:'Dopisz zero, żeby obie liczby miały po trzy miejsca po przecinku. Przecinek pod przecinkiem.',
+    expl:`${DF(a,3)} − ${DF(b,3)} = ${DF(r6(a-b))}. Sprawdzenie dodawaniem: ${DF(r6(a-b))} + ${DF(b)} = ${DF(a)}.`};
+},
+dcword(L){
+  if(L===1){const p=r6(R(150,990)/100),q=r6(R(120,890)/100),nm=P(NM);
+    return{html:`${nm} kupił zeszyt za ${DF(p,2)} zł i długopis za ${DF(q,2)} zł. Ile zapłacił razem?`,fields:[DQ('Złotych',r6(p+q),2)],path:[opSel('Które działanie?','a')],
+      hint:'Dodaj ceny, przecinek pod przecinkiem.',expl:`${DF(p,2)} + ${DF(q,2)} = ${DF(r6(p+q),2)} zł.`}}
+  if(L===2){const p=r6(R(150,990)/100),q=r6(R(120,890)/100),s=r6(p+q),m=P([10,20,50].filter(x=>x>s));
+    return{html:`Mama kupiła chleb za ${DF(p,2)} zł i masło za ${DF(q,2)} zł. Zapłaciła banknotem ${m} zł. Ile reszty otrzymała?`,fields:[DQ('Reszta (zł)',r6(m-s),2)],
+      path:[{label:'Ile kosztowały zakupy (zł)?',kind:'dec',ans:s}],hint:'Najpierw dodaj ceny, potem odejmij od zapłaconej kwoty.',expl:`${DF(p,2)} + ${DF(q,2)} = ${DF(s,2)} zł. Reszta: ${m} − ${DF(s,2)} = ${DF(r6(m-s),2)} zł.`}}
+  const a=r6(R(500,900)/100),b=r6(R(10,90)/100),c=r6(R(10,80)/100),t=P(NF);
+  return{html:`${t} skoczyła w dal ${DF(a,2)} m. W drugiej próbie skoczyła o ${DF(b,2)} m dalej, a w trzeciej o ${DF(c,2)} m bliżej niż w drugiej. Ile wynosił trzeci skok?`,fields:[DQ('Metrów',r6(a+b-c),2)],
+    path:[{label:'Długość drugiego skoku (m)',kind:'dec',ans:r6(a+b)}],hint:'Oblicz najpierw drugi skok.',expl:`Drugi: ${DF(a,2)} + ${DF(b,2)} = ${DF(r6(a+b),2)} m. Trzeci: ${DF(r6(a+b),2)} − ${DF(c,2)} = ${DF(r6(a+b-c),2)} m.`};
+}
+});
+
+/* ---- DZIAŁ 7: POLA FIGUR (s. 223–236) ---- */
+const SQU=[['dm²','cm²',100],['m²','dm²',100],['cm²','mm²',100],['m²','cm²',10000]];
+Object.assign(G,{
+arunit(L){
+  if(L===1){const a=R(2,12),b=R(2,12);
+    return{html:`Ile kwadratów o boku 1 cm mieści się w prostokącie o wymiarach ${a} cm × ${b} cm? Tyle centymetrów kwadratowych ma jego pole.`,fields:[{label:'cm²',ans:a*b}],
+      path:[{label:'Ile kwadratów mieści się w jednym rzędzie?',ans:a}],hint:'Policz kwadraty w jednym rzędzie i pomnóż przez liczbę rzędów.',expl:`${a} kwadratów w rzędzie, ${b} rzędów: ${a} · ${b} = ${a*b} cm².`}}
+  if(L===2){const [B,S,k]=P(SQU),a=R(2,30);
+    if(R(0,1))return{html:`Zamień jednostki: <b>${a} ${B} = ? ${S}</b>`,fields:[{label:S,ans:a*k}],path:[{label:`1 ${B} = ? ${S}`,ans:k}],
+      hint:`Kwadrat o boku 1 ${B.slice(0,-1)} ma bok ${Math.sqrt(k)} ${S.slice(0,-1)}, więc pole ${Math.sqrt(k)} · ${Math.sqrt(k)} = ${f(k)} ${S}.`,expl:`1 ${B} = ${f(k)} ${S}, więc ${a} ${B} = ${f(a*k)} ${S}.`};
+    return{html:`Zamień jednostki: <b>${f(a*k)} ${S} = ? ${B}</b>`,fields:[{label:B,ans:a}],path:[{label:`1 ${B} = ? ${S}`,ans:k}],
+      hint:`Podziel przez ${f(k)}.`,expl:`${f(a*k)} : ${f(k)} = ${a} ${B}.`}}
+  if(R(0,1)){const a=R(1,5),b=R(2,8);
+    return{html:`Ile kwadratów o boku 1 mm mieści się w prostokącie o wymiarach ${a} cm × ${b} cm?`,fields:[{label:'Kwadratów',ans:a*b*100}],
+      path:[{label:`Ile milimetrów to ${a} cm?`,ans:a*10},{label:`Ile milimetrów to ${b} cm?`,ans:b*10}],hint:'Zamień boki na milimetry, a potem pomnóż.',expl:`${a*10} mm · ${b*10} mm = ${f(a*b*100)} kwadratów (mm²).`}}
+  const a=R(2,6),b=R(3,9);
+  return{html:`Ile kwadratów o boku 1 dm mieści się w prostokącie o wymiarach ${a} m × ${b} m?`,fields:[{label:'Kwadratów',ans:a*b*100}],
+    path:[{label:`Ile decymetrów to ${a} m?`,ans:a*10}],hint:'1 m = 10 dm. Zamień boki na decymetry.',expl:`${a*10} dm · ${b*10} dm = ${f(a*b*100)} dm².`};
+},
+argrid(L){
+  const W=8,H=6,n=L===1?R(5,12):R(5,10),cells=polyo(n,W,H),tris=L===1?[]:addTris(cells,L===2?2:R(3,5),W,H),A=cells.length+tris.length/2;
+  return{html:`Jednostką pola jest jedna kratka. Jakie pole ma zacieniowana figura?${L>1?' (Trójkąt to połowa kratki.)':''}`+figs(areaSVG(W,H,cells,tris)),fields:[DQ('Pole (kratek)',A)],
+    path:L===1?[]:[{label:'Ile jest całych kratek?',ans:cells.length},{label:'Ile jest połówek kratki (trójkątów)?',ans:tris.length}],
+    hint:L===1?'Policz kratki po kolei, np. rzędami.':'Policz całe kratki, a dwie połówki dają jedną kratkę.',
+    expl:L===1?`Figura składa się z ${A} kratek, więc jej pole to ${A}.`:`${cells.length} całych kratek i ${tris.length} ${plural(tris.length,'połówka','połówki','połówek')} (${tris.length} : 2 = ${DF(tris.length/2)}). Pole: ${DF(A)}.`};
+},
+arrect(L){
+  if(L===1){if(R(0,1)){const a=R(2,15);return{html:`Oblicz pole kwadratu o boku ${a} cm.`,fields:[{label:'cm²',ans:a*a}],path:[opSel('Które działanie?','m')],hint:'Pole kwadratu = bok · bok.',expl:`${a} · ${a} = ${a*a} cm².`}}
+    const a=R(2,20),b=R(2,15);return{html:`Oblicz pole prostokąta o wymiarach ${a} cm × ${b} cm.`,fields:[{label:'cm²',ans:a*b}],path:[opSel('Które działanie?','m')],hint:'Pole prostokąta = długość · szerokość.',expl:`${a} · ${b} = ${a*b} cm².`}}
+  if(L===2){const v=R(0,2);
+    if(v===0){const a=R(2,25);return{html:`Obwód kwadratu wynosi ${4*a} cm. Oblicz jego pole.`,fields:[{label:'cm²',ans:a*a}],path:[{label:'Jaką długość ma bok (cm)?',ans:a}],
+      hint:'Bok kwadratu to obwód podzielony przez 4.',expl:`Bok: ${4*a} : 4 = ${a} cm. Pole: ${a} · ${a} = ${a*a} cm².`}}
+    if(v===1){const a=R(1,9),b=R(2,30);return{html:`Oblicz pole prostokąta o wymiarach ${a} m × ${b} dm. Wynik podaj w dm².`,fields:[{label:'dm²',ans:a*10*b}],path:[{label:`Ile dm to ${a} m?`,ans:a*10}],
+      hint:'Oba boki muszą być w tej samej jednostce.',expl:`${a} m = ${a*10} dm. Pole: ${a*10} · ${b} = ${a*10*b} dm².`}}
+    const a=R(3,20),b=R(2,15);return{html:`Jeden bok prostokąta ma ${a} cm, a obwód wynosi ${2*(a+b)} cm. Oblicz pole.`,fields:[{label:'cm²',ans:a*b}],path:[{label:'Długość drugiego boku (cm)',ans:b}],
+      hint:'Połowa obwodu to suma dwóch sąsiednich boków.',expl:`${2*(a+b)} : 2 = ${a+b}, drugi bok: ${a+b} − ${a} = ${b} cm. Pole: ${a} · ${b} = ${a*b} cm².`}}
+  if(R(0,1)){const a=R(3,25),b=R(3,25);return{html:`Pole prostokąta wynosi ${a*b} cm², a jeden z boków ma ${a} cm. Ile wynosi obwód tego prostokąta?`,fields:[{label:'Obwód (cm)',ans:2*(a+b)}],
+    path:[{label:'Długość drugiego boku (cm)',ans:b}],hint:'Drugi bok = pole : znany bok.',expl:`${a*b} : ${a} = ${b} cm. Obwód: 2 · (${a} + ${b}) = ${2*(a+b)} cm.`}}
+  const a=R(6,20),d=R(1,a-2);return{html:`Prostokąt ma jeden bok długości ${a} cm, a drugi o ${d} cm krótszy. Oblicz pole prostokąta.`,fields:[{label:'cm²',ans:a*(a-d)}],path:[{label:'Długość drugiego boku (cm)',ans:a-d}],
+    hint:'Najpierw oblicz drugi bok.',expl:`Drugi bok: ${a} − ${d} = ${a-d} cm. Pole: ${a} · ${a-d} = ${a*(a-d)} cm².`};
+},
+arcomp(L){
+  const u=P(['cm','m']),W=R(5,12),H=R(4,9),w=R(2,W-2),h=R(1,H-2);
+  const pts=[[0,0],[W-w,0],[W-w,h],[W,h],[W,H],[0,H]],labs=[[0,`${W-w} ${u}`],[1,`${h} ${u}`],[2,`${w} ${u}`],[4,`${W} ${u}`],[5,`${H} ${u}`]];
+  const A=W*H-w*h,O=2*(W+H);
+  const fields=[{label:`Pole (${u}²)`,ans:A}];if(L===3)fields.push({label:`Obwód (${u})`,ans:O});
+  return{html:`Oblicz ${L===3?'pole i obwód':'pole'} figury przedstawionej na rysunku.`+figs(polySVG(pts,labs,L===1?[[W-w,h,W-w,H]]:null)),fields,
+    path:L===1?[{label:`Pole lewego prostokąta (${W-w} × ${H})`,ans:(W-w)*H},{label:`Pole prawego prostokąta (${w} × ${H-h})`,ans:w*(H-h)}]:[{label:`Pole dużego prostokąta ${W} × ${H}`,ans:W*H},{label:`Pole wyciętego prostokąta ${w} × ${h}`,ans:w*h}],
+    hint:L===1?'Przerywana linia dzieli figurę na dwa prostokąty. Dodaj ich pola.':'Uzupełnij figurę do dużego prostokąta i odejmij pole brakującej części.',
+    expl:(L===1?`${W-w} · ${H} + ${w} · ${H-h} = ${(W-w)*H} + ${w*(H-h)} = ${A} ${u}².`:`${W} · ${H} − ${w} · ${h} = ${W*H} − ${w*h} = ${A} ${u}².`)+(L===3?` Obwód: bok wycięcia nie zmienia obwodu, więc jest taki jak prostokąta ${W} × ${H}: 2 · (${W} + ${H}) = ${O} ${u}.`:'')};
+},
+arword(L){
+  if(L===1){const a=R(3,7),b=R(2,6),p=R(3,9)*10;
+    return{html:`Podłoga pokoju ma wymiary ${a} m × ${b} m. Metr kwadratowy paneli kosztuje ${p} zł. Ile kosztują panele na całą podłogę?`,fields:[{label:'Złotych',ans:a*b*p}],
+      path:[{label:'Pole podłogi (m²)',ans:a*b}],hint:'Najpierw pole podłogi, potem pomnóż przez cenę 1 m².',expl:`Pole: ${a} · ${b} = ${a*b} m². Koszt: ${a*b} · ${p} = ${f(a*b*p)} zł.`}}
+  if(L===2){const t=P([20,25,50]),k=100/t,a=R(2,6),b=R(2,5);
+    return{html:`Podłogę w kształcie prostokąta ${a} m × ${b} m wyłożono kwadratowymi płytkami o boku ${t} cm. Ile płytek zużyto?`,fields:[{label:'Płytek',ans:a*k*b*k}],
+      path:[{label:`Ile płytek mieści się wzdłuż boku ${a} m?`,ans:a*k},{label:`Ile płytek mieści się wzdłuż boku ${b} m?`,ans:b*k}],
+      hint:`1 m = 100 cm. Ile płytek po ${t} cm mieści się w 1 m?`,expl:`Wzdłuż ${a} m: ${a*k} płytek, wzdłuż ${b} m: ${b*k}. Razem ${a*k} · ${b*k} = ${a*k*b*k} płytek.`}}
+  const a=R(2,8),b=R(2,6),s=100;
+  return{html:`Pokój narysowano w skali 1 : ${s} jako prostokąt o bokach ${a} cm i ${b} cm. Ile metrów kwadratowych ma ten pokój?`,fields:[{label:'m²',ans:a*b}],
+    path:[{label:`Ile metrów ma w rzeczywistości bok ${a} cm?`,ans:a}],hint:'W skali 1 : 100 każdy 1 cm na rysunku to 1 m w rzeczywistości.',expl:`Boki pokoju: ${a} m i ${b} m. Pole: ${a} · ${b} = ${a*b} m².`};
+}
+});
+
+/* ---- DZIAŁ 8: PROSTOPADŁOŚCIANY I SZEŚCIANY (s. 237–264) ---- */
+function cuboidNet(a,b,c){const r=[[c,0,a,c],[0,c,c,b],[c,c,a,b],[c+a,c,c,b],[2*c+a,c,a,b],[c,c+b,a,c]];return r}
+const BOXL=(a,b,c,u)=>boxSVG(a,b,c,`${a} ${u}`,`${b} ${u}`,`${c} ${u}`);
+const dims3=(lo,hi)=>{let a,b,c;do{a=R(lo,hi);b=R(lo,hi);c=R(lo,hi)}while(a===b&&b===c);return[a,b,c]};
+Object.assign(G,{
+cbdesc(L){
+  if(L===1){const q=P([['Ile ścian ma prostopadłościan?',6,'Policz: góra, dół, przód, tył i dwa boki.'],['Ile krawędzi ma prostopadłościan?',12,'Po 4 krawędzie na górze i na dole oraz 4 pionowe.'],['Ile wierzchołków ma prostopadłościan?',8,'4 wierzchołki na górze i 4 na dole.'],['Ile krawędzi wychodzi z jednego wierzchołka prostopadłościanu?',3,'Jedna w prawo, jedna w głąb, jedna w górę.']]);
+    return{html:q[0]+figs(boxSVG(4,3,3)),fields:[{label:'Odpowiedź',ans:q[1]}],path:[],hint:q[2],expl:`Odpowiedź: ${q[1]}. Prostopadłościan ma 6 ścian, 12 krawędzi i 8 wierzchołków.`}}
+  if(L===2){if(R(0,1)){const k=R(1,6),m=R(1,9);
+    return{html:`Agnieszka buduje szkielet sześcianu z kulek plasteliny (wierzchołki) i patyczków (krawędzie). Ma już ${k} ${plural(k,'kulkę','kulki','kulek')} i ${m} ${plural(m,'patyczek','patyczki','patyczków')}. Ilu jeszcze potrzebuje?`,fields:[{label:'Kulek',ans:8-k},{label:'Patyczków',ans:12-m}],
+      path:[],hint:'Sześcian ma 8 wierzchołków i 12 krawędzi.',expl:`Kulek: 8 − ${k} = ${8-k}. Patyczków: 12 − ${m} = ${12-m}.`}}
+    return{html:'Ola zaznaczyła jedną krawędź prostopadłościanu. Ile krawędzi tego prostopadłościanu <b>nie dotyka</b> zaznaczonej krawędzi?'+figs(boxSVG(4,3,3)),fields:[{label:'Krawędzi',ans:7}],
+      path:[{label:'Ile krawędzi dotyka zaznaczonej (w jej dwóch końcach)?',ans:4}],hint:'Z każdego końca krawędzi wychodzą jeszcze 2 inne krawędzie.',expl:'Zaznaczonej dotykają 2 + 2 = 4 krawędzie. Wszystkich jest 12: 12 − 1 − 4 = 7.'}}
+  const n=R(3,6),q=P([['trzy pomalowane ściany',8,'To kostki w rogach (wierzchołkach) dużego sześcianu.'],['dwie pomalowane ściany',12*(n-2),`To kostki na krawędziach bez rogów: na każdej z 12 krawędzi jest ich ${n-2}.`],['jedną pomalowaną ścianę',6*(n-2)**2,`To kostki w środku każdej ściany: na każdej z 6 ścian jest ich ${n-2} · ${n-2}.`],['żadnej pomalowanej ściany',(n-2)**3,`To kostki w środku: ${n-2} · ${n-2} · ${n-2}.`]]);
+  return{html:`Sześcian ułożono z ${n**3} jednakowych kostek (${n} × ${n} × ${n}) i pomalowano z zewnątrz. Ile kostek ma <b>${q[0]}</b>?`+figs(boxSVG(n,n,n,'','','',true)),fields:[{label:'Kostek',ans:q[1]}],
+    path:[{label:'Ile kostek leży wzdłuż jednej krawędzi bez dwóch rogów?',ans:n-2}],hint:q[2],expl:`${q[2]} Odpowiedź: ${q[1]}.`};
+},
+cbedge(L){
+  if(L===1){const [a,b,c]=dims3(2,15);
+    return{html:`Oblicz sumę długości wszystkich krawędzi prostopadłościanu o wymiarach ${a} cm × ${b} cm × ${c} cm.`+figs(BOXL(a,b,c,'cm')),fields:[{label:'cm',ans:4*(a+b+c)}],
+      path:[{label:'Suma trzech krawędzi z jednego wierzchołka',ans:a+b+c}],hint:'Każdej długości są po 4 krawędzie.',expl:`4 · (${a} + ${b} + ${c}) = 4 · ${a+b+c} = ${4*(a+b+c)} cm.`}}
+  if(L===2){const a=R(2,15);
+    return{html:`Z drutu o długości ${12*a} cm wykonano szkielet sześcianu (cały drut zużyto). Jaką długość ma krawędź sześcianu?`,fields:[{label:'cm',ans:a}],path:[{label:'Ile krawędzi ma sześcian?',ans:12}],
+      hint:'Wszystkie 12 krawędzi sześcianu są równe.',expl:`${12*a} : 12 = ${a} cm.`}}
+  const [a,b,c]=dims3(2,12),Lw=4*(a+b+c);
+  return{html:`Z drutu o długości ${Lw} cm zbudowano szkielet prostopadłościanu. Dwie krawędzie wychodzące z jednego wierzchołka mają ${a} cm i ${b} cm. Jaką długość ma trzecia krawędź?`,fields:[{label:'cm',ans:c}],
+    path:[{label:`Suma trzech krawędzi z jednego wierzchołka (${Lw} : 4)`,ans:Lw/4}],hint:'Drut to 4 komplety trzech różnych krawędzi.',expl:`${Lw} : 4 = ${Lw/4}. Trzecia krawędź: ${Lw/4} − ${a} − ${b} = ${c} cm.`};
+},
+cbnet(L){
+  if(L===1){const e=R(2,9),r=cuboidNet(1,1,1);
+    return{html:`Na rysunku jest siatka sześcianu o krawędzi ${e} cm. Jakie pole ma cała siatka?`+figs(netSVG(r,[[1.5,0,`${e} cm`,'middle',0,-12]],220,200)),fields:[{label:'cm²',ans:6*e*e}],
+      path:[{label:'Pole jednej ściany (cm²)',ans:e*e}],hint:'Siatka sześcianu to 6 jednakowych kwadratów.',expl:`Jedna ściana: ${e} · ${e} = ${e*e} cm². Sześć ścian: 6 · ${e*e} = ${6*e*e} cm².`}}
+  const [a,b,c]=dims3(2,8),r=cuboidNet(a,b,c),lab=[[c+a/2,0,`${a} cm`,'middle',0,-12],[c,c/2,`${c} cm`,'end',-7,0],[0,c+b/2,`${b} cm`,'end',-7,0]];
+  if(L===2)return{html:'Na rysunku jest siatka prostopadłościanu. Jakie pole powierzchni ma ten prostopadłościan?'+figs(netSVG(r,lab)),fields:[{label:'cm²',ans:2*(a*b+a*c+b*c)}],
+    path:[{label:`Pole ściany ${a} × ${b}`,ans:a*b},{label:`Pole ściany ${a} × ${c}`,ans:a*c},{label:`Pole ściany ${b} × ${c}`,ans:b*c}],
+    hint:'Siatka ma trzy pary jednakowych prostokątów.',expl:`2 · ${a*b} + 2 · ${a*c} + 2 · ${b*c} = ${2*(a*b+a*c+b*c)} cm².`};
+  return{html:'Z siatki sklejono prostopadłościan. Ile wynosi suma długości wszystkich jego krawędzi?'+figs(netSVG(r,lab)),fields:[{label:'cm',ans:4*(a+b+c)}],
+    path:[{label:'Suma trzech różnych krawędzi',ans:a+b+c}],hint:'Odczytaj z siatki trzy wymiary prostopadłościanu.',expl:`Wymiary: ${a} cm, ${b} cm, ${c} cm. Suma krawędzi: 4 · (${a} + ${b} + ${c}) = ${4*(a+b+c)} cm.`};
+},
+cbsurf(L){
+  if(L===1){const e=R(2,12),u=P(['cm','dm','m']);
+    return{html:`Oblicz pole powierzchni sześcianu o krawędzi ${e} ${u}.`+figs(boxSVG(3,3,3,`${e} ${u}`)),fields:[{label:`${u}²`,ans:6*e*e}],path:[{label:`Pole jednej ściany (${u}²)`,ans:e*e}],
+      hint:'Sześcian ma 6 jednakowych ścian – kwadratów.',expl:`${e} · ${e} = ${e*e}, a 6 · ${e*e} = ${6*e*e} ${u}².`}}
+  if(L===2){const [a,b,c]=dims3(2,12);
+    return{html:`Oblicz pole powierzchni prostopadłościanu o wymiarach ${a} cm × ${b} cm × ${c} cm.`+figs(BOXL(a,b,c,'cm')),fields:[{label:'cm²',ans:2*(a*b+a*c+b*c)}],
+      path:[{label:`${a} · ${b} =`,ans:a*b},{label:`${a} · ${c} =`,ans:a*c},{label:`${b} · ${c} =`,ans:b*c}],hint:'Prostopadłościan ma trzy pary jednakowych ścian.',
+      expl:`Pc = 2 · ${a*b} + 2 · ${a*c} + 2 · ${b*c} = ${2*(a*b+a*c+b*c)} cm².`}}
+  if(R(0,1)){const e=R(2,12);return{html:`Pole powierzchni sześcianu wynosi ${6*e*e} cm². Jaką długość ma jego krawędź?`,fields:[{label:'cm',ans:e}],path:[{label:'Pole jednej ściany (cm²)',ans:e*e}],
+    hint:'Podziel pole przez 6, a potem pomyśl, jaka liczba pomnożona przez siebie daje wynik.',expl:`${6*e*e} : 6 = ${e*e}, a ${e} · ${e} = ${e*e}, więc krawędź ma ${e} cm.`}}
+  const a=R(3,6),b=R(3,5),h=3,p=R(2,4)*8,S=2*(a*h+b*h)+a*b;
+  return{html:`Pokój ma długość ${a} m, szerokość ${b} m i wysokość ${h} m. Malowanie 1 m² kosztuje ${p} zł. Ile kosztuje pomalowanie ścian i sufitu (bez odliczania okien i drzwi)?`,fields:[{label:'Złotych',ans:S*p}],
+    path:[{label:'Pole ścian i sufitu (m²)',ans:S}],hint:'Podłogi nie malujemy: 4 ściany i sufit.',expl:`Ściany: 2 · ${a*h} + 2 · ${b*h} = ${2*(a*h+b*h)} m², sufit ${a*b} m². Razem ${S} m². Koszt: ${S} · ${p} = ${f(S*p)} zł.`};
+},
+cbvunit(L){
+  if(L===1){const [a,b,c]=dims3(1,4);
+    return{html:'Prostopadłościan ułożono z kostek o krawędzi 1 cm. Jaka jest jego objętość?'+figs(boxSVG(a,b,c,'','','',true)),fields:[{label:'cm³',ans:a*b*c}],
+      path:[{label:'Ile kostek jest w jednej poziomej warstwie?',ans:a*b},{label:'Ile jest warstw?',ans:c}],hint:'Policz kostki w jednej warstwie i pomnóż przez liczbę warstw.',expl:`Warstwa: ${a} · ${b} = ${a*b} kostek, warstw ${c}: ${a*b} · ${c} = ${a*b*c} cm³.`}}
+  if(L===2){const U=P([['dm³','cm³',1000],['m³','dm³',1000],['cm³','mm³',1000]]),a=R(2,15);
+    if(R(0,1))return{html:`Zamień jednostki: <b>${a} ${U[0]} = ? ${U[1]}</b>`,fields:[{label:U[1],ans:a*U[2]}],path:[{label:`1 ${U[0]} = ? ${U[1]}`,ans:U[2]}],hint:`Sześcian o krawędzi 1 ${U[0].slice(0,-1)} ma 10 · 10 · 10 = 1000 ${U[1]}.`,expl:`${a} · 1000 = ${f(a*1000)} ${U[1]}.`};
+    return{html:`Zamień jednostki: <b>${f(a*1000)} ${U[1]} = ? ${U[0]}</b>`,fields:[{label:U[0],ans:a}],path:[{label:`1 ${U[0]} = ? ${U[1]}`,ans:1000}],hint:'Podziel przez 1000.',expl:`${f(a*1000)} : 1000 = ${a} ${U[0]}.`}}
+  let e,k;do{e=R(2,10);k=P([2,3,4,5,8])}while(e**3%k);
+  return{html:`Sześcian o krawędzi ${e} dm podzielono na ${k} jednakowe prostopadłościany. Jaką objętość ma każdy z nich?`,fields:[{label:'dm³',ans:e**3/k}],path:[{label:'Objętość sześcianu (dm³)',ans:e**3}],
+    hint:'Najpierw objętość całego sześcianu, potem podziel.',expl:`${e} · ${e} · ${e} = ${e**3} dm³. ${e**3} : ${k} = ${e**3/k} dm³.`};
+},
+cbvol(L){
+  if(L===1){const [a,b,c]=dims3(2,10),u=P(['cm','dm','m']);
+    return{html:'Oblicz objętość prostopadłościanu.'+figs(BOXL(a,b,c,u)),fields:[{label:`${u}³`,ans:a*b*c}],path:[{label:`${a} · ${b} =`,ans:a*b}],hint:'Objętość = długość · szerokość · wysokość.',expl:`V = ${a} · ${b} · ${c} = ${a*b*c} ${u}³.`}}
+  if(L===2){const a=R(2,9),b=R(1,9),c=R(2,6);
+    return{html:`Oblicz objętość prostopadłościanu o wymiarach ${a} cm × ${b*10} mm × ${c} cm.`,fields:[{label:'cm³',ans:a*b*c}],path:[{label:`Ile cm to ${b*10} mm?`,ans:b}],
+      hint:'Wszystkie wymiary muszą być w tej samej jednostce.',expl:`${b*10} mm = ${b} cm. V = ${a} · ${b} · ${c} = ${a*b*c} cm³.`}}
+  if(R(0,1)){const [a,b,c]=dims3(2,10);return{html:`Objętość prostopadłościanu wynosi ${a*b*c} cm³. Dwie krawędzie wychodzące z jednego wierzchołka mają ${a} cm i ${b} cm. Jaką długość ma trzecia krawędź?`,fields:[{label:'cm',ans:c}],
+    path:[{label:`Pole podstawy ${a} · ${b}`,ans:a*b}],hint:'Podziel objętość przez iloczyn dwóch znanych krawędzi.',expl:`${a} · ${b} = ${a*b}, a ${a*b*c} : ${a*b} = ${c} cm.`}}
+  const e=R(2,10);return{html:`Pole powierzchni sześcianu wynosi ${6*e*e} cm². Oblicz jego objętość.`,fields:[{label:'cm³',ans:e**3}],path:[{label:'Długość krawędzi (cm)',ans:e}],
+    hint:'Z pola powierzchni znajdź krawędź (pole : 6 = pole ściany).',expl:`Ściana: ${6*e*e} : 6 = ${e*e} cm², krawędź ${e} cm. V = ${e} · ${e} · ${e} = ${e**3} cm³.`};
+},
+cbliter(L){
+  if(L===1){const q=P([()=>{const a=R(2,9);return[`${a} l = ? ml`,'ml',a*1000,'1 l = 1000 ml.']},()=>{const a=R(1,9);return[`${a},5 l = ? ml`,'ml',a*1000+500,'0,5 l to pół litra, czyli 500 ml.']},
+      ()=>{const a=R(2,30);return[`${a} dm³ = ? l`,'l',a,'1 dm³ = 1 l.']},()=>{const a=R(5,500);return[`${a} ml = ? cm³`,'cm³',a,'1 ml = 1 cm³.']},()=>{const a=R(2,9);return[`${a*1000} cm³ = ? l`,'l',a,'1000 cm³ = 1 dm³ = 1 l.']}])();
+    return{html:`Zamień jednostki: <b>${q[0]}</b>`,fields:[{label:q[1],ans:q[2]}],path:[],hint:q[3],expl:`${q[3]} Odpowiedź: ${f(q[2])} ${q[1]}.`}}
+  if(L===2){const a=R(2,6)*10,b=R(2,5)*10,c=R(2,6)*10,half=R(0,1),V=a*b*c/1000;
+    return{html:`Akwarium ma wymiary ${a} cm × ${b} cm × ${c} cm (wysokość ${c} cm). Ile litrów wody mieści się w nim${half?', gdy jest napełnione do połowy wysokości':''}?`+figs(BOXL(a/10,b/10,c/10,'dm')),
+      fields:[DQ('Litrów',half?V/2:V)],path:[{label:'Objętość całego akwarium w dm³',ans:V}],hint:'Zamień centymetry na decymetry (10 cm = 1 dm). 1 dm³ = 1 l.',
+      expl:`${a/10} dm · ${b/10} dm · ${c/10} dm = ${V} dm³ = ${V} l.${half?` Połowa: ${V} : 2 = ${V/2} l.`:''}`}}
+  if(R(0,1)){const l=R(1,4),cup=P([150,200,250]),n=Math.floor(l*1000/cup);
+    return{html:`Mamy ${l} ${plural(l,'litr','litry','litrów')} soku i napełniamy nim kubki o pojemności ${cup} ml. Ile najwięcej kubków napełnimy?`,fields:[{label:'Kubków',ans:n}],
+      path:[{label:`Ile ml to ${l} l?`,ans:l*1000}],hint:'Zamień litry na mililitry i podziel.',expl:`${l*1000} : ${cup} = ${n}${l*1000%cup?` r. ${l*1000%cup}`:''}, więc ${n} pełnych kubków.`}}
+  const g=R(1,5),k=R(1,3);
+  return{html:`Dawne jednostki (podręcznik s. 261): 1 garniec = 4 litry, 1 garniec = 4 kwarty. Ile litrów to ${g} ${plural(g,'garniec','garnce','garnców')} i ${k} ${plural(k,'kwarta','kwarty','kwart')}?`,fields:[{label:'Litrów',ans:4*g+k}],
+    path:[{label:'Ile litrów to 1 kwarta?',ans:1}],hint:'Skoro garniec to 4 litry i 4 kwarty, to kwarta ma 1 litr.',expl:`${g} · 4 = ${4*g} l, ${k} kwart to ${k} l. Razem ${4*g+k} l.`};
+},
+cbword(L){
+  if(L===1){const p=R(2,6),d=R(2,4),h=R(2,6);
+    return{html:`Akwarium ma dno o wymiarach ${p} dm × ${d} dm. Wlano wodę do wysokości ${h} dm. Ile litrów wody jest w akwarium?`,fields:[{label:'Litrów',ans:p*d*h}],path:[{label:'Pole dna (dm²)',ans:p*d}],
+      hint:'Objętość wody = pole dna · wysokość wody. 1 dm³ = 1 l.',expl:`${p} · ${d} · ${h} = ${p*d*h} dm³ = ${p*d*h} l.`}}
+  if(L===2){const a=R(3,8),b=R(2,4),h=R(3,8)*20,k=5,bot=a*k*b*k,wall=2*(a*k+b*k)*(h/20);
+    return{html:`Basen ma kształt prostopadłościanu. Dno ma wymiary ${a} m × ${b} m, a głębokość wynosi ${h} cm. Dno i ściany wykładamy kwadratowymi płytkami o boku 20 cm. Ile potrzeba płytek?`,fields:[{label:'Płytek',ans:bot+wall}],
+      path:[{label:'Ile płytek na dno?',ans:bot},{label:'Ile płytek na wszystkie ściany?',ans:wall}],hint:'W 1 m mieści się 5 płytek. Policz osobno dno i ściany.',
+      expl:`Dno: ${a*k} · ${b*k} = ${bot}. Ściany mają wysokość ${h/20} płytek: 2 · (${a*k} + ${b*k}) · ${h/20} = ${wall}. Razem ${bot+wall}.`}}
+  const a=R(4,8)*10,b=R(3,6)*10,c=R(3,5)*10,V=a*b*c/1000;
+  return{html:`Zbiornik ma wymiary ${a} cm × ${b} cm × ${c} cm i jest całkowicie napełniony wodą. Ile kilogramów waży woda? (1 l wody waży 1 kg)`,fields:[{label:'kg',ans:V}],
+    path:[{label:'Objętość w litrach',ans:V}],hint:'Zamień wymiary na decymetry, oblicz objętość w dm³ (litrach).',expl:`${a/10} · ${b/10} · ${c/10} = ${V} dm³ = ${V} l, czyli ${V} kg.`};
+}
+});
+/* Kangur: gra w skreślanie kółek (s. 236) */
+KANG.push({l:2,g:()=>{let n;do{n=R(4,14)}while(n%3===0);const o=kOpts(n%3,[1,2,3,4,5]);
+  return kq(`Gra dla dwóch osób: gracze na zmianę skreślają 1 lub 2 kółka. Wygrywa ten, kto skreśli ostatnie kółko. Zostało ${n} kółek i ruch należy do ciebie. Ile kółek musisz skreślić, żeby na pewno wygrać?`,o,
+  [{label:`Jaką resztę daje ${n} przy dzieleniu przez 3?`,ans:n%3}],'Zostaw przeciwnikowi liczbę kółek podzielną przez 3. Wtedy zawsze możesz odpowiedzieć tak, by w parze ruchów ubyły 3 kółka.',
+  `Skreśl ${n%3}, zostanie ${n-n%3} (podzielne przez 3). Gdy przeciwnik skreśli 1, ty 2, a gdy 2, ty 1. Ostatnie kółko będzie twoje.`,'W krainie łamigłówek, s. 236')}});
+G.mix=function(L){const ids=TOPICS.filter(t=>!['k','u'].includes(t.ch)).map(t=>t.id),id=P(ids),q=G[id](L);q.html+=`<span class="src">Temat: ${T[id].name} (${C[T[id].ch].name})</span>`;return q};
+
 
 /* ---------- ciekawostki z podręcznika ---------- */
 const FUN=[
@@ -1595,7 +2167,14 @@ const FUN=[
  {t:'Najmniejsza książka świata?',pg:'s. 157',tx:'W podręczniku na stronie 157 pojawia się informacja o najmniejszej książce, której autorem jest Zygmunt Szkocny. Zajrzyj tam i zmierz ją linijką: ile milimetrów ma jej okładka?'},
  {t:'Okrąg i liczba π',pg:'koła i okręgi',tx:'Obwód każdego okręgu jest nieco większy niż trzy jego średnice. To „trochę więcej” to liczba π, około 3,14. Dlatego koło o średnicy 10 cm ma obwód około 31 cm.'},
  {t:'Skala to „przybliżenie”',pg:'dział 4',tx:'Skala 1 : 100 oznacza, że 1 cm na rysunku to 100 cm, czyli 1 m w rzeczywistości. Im większa liczba w skali, tym mniejszy obraz na planie. Mapa Polski ma skalę rzędu 1 : 1 000 000, a plan pokoju 1 : 50.'},
- {t:'Kangur matematyczny',pg:'konkurs',tx:'To międzynarodowy konkurs, w którym uczniowie rozwiązują zadania testowe z odpowiedziami A–E. Zadania są ułożone od łatwych do trudnych, za łatwe jest 3 punkty, za trudniejsze 4 i 5. Dla klas 3–4 jest kategoria „Maluch” (w międzynarodowych materiałach „Écolier”).'}
+ {t:'Kangur matematyczny',pg:'konkurs',tx:'To międzynarodowy konkurs, w którym uczniowie rozwiązują zadania testowe z odpowiedziami A–E. Zadania są ułożone od łatwych do trudnych, za łatwe jest 3 punkty, za trudniejsze 4 i 5. Dla klas 3–4 jest kategoria „Maluch” (w międzynarodowych materiałach „Écolier”).'},
+ {t:'Licznik i mianownik',pg:'ułamki zwykłe',tx:'Mianownik (pod kreską) mówi, na ile równych części podzielono całość. Licznik (nad kreską) mówi, ile takich części wzięto. Kreska ułamkowa oznacza dzielenie: 3/4 to 3 : 4.',ex:'3/4 godziny = 60 : 4 · 3 = 45 minut'},
+ {t:'Jeden ułamek, wiele zapisów',pg:'rozszerzanie i skracanie',tx:'Gdy pomnożysz albo podzielisz licznik i mianownik przez tę samą liczbę, ułamek się nie zmieni. Dlatego 1/2, 2/4, 3/6 i 50/100 to ta sama połowa.',ex:'1/2 = 2/4 = 5/10 = 50/100 = 0,5'},
+ {t:'Zera na końcu nic nie zmieniają',pg:'ułamki dziesiętne',tx:'Zera dopisane na końcu ułamka dziesiętnego nie zmieniają jego wartości: 0,5 = 0,50 = 0,500. Przydaje się to przy porównywaniu i odejmowaniu.',ex:'3,7 i 3,72 → 3,70 < 3,72'},
+ {t:'Dlaczego cm² to 100 mm²?',pg:'jednostki pola',tx:'Kwadrat o boku 1 cm ma bok 10 mm, więc mieści 10 rzędów po 10 kwadracików 1 mm × 1 mm. Tak samo 1 m² = 100 dm², a 1 dm² = 100 cm².',ex:'1 cm² = 10 · 10 = 100 mm²\n1 m² = 100 · 100 = 10 000 cm²'},
+ {t:'Litr to sześcian o krawędzi 1 dm',pg:'s. 258',tx:'1 l = 1 dm³ = 1000 cm³, a 1 ml = 1 cm³. Woda jest wygodna: 1 ml wody waży 1 g, a 1 l wody waży 1 kg.',ex:'Akwarium 50 cm × 30 cm × 20 cm\n= 5 dm · 3 dm · 2 dm = 30 dm³ = 30 l'},
+ {t:'Dawne jednostki objętości',pg:'s. 261',tx:'Dawniej w Polsce płyny i zboże mierzono w garncach, kwartach i kwaterkach, a większe ilości w korcach i beczkach. Podręcznik podaje: 1 garniec = 4 litry = 4 kwarty = 16 kwaterek, 32 garnce = 1 korzec, 48 garnców = 1 beczka.'},
+ {t:'Gra w skreślanie kółek',pg:'s. 236',tx:'Gracze skreślają na zmianę 1 lub 2 kółka, wygrywa ten, kto skreśli ostatnie. Sekret: zostawiaj przeciwnikowi liczbę kółek podzielną przez 3. Wtedy w każdej parze ruchów ubywają 3 kółka i ostatnie skreślisz ty.'}
 ];
 
 /* ---------- storage ---------- */
@@ -1630,7 +2209,8 @@ function weakTopics(){
 }
 
 /* ---------- questions ---------- */
-const PATHTOP=new Set(['word','neigh','age','diff','times','puzzle','wtext','rect','scale']);
+const PATHTOP=new Set(['word','neigh','age','diff','times','puzzle','wtext','rect','scale','frword','frimp','dcword','arcomp','arword','cbsurf','cbedge','cbword','cbliter']);
+const REP=id=>id==='kang'?5:id==='mix'?10:1;
 function makeQ(id,L,seen,wp){
   let q;for(let k=0;k<8;k++){q=G[id](L);if(!seen||!seen.has(q.html))break}
   q.topic=id;q.level=L;q.path=q.path||[];q.hasPath=!!(wp&&q.path.length&&(PATHTOP.has(id)||L>=3||Math.random()<0.2));
@@ -1638,13 +2218,22 @@ function makeQ(id,L,seen,wp){
   q.max=q.fields.length;seen&&seen.add(q.html);return q;
 }
 function parseNum(v){if(v==null)return null;const s=String(v).replace(/[\s .]/g,'').replace(/^[−–]/,'-');if(!/^-?\d+$/.test(s))return null;return parseInt(s,10)}
-function isEmpty(q,vals){return q.fields.some((fd,k)=>fd.mark?vals[k]==null:!String(vals[k]??'').trim())}
-function gradeQ(q,vals){const ok=q.fields.map((fd,k)=>fd.mark?vals[k]===fd.ans:fd.kind==='sel'?vals[k]===fd.ans:parseNum(vals[k])===fd.ans);return{ok,pts:ok.filter(Boolean).length,max:q.max}}
+function isEmpty(q,vals){return q.fields.some((fd,k)=>fd.mark?vals[k]==null:fd.kind==='frac'?!(Array.isArray(vals[k])&&vals[k].some(x=>String(x??'').trim())):!String(vals[k]??'').trim())}
+function parseDec(v){if(v==null)return null;const s=String(v).replace(/\s/g,'').replace(',','.').replace(/^[−–]/,'-');if(!/^-?\d+(\.\d+)?$/.test(s))return null;return parseFloat(s)}
+function parseFrac(v){if(!Array.isArray(v))return null;const t=v.map(x=>String(x??'').trim()),num=x=>x===''?null:parseNum(x);
+  const w=t[0]===''?0:num(t[0]),n=t[1]===''?0:num(t[1]),d=t[2]===''?(n===0?1:null):num(t[2]);if(w==null||n==null||d==null||d<=0)return null;return[w,n,d]}
+function chkFrac(fd,v){const p=parseFrac(v);if(!p)return false;const[a,b,c]=fd.ans;if(p[0]*p[2]*c+p[1]*c!==(a*c+b)*p[2])return false;
+  if(fd.exact)return p[0]===a&&p[1]*c===b*p[2]&&(p[2]===c||b===0);
+  if(fd.form==='mixed'&&p[1]>=p[2])return false;if(fd.nowhole&&p[0]!==0)return false;return true}
+function chkField(fd,v){if(fd.kind==='sel')return v===fd.ans;if(fd.kind==='frac')return chkFrac(fd,v);if(fd.kind==='dec'){const x=parseDec(v);return x!=null&&Math.abs(x-fd.ans)<1e-9}return parseNum(v)===fd.ans}
+function gradeQ(q,vals){const ok=q.fields.map((fd,k)=>fd.mark?vals[k]===fd.ans:chkField(fd,vals[k]));return{ok,pts:ok.filter(Boolean).length,max:q.max}}
 function selLabel(fd,v){const o=(fd.opts||[]).find(x=>x[0]===v);return o?o[1]:(v||'—')}
 function ansText(fd){
   if(fd.mark)return`liczba ${fd.show} (zielona kreska)`;
   const l=fd.label||'wynik';
   if(fd.kind==='sel')return`${l}: <b>${fd.show||selLabel(fd,fd.ans)}</b>`;
+  if(fd.kind==='frac')return`${l.replace(/ =$/,'')}: <b>${MXa(fd.ans)}</b>`;
+  if(fd.kind==='dec')return`${l.replace(/ =$/,'')}: <b>${DF(fd.ans,fd.dp)}</b>`;
   return /[=?]$/.test(l)?`${l} <b>${f(fd.ans)}</b>`:`${l}: <b>${f(fd.ans)}</b>`;
 }
 
@@ -1667,6 +2256,9 @@ function lineSVG(q,ns,vals,locked,show){
 function fieldHTML(fd,k,ns,vals,res){
   if(fd.mark)return'';
   const locked=!!res,cls=locked?` ${res.ok[k]?'ok':'bad'}`:'';
+  if(fd.kind==='frac'){const v=Array.isArray(vals[k])?vals[k]:['','',''],cl=locked?` disabled class="${res.ok[k]?'ok':'bad'}"`:'',im=`inputmode="${KBSYS?'numeric':'none'}" autocomplete="off" enterkeyhint="next"`;
+    const inp=(p,lab)=>`<input id="${ns}-${k}-${p}" data-ns="${ns}" data-k="${k}" data-p="${p}" ${im} aria-label="${lab}" value="${esc(v[p]??'')}"${cl}>`;
+    return`<div class="fld frf"><span>${fd.label||'Wynik'}</span><span class="fracin">${fd.nowhole?'':`<span class="fw">${inp(0,'całości')}</span>`}<span class="fst">${inp(1,'licznik')}<i></i>${inp(2,'mianownik')}</span></span></div>`}
   if(fd.kind==='sel'){
     return`<label class="fld${fd.path?'':' '}" for="${ns}-${k}"><span>${fd.label||'Wybierz'}</span><select id="${ns}-${k}" data-ns="${ns}" data-k="${k}"${locked?` disabled class="${res.ok[k]?'ok':'bad'}"`:''}>${fd.opts.map(([v,l])=>`<option value="${v}"${vals[k]===v?' selected':''}>${l}</option>`).join('')}</select></label>`;
   }
@@ -1697,7 +2289,7 @@ const TRAIN={topics:new Set(topicsOf('c1').map(t=>t.id)),level:'auto',n:10,path:
 const TEST={level:2,timer:false,chs:new Set(['c1'])};
 const $=s=>document.querySelector(s);
 const testTopics=()=>CH.filter(c=>TEST.chs.has(c.id)).flatMap(c=>topicsOf(c.id));
-const testCount=()=>testTopics().reduce((a,t)=>a+(t.id==='kang'?5:1),0);
+const testCount=()=>testTopics().reduce((a,t)=>a+REP(t.id),0);
 const testMin=n=>Math.max(45,Math.ceil(n*3.5/5)*5);
 
 function newWarm(){const pool=TOPICS.filter(t=>t.id!=='kang'&&t.ch==='c1'||acc(t.id)!=null&&t.id!=='kang');const id=P(pool).id;WARM={q:makeQ(id,lvl(id),null,false),vals:[],res:null,hint:false,msg:''}}
@@ -1708,7 +2300,7 @@ function startRun(mode,o){
   RUN={mode,opts:o,level:o.level,n:o.n,qs:[],vals:[],res:[],hint:[],i:0,seen,wp,t0:Date.now(),done:false,pending:null,confirmEnd:false,msg:'',group:P(['A','B'])};
   if(mode==='test'){
     const ts=o.chs?CH.filter(c=>o.chs.includes(c.id)).flatMap(c=>topicsOf(c.id)):TOPICS.filter(t=>t.ch==='c1');
-    ts.forEach(t=>{for(let r=0;r<(t.id==='kang'?5:1);r++)RUN.qs.push(makeQ(t.id,o.level,seen,true))});
+    ts.forEach(t=>{for(let r=0;r<REP(t.id);r++)RUN.qs.push(makeQ(t.id,o.level,seen,true))});
     RUN.n=RUN.qs.length;RUN.vals=RUN.qs.map(()=>[]);RUN.names=CH.filter(c=>o.chs.includes(c.id)).map(c=>c.name);
     if(o.timer){RUN.deadline=Date.now()+testMin(RUN.n)*60000;TIMER=setInterval(tick,1000)}}
   else{let order=[];while(order.length<o.n){let s=shuffle(o.topics);if(order.length&&s.length>1&&s[0]===order[order.length-1])s.push(s.shift());order=order.concat(s)}RUN.order=order.slice(0,o.n);ensureQ(0)}
@@ -1858,7 +2450,7 @@ function vRun(){
   return h+'</article>';
 }
 
-function yoursText(q,vals){return q.fields.map((fd,j)=>fd.mark?(vals[j]!=null?'kreska nr '+vals[j]:'—'):fd.kind==='sel'?selLabel(fd,vals[j]):(String(vals[j]??'').trim()?esc(vals[j]):'—')).join(', ')}
+function yoursText(q,vals){return q.fields.map((fd,j)=>fd.mark?(vals[j]!=null?'kreska nr '+vals[j]:'—'):fd.kind==='sel'?selLabel(fd,vals[j]):fd.kind==='frac'?(parseFrac(vals[j])?MXt(parseFrac(vals[j])):'—'):(String(vals[j]??'').trim()?esc(vals[j]):'—')).join(', ')}
 function vResult(){
   const r=RUN,s=r.summary,test=r.mode==='test',[g,gn]=gradeOf(s.pct);
   const full=r.res.filter(x=>x&&x.pts===x.max).length;
@@ -2004,14 +2596,15 @@ function go(v){
 }
 
 /* ---------- events ---------- */
+function setV(arr,k,el){if(el.dataset.p!=null){const a=Array.isArray(arr[k])?arr[k]:['','',''];a[+el.dataset.p]=el.value;arr[k]=a}else arr[k]=el.value}
 document.querySelector('.nav').addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b)go(b.dataset.go)});
 $('#main').addEventListener('input',e=>{
   const el=e.target;
   if(el.id==='name-in'){S.name=el.value.trim()||'Franek';save();return}
   if(el.dataset.ct){CONTACT[el.dataset.ct]=el.value;saveContact();SEND.msg='';return}
   if(el.dataset.k==null)return;const k=+el.dataset.k;
-  if(el.dataset.ns==='w')WARM.vals[k]=el.value;
-  else if(RUN){RUN.vals[RUN.i][k]=el.value;if(RUN.mode==='test'){const d=document.querySelectorAll('.dots button')[RUN.i];d&&d.classList.toggle('filled',!isEmpty(RUN.qs[RUN.i],RUN.vals[RUN.i]))}}
+  if(el.dataset.ns==='w')setV(WARM.vals,k,el);
+  else if(RUN){setV(RUN.vals[RUN.i],k,el);if(RUN.mode==='test'){const d=document.querySelectorAll('.dots button')[RUN.i];d&&d.classList.toggle('filled',!isEmpty(RUN.qs[RUN.i],RUN.vals[RUN.i]))}}
 });
 $('#main').addEventListener('change',e=>{
   if(e.target.id==='x-timer'){TEST.timer=e.target.checked;return}
@@ -3799,6 +4392,37 @@ var T4 = [
   ["rect", "c4", "Prostokąty, kwadraty i obwody"],
   ["circle", "c4", "Koła i okręgi"],
   ["scale", "c4", "Skala i plan"],
+  ["frpart", "c5", "Ułamek jako część całości"],
+  ["frunit", "c5", "Ułamki w jednostkach i liczbach"],
+  ["frline", "c5", "Ułamki na osi liczbowej"],
+  ["frcmp", "c5", "Porównywanie ułamków"],
+  ["frext", "c5", "Rozszerzanie i skracanie ułamków"],
+  ["frimp", "c5", "Ułamki niewłaściwe i liczby mieszane"],
+  ["fradd", "c5", "Dodawanie ułamków"],
+  ["frsub", "c5", "Odejmowanie ułamków"],
+  ["frword", "c5", "Zadania tekstowe z ułamkami"],
+  ["dcread", "c6", "Zapisywanie ułamków dziesiętnych"],
+  ["dcunits", "c6", "Wyrażenia dwumianowane – długość"],
+  ["dcmass", "c6", "Wyrażenia dwumianowane – masa"],
+  ["dccmp", "c6", "Porównywanie ułamków dziesiętnych"],
+  ["dcline", "c6", "Ułamki dziesiętne na osi"],
+  ["dcadd", "c6", "Dodawanie ułamków dziesiętnych"],
+  ["dcsub", "c6", "Odejmowanie ułamków dziesiętnych"],
+  ["dcword", "c6", "Zadania tekstowe z ułamkami dziesiętnymi"],
+  ["arunit", "c7", "Jednostki pola"],
+  ["argrid", "c7", "Pole figury z kratek"],
+  ["arrect", "c7", "Pole prostokąta i kwadratu"],
+  ["arcomp", "c7", "Pole figury złożonej"],
+  ["arword", "c7", "Zadania tekstowe – pola"],
+  ["cbdesc", "c8", "Ściany, krawędzie, wierzchołki"],
+  ["cbedge", "c8", "Suma długości krawędzi"],
+  ["cbnet", "c8", "Siatki prostopadłościanów"],
+  ["cbsurf", "c8", "Pole powierzchni prostopadłościanu"],
+  ["cbvunit", "c8", "Jednostki objętości"],
+  ["cbvol", "c8", "Objętość prostopadłościanu"],
+  ["cbliter", "c8", "Litry i mililitry"],
+  ["cbword", "c8", "Zadania tekstowe – bryły"],
+  ["mix", "u", "Zadania z całego roku"],
   ["kang", "k", "Zadania z Kangura"]
 ];
 var CH = [
@@ -3806,6 +4430,11 @@ var CH = [
   ["c2", "Systemy zapisywania liczb", "s. 58–97"],
   ["c3", "Działania pisemne", "s. 98–123"],
   ["c4", "Figury geometryczne", "s. 123–164"],
+  ["c5", "Ułamki zwykłe", "s. 165–192"],
+  ["c6", "Ułamki dziesiętne", "s. 193–222"],
+  ["c7", "Pola figur", "s. 223–236"],
+  ["c8", "Prostopadłościany i sześciany", "s. 237–264"],
+  ["u", "Powtórka – zadania uzupełniające", "s. 265–274"],
   ["k", "Kangur matematyczny", "konkurs"]
 ];
 var mathDzialy = CH.map(([id, name, pages]) => ({

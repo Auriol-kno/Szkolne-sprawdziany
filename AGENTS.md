@@ -92,6 +92,8 @@ Kopia w Ustawieniach eksportuje/importuje te klucze (format `{app:'szkolne-spraw
 
 - 2026-11-27: główny adres `/` = nowa wersja (stara w `/stara/`, `/v2/` przekierowuje). Jednorazowa migracja postępów Historii/Przyrody/Angielskiego ze starej wersji. Dwa nowe warianty: Płynne szkło (Liquid Glass) i Ekspresja (Material 3 Expressive). Test kontrastu + automatyczna korekta kolorów. Dotyk: `touch-action: manipulation`, reakcja na naciśnięcie, większy pasek w module matematyki na telefonie (przyciski miały 29 px wysokości).
 
+- 2026-11-27: Matematyka – cały podręcznik. Nowe działy w module (src/math_app.html): 5. Ułamki zwykłe (s. 165–192), 6. Ułamki dziesiętne (s. 193–222), 7. Pola figur (s. 223–236), 8. Prostopadłościany i sześciany (s. 237–264) – po 3 poziomy, droga do wyniku, rysunki SVG (części figur, oś z ułamkami, figury z kratek, wielokąty z wymiarami, prostopadłościany, siatki); dział „Powtórka – zadania uzupełniające” (s. 265–274, topic `mix` losuje zadania ze wszystkich działów, 10 w sprawdzianie); Kangur + gra w skreślanie kółek (s. 236); ciekawostki. Nowe typy pól: `kind:'frac'` (całości/licznik/mianownik, `ans=[w,l,m]`, opcje `nowhole`, `form:'mixed'`, `exact`; przyjmuje ułamki równoważne) i `kind:'dec'` (przecinek lub kropka). Odpowiedzi sprawdzone z kluczem z podręcznika (s. 280–284).
+
 ## Zasady od rodzica (obowiązkowe)
 
 - **Na ekranach aplikacji nigdy nie pokazujemy oceny, którą uczeń dostał w szkole** (ani punktów/procentu ze szkolnego sprawdzianu). Dane `result` w sprawdzianach szkolnych są tylko do zapisu – nie wyświetlaj ich. Można pokazać „Do poprawy: …” (bez oceny).
